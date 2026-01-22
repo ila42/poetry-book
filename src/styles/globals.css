@@ -1007,67 +1007,106 @@
   }
 }
 
-/* Page Scrubber */
+/* Page Scrubber - Golden/Brown style */
 .page-scrubber {
   -webkit-appearance: none;
   appearance: none;
   height: 8px;
   border-radius: 4px;
   background: linear-gradient(to right, 
-    rgba(171, 33, 70, 0.3) 0%, 
-    rgba(171, 33, 70, 0.1) 100%
+    rgba(139, 90, 43, 0.4) 0%,
+    rgba(212, 175, 55, 0.3) 50%,
+    rgba(139, 90, 43, 0.2) 100%
   );
   cursor: pointer;
   outline: none;
+  border: 1px solid rgba(212, 175, 55, 0.2);
 }
 
 .page-scrubber::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  width: 20px;
-  height: 20px;
+  width: 22px;
+  height: 22px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #ab2146 0%, #7a1d39 100%);
+  background: linear-gradient(145deg, #d4af37 0%, #b8860b 50%, #8b5a2b 100%);
   border: 2px solid #f5f0e8;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  box-shadow: 
+    0 2px 8px rgba(0, 0, 0, 0.4),
+    0 0 12px rgba(212, 175, 55, 0.3),
+    inset 0 1px 2px rgba(255, 255, 255, 0.3);
   cursor: pointer;
   transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
 .page-scrubber::-webkit-slider-thumb:hover {
-  transform: scale(1.1);
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.4);
+  transform: scale(1.15);
+  box-shadow: 
+    0 3px 12px rgba(0, 0, 0, 0.5),
+    0 0 20px rgba(212, 175, 55, 0.5),
+    inset 0 1px 2px rgba(255, 255, 255, 0.3);
 }
 
 .page-scrubber::-moz-range-thumb {
-  width: 20px;
-  height: 20px;
+  width: 22px;
+  height: 22px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #ab2146 0%, #7a1d39 100%);
+  background: linear-gradient(145deg, #d4af37 0%, #b8860b 50%, #8b5a2b 100%);
   border: 2px solid #f5f0e8;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  box-shadow: 
+    0 2px 8px rgba(0, 0, 0, 0.4),
+    0 0 12px rgba(212, 175, 55, 0.3);
   cursor: pointer;
 }
 
-/* Sidebar Nav - Home Link */
+/* Track filled portion (progress) */
+.page-scrubber::-webkit-slider-runnable-track {
+  background: linear-gradient(to right, 
+    rgba(212, 175, 55, 0.5) 0%,
+    rgba(139, 90, 43, 0.3) 100%
+  );
+  border-radius: 4px;
+}
+
+.page-scrubber::-moz-range-track {
+  background: linear-gradient(to right, 
+    rgba(212, 175, 55, 0.5) 0%,
+    rgba(139, 90, 43, 0.3) 100%
+  );
+  border-radius: 4px;
+  height: 8px;
+}
+
+/* Sidebar Nav - Home Link - Gold accent */
 .sidebar-nav-home-link {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 10px 12px;
-  margin: 8px 0;
-  font-size: 14px;
+  gap: 10px;
+  padding: 12px 14px;
+  margin: 10px 12px;
+  font-size: 15px;
   font-family: var(--font-serif);
-  color: #ab2146;
-  background: rgba(171, 33, 70, 0.08);
-  border-radius: 6px;
+  color: #d4af37;
+  background: linear-gradient(135deg, rgba(212, 175, 55, 0.15) 0%, rgba(139, 90, 43, 0.1) 100%);
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  border-radius: 8px;
   text-decoration: none;
   transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
 .sidebar-nav-home-link:hover {
-  background: rgba(171, 33, 70, 0.15);
-  color: #7a1d39;
+  background: linear-gradient(135deg, rgba(212, 175, 55, 0.25) 0%, rgba(139, 90, 43, 0.15) 100%);
+  color: #f4d03f;
+  border-color: rgba(212, 175, 55, 0.5);
+  box-shadow: 
+    0 4px 12px rgba(0, 0, 0, 0.3),
+    0 0 15px rgba(212, 175, 55, 0.2);
+  transform: translateX(-2px);
+}
+
+.sidebar-nav-home-link svg {
+  color: #d4af37;
 }
 
 /* Sidebar Nav - Go To Page */
@@ -1224,18 +1263,153 @@
 /* Page scrubber mobile */
 @media (max-width: 768px) {
   .page-scrubber {
-    height: 12px;
+    height: 10px;
+    border-width: 1px;
   }
   
   .page-scrubber::-webkit-slider-thumb {
-    width: 28px;
-    height: 28px;
+    width: 32px;
+    height: 32px;
+    box-shadow: 
+      0 3px 10px rgba(0, 0, 0, 0.5),
+      0 0 15px rgba(212, 175, 55, 0.4);
   }
   
   .page-scrubber::-moz-range-thumb {
-    width: 28px;
-    height: 28px;
+    width: 32px;
+    height: 32px;
   }
+  
+  .page-scrubber::-moz-range-track {
+    height: 10px;
+  }
+}
+
+/* ===== LANDING PAGE STYLES ===== */
+
+/* Override contact form styles on landing */
+.landing-contact-form .contact-form-wrapper {
+  filter: none;
+}
+
+.landing-contact-form .contact-form-wrapper::before {
+  display: none !important;
+}
+
+/* Main form container */
+.landing-contact-form .contact-form-wrapper > div {
+  background: white !important;
+  border: 1px solid #E5E5E0 !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08) !important;
+  border-radius: 12px !important;
+}
+
+.landing-contact-form .contact-form-wrapper > div::before {
+  display: none !important;
+}
+
+/* Hide ALL absolute positioned decorative elements */
+.landing-contact-form .contact-form-wrapper > div > .absolute {
+  display: none !important;
+}
+
+/* But keep the form content visible */
+.landing-contact-form .contact-form-wrapper > div > div:not(.absolute) {
+  display: block;
+}
+
+/* Hide postcard lines decoration (last div with background-image) */
+.landing-contact-form .contact-form-wrapper > div > div[style*="background-image"] {
+  display: none !important;
+}
+
+/* Form styling for landing */
+.landing-contact-form h3,
+.landing-contact-form .font-display {
+  color: #2C3E50 !important;
+}
+
+.landing-contact-form p {
+  color: #2C3E50 !important;
+}
+
+.landing-contact-form .text-ink-600,
+.landing-contact-form .text-ink-500,
+.landing-contact-form .text-ink-400 {
+  color: rgba(44, 62, 80, 0.6) !important;
+}
+
+/* Divider line */
+.landing-contact-form .bg-gradient-to-r {
+  background: linear-gradient(to right, transparent, #2C3E50, transparent) !important;
+  opacity: 0.2;
+}
+
+/* Icon colors */
+.landing-contact-form svg {
+  color: #2C3E50 !important;
+}
+
+.landing-contact-form .text-burgundy-600,
+.landing-contact-form .text-burgundy-500,
+.landing-contact-form .text-burgundy-400 {
+  color: #2C3E50 !important;
+}
+
+.landing-contact-form .form-input {
+  background: #FAFAF8 !important;
+  border-color: #E5E5E0 !important;
+  color: #2C3E50 !important;
+}
+
+.landing-contact-form .form-input:focus {
+  border-color: #2C3E50 !important;
+  box-shadow: 0 0 0 2px rgba(44, 62, 80, 0.1) !important;
+}
+
+.landing-contact-form .form-input::placeholder {
+  color: rgba(44, 62, 80, 0.4) !important;
+}
+
+.landing-contact-form .form-label,
+.landing-contact-form .form-label span {
+  color: #2C3E50 !important;
+}
+
+/* Submit button */
+.landing-contact-form button[type="submit"] {
+  background: linear-gradient(135deg, #2C3E50 0%, #1a252f 100%) !important;
+  border: none !important;
+}
+
+.landing-contact-form button[type="submit"]:hover {
+  background: linear-gradient(135deg, #1a252f 0%, #0f171d 100%) !important;
+}
+
+/* File upload area */
+.landing-contact-form label[for="file-upload"] {
+  border-color: #E5E5E0 !important;
+  color: rgba(44, 62, 80, 0.6) !important;
+}
+
+.landing-contact-form label[for="file-upload"]:hover {
+  border-color: #2C3E50 !important;
+  background: rgba(44, 62, 80, 0.02) !important;
+}
+
+/* Attached file display */
+.landing-contact-form .bg-burgundy-50\/50 {
+  background: rgba(44, 62, 80, 0.05) !important;
+  border-color: #E5E5E0 !important;
+}
+
+/* Success/Error messages */
+.landing-contact-form .bg-green-50 {
+  background: #f0fdf4 !important;
+}
+
+.landing-contact-form .bg-red-50 {
+  background: #fef2f2 !important;
 }
 
 @layer utilities {

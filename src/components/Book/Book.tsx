@@ -358,22 +358,24 @@ export function Book({ bookInfo, chapters, poems }: BookProps) {
               </button>
             </div>
             
-            {/* Скраббер страниц - компактный на мобильных */}
+            {/* Скраббер страниц - тёмная тема с золотыми акцентами */}
             <motion.div
               className="mt-3 sm:mt-6 px-2 sm:px-4 max-w-2xl mx-auto w-full"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5 }}
             >
-              <div className="bg-parchment-100/90 backdrop-blur-sm rounded-lg p-3 sm:p-4 shadow-lg border border-burgundy-200/30">
+              <div className="bg-gradient-to-br from-[#3d2817]/95 to-[#2a1a0f]/95 
+                              backdrop-blur-sm rounded-lg p-3 sm:p-4 
+                              shadow-xl border border-[#d4af37]/20">
                 {/* Информация о странице */}
                 <div className="flex justify-between items-center mb-2 sm:mb-3 text-xs sm:text-sm font-serif">
-                  <span className="text-burgundy-700">
+                  <span className="text-[#d4af37]">
                     <span className="hidden sm:inline">Страница </span>
                     <span className="sm:hidden">Стр. </span>
                     {currentPage + 1} из {pageStructure.length}
                   </span>
-                  <span className="text-ink-500">
+                  <span className="text-[#d4af37]/60">
                     {Math.round(((currentPage + 1) / pageStructure.length) * 100)}%
                   </span>
                 </div>
@@ -389,22 +391,22 @@ export function Book({ bookInfo, chapters, poems }: BookProps) {
                 />
                 
                 {/* Быстрые переходы */}
-                <div className="flex justify-between mt-2 sm:mt-3 text-[10px] sm:text-xs font-serif text-ink-500">
+                <div className="flex justify-between mt-2 sm:mt-3 text-[10px] sm:text-xs font-serif text-[#d4af37]/50">
                   <button 
                     onClick={() => handleNavigate(0)}
-                    className="hover:text-burgundy-700 active:text-burgundy-800 transition-colors py-1 px-2"
+                    className="hover:text-[#d4af37] active:text-[#f4d03f] transition-colors py-1 px-2"
                   >
                     В начало
                   </button>
                   <button 
                     onClick={() => handleNavigate(Math.floor(pageStructure.length / 2))}
-                    className="hover:text-burgundy-700 active:text-burgundy-800 transition-colors py-1 px-2"
+                    className="hover:text-[#d4af37] active:text-[#f4d03f] transition-colors py-1 px-2"
                   >
                     Середина
                   </button>
                   <button 
                     onClick={() => handleNavigate(pageStructure.length - 1)}
-                    className="hover:text-burgundy-700 active:text-burgundy-800 transition-colors py-1 px-2"
+                    className="hover:text-[#d4af37] active:text-[#f4d03f] transition-colors py-1 px-2"
                   >
                     В конец
                   </button>

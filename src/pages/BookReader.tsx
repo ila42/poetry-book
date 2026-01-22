@@ -17,14 +17,18 @@ export function BookReader() {
         <div className="fixed inset-0 leather-wear" />
         <div className="fixed inset-0 leather-vignette" />
         
-        {/* Кнопка "Назад на главную" */}
+        {/* Кнопка "Назад на главную" - золотистый стиль */}
         <Link
           to="/"
-          className="fixed top-4 left-4 z-50 flex items-center gap-2 px-4 py-2
-                     bg-parchment-100/90 backdrop-blur-sm rounded-md
-                     text-burgundy-800 font-serif text-sm
-                     hover:bg-parchment-50 transition-colors duration-200
-                     shadow-md hover:shadow-lg"
+          className="fixed top-4 left-4 z-50 flex items-center gap-2 px-4 py-2.5
+                     bg-gradient-to-br from-[#3d2817]/95 to-[#2a1a0f]/95
+                     backdrop-blur-sm rounded-lg
+                     text-[#d4af37] font-serif text-sm
+                     border border-[#d4af37]/30
+                     hover:border-[#d4af37]/50 hover:text-[#f4d03f]
+                     transition-all duration-200
+                     shadow-lg hover:shadow-xl
+                     hover:shadow-[#d4af37]/10"
         >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
