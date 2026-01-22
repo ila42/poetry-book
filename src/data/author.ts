@@ -12,7 +12,7 @@ export const author: Author = {
 };
 
 export const bookInfo: BookInfo = {
-  title: 'Нервожилия',
+  title: 'Сборник стихов',
   subtitle: 'Избранные стихотворения',
   author: author.name,
   year: 2026,

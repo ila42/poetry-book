@@ -1,126 +1,32 @@
 import { useState, useCallback, useMemo, useRef, forwardRef, useEffect } from 'react';
 import HTMLFlipBook from 'react-pageflip';
 import { motion, AnimatePresence } from 'framer-motion';
-import { BookInfo, Author, Chapter, Poem } from '@/types';
+import { BookInfo, Chapter, Poem } from '@/types';
 import { BookCover } from './BookCover';
 import { BookPage, TitlePage, DedicationPage, IntroductionPage, ChapterPage } from './BookPage';
 import { PoemPage } from './PoemPage';
 import { TableOfContents } from './TableOfContents';
-import { AboutPage } from './AboutPage';
-import { ContactPage } from './ContactPage';
 import { SidebarNav } from './SidebarNav';
 
-// Хук для управления состоянием перетаскивания
-// isDragging = true ТОЛЬКО когда ЛКМ зажата НА странице книги (не на интерактивных элементах)
-function useDragProtection() {
-  const [isDragging, setIsDragging] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const isMouseDownRef = useRef(false);
-
+// Хук для определения мобильного устройства
+function useIsMobile() {
+  const [isMobile, setIsMobile] = useState(false);
+  
   useEffect(() => {
-    const container = containerRef.current;
-    if (!container) return;
-
-    // Список селекторов элементов, которые НЕ должны запускать перетаскивание
-    const interactiveSelectors = [
-      'button',
-      'a',
-      'input',
-      'textarea',
-      'select',
-      '[role="button"]',
-      '[data-no-drag]',
-      '.inline-audio-player',
-      '.global-audio-player', 
-      '.sidebar-nav-container',
-      '.sidebar-nav-toggle',
-      '.sidebar-nav-menu',
-      '.nav-arrow',
-      '.contact-form',
-    ].join(', ');
-
-    // Сброс всех состояний перетаскивания
-    const resetDragState = () => {
-      isMouseDownRef.current = false;
-      setIsDragging(false);
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
     };
-
-    const handleMouseDown = (e: MouseEvent) => {
-      const target = e.target as HTMLElement;
-      
-      // Если клик на интерактивном элементе - НЕ начинаем перетаскивание
-      if (target.closest(interactiveSelectors)) {
-        resetDragState();
-        return;
-      }
-      
-      // Проверяем, что клик был ЛКМ (button === 0)
-      if (e.button !== 0) {
-        return;
-      }
-      
-      isMouseDownRef.current = true;
-      setIsDragging(true);
-    };
-
-    // ВАЖНО: mousemove проверяет, действительно ли кнопка зажата
-    const handleMouseMove = (e: MouseEvent) => {
-      // e.buttons === 1 означает, что ЛКМ зажата
-      // Если ЛКМ НЕ зажата, но isMouseDownRef.current === true - сбрасываем
-      if (e.buttons !== 1 && isMouseDownRef.current) {
-        resetDragState();
-        return;
-      }
-      
-      // Если мышь не зажата - выходим
-      if (!isMouseDownRef.current) {
-        return;
-      }
-    };
-
-    const handleMouseUp = () => {
-      resetDragState();
-    };
-
-    // Глобальный обработчик - ГАРАНТИРОВАННО сбрасывает состояние
-    const handleGlobalMouseUp = () => {
-      resetDragState();
-    };
-
-    // Обработчик потери фокуса окна
-    const handleWindowBlur = () => {
-      resetDragState();
-    };
-
-    // Добавляем слушатели
-    container.addEventListener('mousedown', handleMouseDown);
-    container.addEventListener('mousemove', handleMouseMove);
-    container.addEventListener('mouseup', handleMouseUp);
-    // НЕ сбрасываем на mouseleave - это мешает перетаскиванию
-    // container.addEventListener('mouseleave', handleMouseLeave);
     
-    // Глобальные слушатели
-    document.addEventListener('mouseup', handleGlobalMouseUp);
-    document.addEventListener('mousemove', handleMouseMove); // Проверяем и глобально
-    window.addEventListener('blur', handleWindowBlur);
-
-    return () => {
-      container.removeEventListener('mousedown', handleMouseDown);
-      container.removeEventListener('mousemove', handleMouseMove);
-      container.removeEventListener('mouseup', handleMouseUp);
-      // container.removeEventListener('mouseleave', handleMouseLeave);
-      document.removeEventListener('mouseup', handleGlobalMouseUp);
-      document.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('blur', handleWindowBlur);
-    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
   }, []);
-
-  return { isDragging, containerRef };
+  
+  return isMobile;
 }
 
 interface BookProps {
   bookInfo: BookInfo;
-  author: Author;
   chapters: Chapter[];
   poems: Poem[];
 }
@@ -135,13 +41,11 @@ const PageWrapper = forwardRef<HTMLDivElement, { children: React.ReactNode }>(
 );
 PageWrapper.displayName = 'PageWrapper';
 
-export function Book({ bookInfo, author, chapters, poems }: BookProps) {
+export function Book({ bookInfo, chapters, poems }: BookProps) {
   const [isBookOpen, setIsBookOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(0);
   const bookRef = useRef<{ pageFlip: () => { flipNext: () => void; flipPrev: () => void; turnToPage: (page: number) => void; } }>(null);
-  
-  // Защита от перелистывания при hover (только drag)
-  const { isDragging, containerRef } = useDragProtection();
+  const isMobile = useIsMobile();
   
   // Сортируем главы
   const sortedChapters = useMemo(() => 
@@ -164,9 +68,6 @@ export function Book({ bookInfo, author, chapters, poems }: BookProps) {
     // Содержание
     pages.push({ type: 'toc' });
     
-    // Об авторе
-    pages.push({ type: 'about' });
-    
     // Предисловие
     pages.push({ type: 'introduction', content: bookInfo.introduction });
     
@@ -181,9 +82,6 @@ export function Book({ bookInfo, author, chapters, poems }: BookProps) {
         pages.push({ type: 'poem', content: poem, id: poem.id });
       });
     });
-    
-    // Контакты
-    pages.push({ type: 'contact' });
     
     // Пустая страница в конце (для четности)
     if (pages.length % 2 !== 0) {
@@ -273,17 +171,6 @@ export function Book({ bookInfo, author, chapters, poems }: BookProps) {
           </PageWrapper>
         );
         
-      case 'about':
-        return (
-          <PageWrapper key={`page-${index}`}>
-            <AboutPage 
-              author={author} 
-              pageNumber={pageNumber}
-              isLeft={isLeft}
-            />
-          </PageWrapper>
-        );
-        
       case 'introduction':
         return (
           <PageWrapper key={`page-${index}`}>
@@ -321,16 +208,6 @@ export function Book({ bookInfo, author, chapters, poems }: BookProps) {
           </PageWrapper>
         );
         
-      case 'contact':
-        return (
-          <PageWrapper key={`page-${index}`}>
-            <ContactPage 
-              pageNumber={pageNumber}
-              isLeft={isLeft}
-            />
-          </PageWrapper>
-        );
-        
       case 'empty':
         return (
           <PageWrapper key={`page-${index}`}>
@@ -346,20 +223,21 @@ export function Book({ bookInfo, author, chapters, poems }: BookProps) {
   };
   
   return (
-    <div className="book-container w-full min-h-screen flex items-center justify-center p-2 md:p-4">
+    <div className="book-container w-full min-h-screen flex flex-col items-center justify-start md:justify-center p-2 md:p-4 pt-4">
       {/* Боковая навигация - ФИКСИРОВАНА в правом верхнем углу */}
       <SidebarNav
         isBookOpen={isBookOpen}
         currentPage={currentPage}
         onNavigate={handleNavigate}
         pageStructure={pageStructure}
+        totalPages={pageStructure.length}
       />
       
       <AnimatePresence mode="wait">
         {!isBookOpen ? (
           <motion.div
             key="cover"
-            className="w-full max-w-lg md:max-w-xl lg:max-w-2xl aspect-[3/4] shadow-cover rounded-r-lg overflow-hidden"
+            className="w-full max-w-[85vw] sm:max-w-lg md:max-w-xl lg:max-w-2xl aspect-[3/4] shadow-cover rounded-r-lg overflow-hidden"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, rotateY: -90 }}
@@ -370,120 +248,169 @@ export function Book({ bookInfo, author, chapters, poems }: BookProps) {
         ) : (
           <motion.div
             key="book"
-            className="relative w-full max-w-[95vw] lg:max-w-[85vw] xl:max-w-[1400px]"
+            className="relative w-full max-w-[98vw] sm:max-w-[95vw] lg:max-w-[85vw] xl:max-w-[1400px] flex flex-col"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.5 }}
           >
-            {/* Кнопка закрытия */}
+            {/* Кнопка закрытия - адаптивная */}
             <motion.button
               onClick={handleCloseBook}
-              className="absolute -top-12 right-0 text-parchment-200 hover:text-parchment-100 
-                         transition-colors z-10 flex items-center gap-2 font-serif text-sm"
+              className="absolute -top-10 sm:-top-12 right-1 sm:right-0 text-parchment-200 hover:text-parchment-100 
+                         transition-colors z-10 flex items-center gap-1 sm:gap-2 font-serif text-xs sm:text-sm
+                         bg-burgundy-900/50 sm:bg-transparent rounded px-2 py-1 sm:p-0"
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
             >
-              <span>Закрыть книгу</span>
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <span className="hidden sm:inline">Закрыть книгу</span>
+              <span className="sm:hidden">Закрыть</span>
+              <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               </svg>
             </motion.button>
             
             {/* Книга */}
-            <div className="flex items-center justify-center">
-              {/* Кнопка "Назад" */}
+            <div className="flex items-center justify-center relative">
+              {/* Кнопка "Назад" - Desktop */}
               <motion.button
                 onClick={handlePrevPage}
-                className="nav-arrow mr-4 hidden md:flex"
+                className="nav-arrow nav-arrow-large mr-2 sm:mr-4 hidden md:flex"
                 disabled={currentPage === 0}
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: currentPage === 0 ? 0.3 : 1, x: 0 }}
                 transition={{ delay: 0.4 }}
               >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                 </svg>
               </motion.button>
               
-              {/* HTMLFlipBook с защитой от hover-перелистывания */}
-              <div 
-                ref={containerRef}
-                className={`shadow-book rounded-lg overflow-hidden book-drag-container ${isDragging ? 'is-dragging' : ''}`}
-              >
+              {/* HTMLFlipBook - режим одной страницы на мобильных */}
+              <div className="shadow-book rounded-lg overflow-hidden book-container-inner">
                 <HTMLFlipBook
                   ref={bookRef}
-                  width={550}
-                  height={750}
+                  width={isMobile ? 320 : 550}
+                  height={isMobile ? 480 : 750}
                   size="stretch"
-                  minWidth={320}
-                  maxWidth={700}
-                  minHeight={450}
-                  maxHeight={950}
-                  maxShadowOpacity={0.5}
+                  minWidth={isMobile ? 280 : 320}
+                  maxWidth={isMobile ? 400 : 700}
+                  minHeight={isMobile ? 400 : 450}
+                  maxHeight={isMobile ? 600 : 950}
+                  maxShadowOpacity={isMobile ? 0.3 : 0.5}
                   showCover={false}
-                  mobileScrollSupport={true}
+                  mobileScrollSupport={false}
                   onFlip={handleFlip}
                   className="book-flip"
                   style={{}}
                   startPage={0}
-                  drawShadow={true}
-                  flippingTime={800}
+                  drawShadow={!isMobile}
+                  flippingTime={isMobile ? 400 : 600}
                   usePortrait={true}
                   startZIndex={0}
                   autoSize={true}
                   clickEventForward={false}
-                  useMouseEvents={true}
-                  swipeDistance={50}
-                  showPageCorners={false}
-                  disableFlipByClick={true}
+                  useMouseEvents={false}
+                  swipeDistance={isMobile ? 30 : 0}
+                  showPageCorners={!isMobile}
+                  disableFlipByClick={isMobile}
                 >
                   {pageStructure.map((page, index) => renderPage(page, index))}
                 </HTMLFlipBook>
               </div>
               
-              {/* Кнопка "Вперёд" */}
+              {/* Кнопка "Вперёд" - Desktop */}
               <motion.button
                 onClick={handleNextPage}
-                className="nav-arrow ml-4 hidden md:flex"
+                className="nav-arrow nav-arrow-large ml-2 sm:ml-4 hidden md:flex"
                 disabled={currentPage >= pageStructure.length - 2}
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: currentPage >= pageStructure.length - 2 ? 0.3 : 1, x: 0 }}
                 transition={{ delay: 0.4 }}
               >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                 </svg>
               </motion.button>
-            </div>
-            
-            {/* Мобильная навигация */}
-            <div className="flex md:hidden justify-center gap-4 mt-4">
+              
+              {/* Мобильные кнопки навигации - по бокам книги */}
               <button
                 onClick={handlePrevPage}
                 disabled={currentPage === 0}
-                className="nav-arrow"
+                className="md:hidden absolute left-0 top-1/2 -translate-y-1/2 nav-arrow-mobile nav-arrow-mobile-left"
+                aria-label="Предыдущая страница"
               >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
                 </svg>
               </button>
-              
-              <span className="text-parchment-200 font-serif self-center">
-                {currentPage + 1} / {pageStructure.length}
-              </span>
               
               <button
                 onClick={handleNextPage}
-                disabled={currentPage >= pageStructure.length - 2}
-                className="nav-arrow"
+                disabled={currentPage >= pageStructure.length - 1}
+                className="md:hidden absolute right-0 top-1/2 -translate-y-1/2 nav-arrow-mobile nav-arrow-mobile-right"
+                aria-label="Следующая страница"
               >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
                 </svg>
               </button>
             </div>
+            
+            {/* Скраббер страниц - компактный на мобильных */}
+            <motion.div
+              className="mt-3 sm:mt-6 px-2 sm:px-4 max-w-2xl mx-auto w-full"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5 }}
+            >
+              <div className="bg-parchment-100/90 backdrop-blur-sm rounded-lg p-3 sm:p-4 shadow-lg border border-burgundy-200/30">
+                {/* Информация о странице */}
+                <div className="flex justify-between items-center mb-2 sm:mb-3 text-xs sm:text-sm font-serif">
+                  <span className="text-burgundy-700">
+                    <span className="hidden sm:inline">Страница </span>
+                    <span className="sm:hidden">Стр. </span>
+                    {currentPage + 1} из {pageStructure.length}
+                  </span>
+                  <span className="text-ink-500">
+                    {Math.round(((currentPage + 1) / pageStructure.length) * 100)}%
+                  </span>
+                </div>
+                
+                {/* Ползунок */}
+                <input
+                  type="range"
+                  min={0}
+                  max={pageStructure.length - 1}
+                  value={currentPage}
+                  onChange={(e) => handleNavigate(parseInt(e.target.value))}
+                  className="page-scrubber w-full"
+                />
+                
+                {/* Быстрые переходы */}
+                <div className="flex justify-between mt-2 sm:mt-3 text-[10px] sm:text-xs font-serif text-ink-500">
+                  <button 
+                    onClick={() => handleNavigate(0)}
+                    className="hover:text-burgundy-700 active:text-burgundy-800 transition-colors py-1 px-2"
+                  >
+                    В начало
+                  </button>
+                  <button 
+                    onClick={() => handleNavigate(Math.floor(pageStructure.length / 2))}
+                    className="hover:text-burgundy-700 active:text-burgundy-800 transition-colors py-1 px-2"
+                  >
+                    Середина
+                  </button>
+                  <button 
+                    onClick={() => handleNavigate(pageStructure.length - 1)}
+                    className="hover:text-burgundy-700 active:text-burgundy-800 transition-colors py-1 px-2"
+                  >
+                    В конец
+                  </button>
+                </div>
+              </div>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>

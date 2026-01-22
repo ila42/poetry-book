@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import contentData from '@/data/content.json';
 
@@ -7,12 +8,14 @@ interface SidebarNavProps {
   currentPage: number;
   onNavigate: (pageIndex: number) => void;
   pageStructure: Array<{ type: string; content?: unknown; id?: string }>;
+  totalPages?: number;
 }
 
 export function SidebarNav({ isBookOpen, currentPage, onNavigate, pageStructure }: SidebarNavProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [expandedVolumes, setExpandedVolumes] = useState<Set<string>>(new Set(['volume-1']));
   const [expandedParts, setExpandedParts] = useState<Set<string>>(new Set());
+  const [goToPage, setGoToPage] = useState('');
   const menuRef = useRef<HTMLDivElement>(null);
 
   // Close menu when clicking outside
@@ -41,8 +44,6 @@ export function SidebarNav({ isBookOpen, currentPage, onNavigate, pageStructure 
   // Get page index for a specific item
   const getPageIndex = (type: string, id?: string) => {
     if (type === 'toc') return pageStructure.findIndex(p => p.type === 'toc');
-    if (type === 'about') return pageStructure.findIndex(p => p.type === 'about');
-    if (type === 'contact') return pageStructure.findIndex(p => p.type === 'contact');
     if (type === 'introduction') return pageStructure.findIndex(p => p.type === 'introduction');
     return pageStructure.findIndex(p => p.id === id);
   };
@@ -51,6 +52,17 @@ export function SidebarNav({ isBookOpen, currentPage, onNavigate, pageStructure 
     const pageIndex = getPageIndex(type, id);
     if (pageIndex >= 0) {
       onNavigate(pageIndex);
+      setIsOpen(false);
+    }
+  };
+
+  // Обработчик перехода на введённую страницу
+  const handleGoToPage = (e: React.FormEvent) => {
+    e.preventDefault();
+    const pageNum = parseInt(goToPage);
+    if (!isNaN(pageNum) && pageNum >= 1 && pageNum <= pageStructure.length) {
+      onNavigate(pageNum - 1); // Индексация с 0
+      setGoToPage('');
       setIsOpen(false);
     }
   };
@@ -117,9 +129,47 @@ export function SidebarNav({ isBookOpen, currentPage, onNavigate, pageStructure 
             >
               {/* Header */}
               <div className="sidebar-nav-header">
-                <span className="sidebar-nav-title">Содержание</span>
-                <span className="sidebar-nav-page">стр. {currentPage + 1}</span>
+                <span className="sidebar-nav-title">Навигация</span>
+                <span className="sidebar-nav-page">стр. {currentPage + 1} / {pageStructure.length}</span>
               </div>
+
+              {/* Ссылка на главную */}
+              <Link 
+                to="/"
+                className="sidebar-nav-home-link"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+                Вернуться на главную
+              </Link>
+
+              {/* Divider */}
+              <div className="sidebar-nav-divider" />
+
+              {/* Перейти на страницу */}
+              <form onSubmit={handleGoToPage} className="sidebar-nav-goto">
+                <label className="sidebar-nav-goto-label">
+                  Перейти на страницу:
+                </label>
+                <div className="sidebar-nav-goto-input-wrap">
+                  <input
+                    type="number"
+                    min={1}
+                    max={pageStructure.length}
+                    value={goToPage}
+                    onChange={(e) => setGoToPage(e.target.value)}
+                    placeholder={`1-${pageStructure.length}`}
+                    className="sidebar-nav-goto-input"
+                  />
+                  <button type="submit" className="sidebar-nav-goto-btn">
+                    →
+                  </button>
+                </div>
+              </form>
+
+              {/* Divider */}
+              <div className="sidebar-nav-divider" />
 
               {/* Quick Links */}
               <div className="sidebar-nav-quick">
@@ -133,22 +183,13 @@ export function SidebarNav({ isBookOpen, currentPage, onNavigate, pageStructure 
                   Оглавление
                 </button>
                 <button 
-                  onClick={() => handleNavigateToPage('about')}
+                  onClick={() => handleNavigateToPage('introduction')}
                   className="sidebar-nav-quick-link"
                 >
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
                   </svg>
-                  Об авторе
-                </button>
-                <button 
-                  onClick={() => handleNavigateToPage('contact')}
-                  className="sidebar-nav-quick-link"
-                >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                  </svg>
-                  Контакты
+                  Предисловие
                 </button>
               </div>
 
