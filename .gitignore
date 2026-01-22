@@ -39,8 +39,8 @@ yarn-error.log*
 *.temp
 
 # Audio files (large, should not be in git)
-*.m4a
-*.mp3
+#*.m4a
+#*.mp3   - закомментил, чтобы аудио работали
 *.wav
 *.ogg
 
