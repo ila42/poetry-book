@@ -182,11 +182,18 @@ export function LandingPage() {
               Об авторе
             </h2>
             
-            <div className="flex flex-col md:flex-row gap-10 lg:gap-16 items-center md:items-start">
-              {/* Фото */}
-              <div className="flex-shrink-0">
+            <div className="flex flex-col md:flex-row gap-8 lg:gap-16 items-center">
+              {/* Фото автора - круглое */}
+              <div className="flex-shrink-0 flex flex-col items-center">
                 <div className="relative">
-                  <div className="w-48 h-60 sm:w-56 sm:h-72 bg-[#E5E5E0] rounded overflow-hidden shadow-lg">
+                  {/* Декоративное кольцо */}
+                  <div className="absolute -inset-2 rounded-full border-2 border-[#2C3E50]/10" />
+                  
+                  {/* Фото */}
+                  <div className="w-[150px] h-[150px] sm:w-[200px] sm:h-[200px] lg:w-[250px] lg:h-[250px] 
+                                  rounded-full overflow-hidden 
+                                  shadow-xl shadow-[#2C3E50]/20
+                                  border-4 border-white">
                     <img
                       src={author.photoUrl}
                       alt={author.fullName}
@@ -205,17 +212,19 @@ export function LandingPage() {
                     />
                   </div>
                 </div>
-                <p className="text-center text-[#2C3E50]/50 text-sm mt-4 font-serif">
+                
+                {/* Имя и годы */}
+                <h3 className="font-serif text-xl sm:text-2xl text-[#2C3E50] mt-6 mb-1 text-center">
+                  {author.fullName}
+                </h3>
+                <p className="text-[#2C3E50]/50 text-sm font-serif">
                   {author.birthYear}{author.deathYear ? ` — ${author.deathYear}` : ' г.р.'}
                 </p>
               </div>
               
               {/* Биография */}
               <div className="flex-1 text-center md:text-left">
-                <h3 className="font-serif text-xl sm:text-2xl text-[#2C3E50] mb-4">
-                  {author.fullName}
-                </h3>
-                <div className="font-serif text-[#2C3E50]/70 leading-relaxed whitespace-pre-line">
+                <div className="font-serif text-[#2C3E50]/70 leading-relaxed whitespace-pre-line text-base sm:text-lg">
                   {author.biography}
                 </div>
               </div>
@@ -248,19 +257,6 @@ export function LandingPage() {
             {/* Форма контактов - переопределяем стили */}
             <div className="landing-contact-form">
               <ContactForm />
-            </div>
-            
-            {/* Альтернативный контакт */}
-            <div className="mt-8 text-center">
-              <p className="text-[#2C3E50]/50 text-sm mb-2">
-                Или напишите напрямую:
-              </p>
-              <a 
-                href="mailto:author@poetrybook.ru" 
-                className="text-[#2C3E50] hover:text-[#8B4557] transition-colors font-serif"
-              >
-                author@poetrybook.ru
-              </a>
             </div>
           </motion.div>
         </div>

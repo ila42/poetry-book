@@ -2,8 +2,7 @@ import { Link } from 'react-router-dom';
 import { Book } from '@/components/Book';
 import { AudioPlayerProvider, GlobalAudioPlayer } from '@/components/AudioPlayer';
 import { author, bookInfo } from '@/data/author';
-import { chapters } from '@/data/chapters';
-import { poems } from '@/content/poems';
+import { contentChapters, contentPoems } from '@/data/contentHelpers';
 
 export function BookReader() {
   return (
@@ -39,8 +38,8 @@ export function BookReader() {
         {/* Книга */}
         <Book 
           bookInfo={bookInfo}
-          chapters={chapters}
-          poems={poems}
+          chapters={contentChapters}
+          poems={contentPoems}
         />
         
         {/* Глобальный аудиоплеер */}

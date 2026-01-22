@@ -1,12 +1,22 @@
-import { useState, useRef, FormEvent, ChangeEvent } from 'react';
+import { useState, useRef, FormEvent, ChangeEvent, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import emailjs from '@emailjs/browser';
 
 // EmailJS configuration - replace with your own keys
-const EMAILJS_SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID || 'your_service_id';
-const EMAILJS_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID || 'your_template_id';
-const EMAILJS_PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY || 'your_public_key';
-const EMAILJS_AUTOREPLY_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_AUTOREPLY_TEMPLATE_ID || 'your_autoreply_template_id';
+const EMAILJS_SERVICE_ID = "service_3jqdlop"; // Твой ID с картинки
+const EMAILJS_TEMPLATE_ID = "template_1u9x183"; // Твой ID с картинки
+const EMAILJS_PUBLIC_KEY = "JhHvdYgde2UHtavaG"; // Твой ключ с картинки
+
+
+// Проверка валидности ключей
+const isConfigValid = Boolean(
+  EMAILJS_SERVICE_ID && 
+  EMAILJS_TEMPLATE_ID && 
+  EMAILJS_PUBLIC_KEY &&
+  !EMAILJS_SERVICE_ID.includes('your_') &&
+  !EMAILJS_TEMPLATE_ID.includes('your_') &&
+  !EMAILJS_PUBLIC_KEY.includes('your_')
+);
 
 interface FormData {
   name: string;
@@ -41,6 +51,16 @@ export function ContactForm() {
   const [status, setStatus] = useState<FormStatus>('idle');
   const [attachment, setAttachment] = useState<File | null>(null);
   const [statusMessage, setStatusMessage] = useState('');
+
+  // Debug: логирование переменных окружения
+  useEffect(() => {
+    console.log('=== EmailJS Config Debug ===');
+    console.log('SERVICE:', EMAILJS_SERVICE_ID);
+    console.log('TEMPLATE:', EMAILJS_TEMPLATE_ID);
+    console.log('KEY:', EMAILJS_PUBLIC_KEY);
+    console.log('Config Valid:', isConfigValid);
+    console.log('============================');
+  }, []);
 
   // Validation
   const validateForm = (): boolean => {
@@ -135,16 +155,22 @@ export function ContactForm() {
       return;
     }
     
+    // Проверка конфигурации перед отправкой
+    if (!isConfigValid) {
+      setStatus('error');
+      setStatusMessage('Ошибка конфигурации EmailJS. Проверьте файл .env и перезапустите сервер.');
+      console.error('EmailJS config invalid! Check .env file.');
+      return;
+    }
+    
     setStatus('submitting');
     
     try {
       // Prepare template parameters
       const templateParams = {
         from_name: formData.name,
-        from_email: formData.email,
-        subject: formData.subject || 'Письмо с сайта',
+        reply_to: formData.email,
         message: formData.message,
-        attachment_name: attachment?.name || 'Нет вложения',
       };
       
       // Send main email
@@ -156,20 +182,7 @@ export function ContactForm() {
       );
       
       // Send auto-reply to user
-      try {
-        await emailjs.send(
-          EMAILJS_SERVICE_ID,
-          EMAILJS_AUTOREPLY_TEMPLATE_ID,
-          {
-            to_name: formData.name,
-            to_email: formData.email,
-            reply_to: formData.email,
-          },
-          EMAILJS_PUBLIC_KEY
-        );
-      } catch (autoReplyError) {
-        console.log('Auto-reply failed, but main message was sent');
-      }
+      
       
       setStatus('success');
       setStatusMessage('Спасибо! Ваше письмо успешно отправлено. Мы ответим вам в ближайшее время.');
@@ -187,15 +200,41 @@ export function ContactForm() {
         fileInputRef.current.value = '';
       }
       
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Email send error:', error);
+      
+      // Детальное логирование для отладки
+      if (error && typeof error === 'object' && 'text' in error) {
+        console.error('EmailJS Error Text:', (error as { text: string }).text);
+      }
+      if (error && typeof error === 'object' && 'status' in error) {
+        console.error('EmailJS Error Status:', (error as { status: number }).status);
+      }
+      
       setStatus('error');
-      setStatusMessage('Произошла ошибка при отправке. Пожалуйста, попробуйте позже или напишите напрямую на email.');
+      
+      // Более информативное сообщение об ошибке
+      const errorMessage = error && typeof error === 'object' && 'text' in error 
+        ? `Ошибка: ${(error as { text: string }).text}`
+        : 'Произошла ошибка при отправке. Проверьте консоль браузера для деталей.';
+      setStatusMessage(errorMessage);
     }
   };
 
   return (
     <div className="contact-form-wrapper max-w-lg mx-auto">
+      {/* Ошибка конфигурации EmailJS */}
+      {!isConfigValid && (
+        <div className="mb-4 p-4 bg-red-100 border-2 border-red-500 rounded-lg text-red-700 text-center">
+          <strong>⚠️ ОШИБКА:</strong> Проверь файл .env! Ключи EmailJS не найдены или невалидны.
+          <div className="text-xs mt-2 text-red-600">
+            SERVICE_ID: {EMAILJS_SERVICE_ID || 'не задан'}<br/>
+            TEMPLATE_ID: {EMAILJS_TEMPLATE_ID || 'не задан'}<br/>
+            PUBLIC_KEY: {EMAILJS_PUBLIC_KEY || 'не задан'}
+          </div>
+        </div>
+      )}
+
       {/* Postcard styling */}
       <motion.div
         className="relative bg-parchment-50 rounded-sm shadow-xl overflow-hidden"
