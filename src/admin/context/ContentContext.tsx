@@ -48,10 +48,11 @@ export interface BookData {
     author: string;
     year: number;
     version: string;
-    epigraph: {
+    epigraph?: string | {
       text: string;
       source: string;
     };
+    afterword?: string;
   };
   volumes: Volume[];
 }

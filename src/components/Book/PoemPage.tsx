@@ -9,7 +9,7 @@ interface PoemPageProps {
   chapterPoems?: Poem[];
 }
 
-export function PoemPage({ poem, pageNumber, isLeft, chapterPoems }: PoemPageProps) {
+export function PoemPage({ poem, pageNumber, isLeft }: PoemPageProps) {
   return (
     <BookPage pageNumber={pageNumber} isLeft={isLeft}>
       <div className="max-w-prose mx-auto">

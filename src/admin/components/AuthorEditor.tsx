@@ -15,12 +15,19 @@ export function AuthorEditor() {
 
   useEffect(() => {
     if (data?.book) {
+      // Преобразуем epigraph из объекта в строку, если нужно
+      const epigraphValue = typeof data.book.epigraph === 'string' 
+        ? data.book.epigraph 
+        : data.book.epigraph 
+          ? `${data.book.epigraph.text}\n\n(${data.book.epigraph.source})`
+          : '';
+      
       setFormData({
         title: data.book.title,
         author: data.book.author,
         year: data.book.year,
         version: data.book.version,
-        epigraph: data.book.epigraph || '',
+        epigraph: epigraphValue,
         afterword: data.book.afterword || '',
       });
     }

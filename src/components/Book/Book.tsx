@@ -222,14 +222,12 @@ export function Book({ bookInfo, chapters, poems }: BookProps) {
         
       case 'poem':
         const poem = page.content as Poem;
-        const chapterPoems = poems.filter(p => p.chapterId === poem.chapterId);
         return (
           <PageWrapper key={`page-${index}`}>
             <PoemPage
               poem={poem}
               pageNumber={pageNumber}
               isLeft={isLeft}
-              chapterPoems={chapterPoems}
             />
           </PageWrapper>
         );
