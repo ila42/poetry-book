@@ -1,5 +1,5 @@
 import { Routes, Route, useLocation } from 'react-router-dom';
-import { LandingPage, BookReader } from '@/pages';
+import { LandingPage, BookReader, AudioArchive } from '@/pages';
 import { AdminApp } from '@/admin';
 
 function App() {
@@ -14,6 +14,7 @@ function App() {
     <Routes>
       <Route path="/" element={<LandingPage />} />
       <Route path="/read" element={<BookReader />} />
+      <Route path="/audio-archive" element={<AudioArchive />} />
     </Routes>
   );
 }

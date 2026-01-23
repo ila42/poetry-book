@@ -3,7 +3,7 @@ import HTMLFlipBook from 'react-pageflip';
 import { motion, AnimatePresence } from 'framer-motion';
 import { BookInfo, Chapter, Poem } from '@/types';
 import { BookCover } from './BookCover';
-import { BookPage, TitlePage, DedicationPage, IntroductionPage, ChapterPage } from './BookPage';
+import { BookPage, TitlePage, DedicationPage, EpigraphPage, AfterwordPage, ChapterPage } from './BookPage';
 import { PoemPage } from './PoemPage';
 import { TableOfContents } from './TableOfContents';
 import { SidebarNav } from './SidebarNav';
@@ -68,8 +68,10 @@ export function Book({ bookInfo, chapters, poems }: BookProps) {
     // Содержание
     pages.push({ type: 'toc' });
     
-    // Предисловие
-    pages.push({ type: 'introduction', content: bookInfo.introduction });
+    // Эпиграф (вместо предисловия)
+    if (bookInfo.epigraph) {
+      pages.push({ type: 'epigraph', content: bookInfo.epigraph });
+    }
     
     // Главы и стихи
     sortedChapters.forEach(chapter => {
@@ -83,7 +85,20 @@ export function Book({ bookInfo, chapters, poems }: BookProps) {
       });
     });
     
-    // Пустая страница в конце (для четности)
+    // Послесловие на странице 310
+    if (bookInfo.afterword) {
+      const targetPageIndex = 309; // Страница 310 (индекс 309, т.к. нумерация с 1)
+      
+      // Если текущее количество страниц меньше целевого, добавляем пустые страницы
+      while (pages.length < targetPageIndex) {
+        pages.push({ type: 'empty' });
+      }
+      
+      // Вставляем послесловие на страницу 310
+      pages.push({ type: 'afterword', content: bookInfo.afterword });
+    }
+    
+    // Финальная проверка на четность всего каталога
     if (pages.length % 2 !== 0) {
       pages.push({ type: 'empty' });
     }
@@ -171,10 +186,21 @@ export function Book({ bookInfo, chapters, poems }: BookProps) {
           </PageWrapper>
         );
         
-      case 'introduction':
+      case 'epigraph':
         return (
           <PageWrapper key={`page-${index}`}>
-            <IntroductionPage 
+            <EpigraphPage 
+              content={page.content as string}
+              pageNumber={pageNumber}
+              isLeft={isLeft}
+            />
+          </PageWrapper>
+        );
+
+      case 'afterword':
+        return (
+          <PageWrapper key={`page-${index}`}>
+            <AfterwordPage 
               content={page.content as string}
               pageNumber={pageNumber}
               isLeft={isLeft}

@@ -8,10 +8,8 @@ export function AuthorEditor() {
     author: '',
     year: 2024,
     version: '',
-    epigraph: {
-      text: '',
-      source: '',
-    },
+    epigraph: '',
+    afterword: '',
   });
   const [saved, setSaved] = useState(false);
 
@@ -22,7 +20,8 @@ export function AuthorEditor() {
         author: data.book.author,
         year: data.book.year,
         version: data.book.version,
-        epigraph: data.book.epigraph,
+        epigraph: data.book.epigraph || '',
+        afterword: data.book.afterword || '',
       });
     }
   }, [data]);
@@ -141,44 +140,57 @@ export function AuthorEditor() {
                 Текст эпиграфа
               </label>
               <textarea
-                value={formData.epigraph.text}
+                value={formData.epigraph}
                 onChange={(e) => setFormData({ 
                   ...formData, 
-                  epigraph: { ...formData.epigraph, text: e.target.value } 
+                  epigraph: e.target.value 
                 })}
-                rows={4}
+                rows={6}
                 className="w-full px-4 py-2.5 bg-slate-900 border border-slate-600 rounded-lg
                   text-white focus:outline-none focus:ring-2 focus:ring-amber-500 font-serif
                   italic"
+                placeholder="Текст эпиграфа и автор"
               />
             </div>
 
-            <div>
+            {/* Removed source field as it is now part of the text area */}
+            <div className="hidden">
               <label className="block text-sm font-medium text-slate-300 mb-2">
                 Источник
               </label>
-              <input
-                type="text"
-                value={formData.epigraph.source}
-                onChange={(e) => setFormData({ 
-                  ...formData, 
-                  epigraph: { ...formData.epigraph, source: e.target.value } 
-                })}
-                className="w-full px-4 py-2.5 bg-slate-900 border border-slate-600 rounded-lg
-                  text-white focus:outline-none focus:ring-2 focus:ring-amber-500"
-                placeholder="Автор цитаты"
-              />
+              <input type="text" className="hidden" />
             </div>
 
             {/* Preview */}
             <div className="p-6 bg-slate-900/50 rounded-lg border border-slate-700">
               <p className="text-sm text-slate-400 mb-3">Предпросмотр:</p>
-              <blockquote className="font-serif italic text-slate-300 border-l-2 border-amber-500 pl-4">
-                {formData.epigraph.text || 'Текст эпиграфа...'}
+              <blockquote className="font-serif italic text-slate-300 border-l-2 border-amber-500 pl-4 whitespace-pre-line">
+                {formData.epigraph || 'Текст эпиграфа...'}
               </blockquote>
-              <p className="text-right text-slate-400 mt-2 text-sm">
-                — {formData.epigraph.source || 'Автор'}
-              </p>
+            </div>
+          </form>
+        </div>
+
+        {/* Afterword Form */}
+        <div className="bg-slate-800 rounded-xl border border-slate-700 p-6">
+          <h2 className="text-lg font-semibold text-white mb-6">Послесловие</h2>
+          
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div>
+              <label className="block text-sm font-medium text-slate-300 mb-2">
+                Текст послесловия
+              </label>
+              <textarea
+                value={formData.afterword}
+                onChange={(e) => setFormData({ 
+                  ...formData, 
+                  afterword: e.target.value 
+                })}
+                rows={10}
+                className="w-full px-4 py-2.5 bg-slate-900 border border-slate-600 rounded-lg
+                  text-white focus:outline-none focus:ring-2 focus:ring-amber-500 font-serif"
+                placeholder="Текст послесловия..."
+              />
             </div>
           </form>
         </div>

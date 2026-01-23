@@ -5,6 +5,7 @@ export interface Poem {
   chapterId: string;
   audioUrl?: string;
   epigraph?: string;
+  afterword?: string;
   dedication?: string;
   date?: string;
 }
@@ -31,7 +32,8 @@ export interface BookInfo {
   subtitle?: string;
   author: string;
   year: number;
-  introduction: string;
+  epigraph?: string;
+  afterword?: string;
   dedication?: string;
 }
 
@@ -48,9 +50,10 @@ export type PageType =
   | 'dedication'
   | 'toc'
   | 'about'
-  | 'introduction'
+  | 'epigraph'
   | 'chapter-title'
   | 'poem'
+  | 'afterword'
   | 'contact'
   | 'back-cover';
 

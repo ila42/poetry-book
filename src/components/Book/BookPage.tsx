@@ -83,20 +83,46 @@ export function DedicationPage({ dedication }: DedicationPageProps) {
   );
 }
 
-// Компонент для страницы с предисловием
-interface IntroductionPageProps {
+// Компонент для страницы с эпиграфом
+interface EpigraphPageProps {
   content: string;
   pageNumber?: number;
   isLeft?: boolean;
 }
 
-export function IntroductionPage({ content, pageNumber, isLeft }: IntroductionPageProps) {
+export function EpigraphPage({ content, pageNumber, isLeft }: EpigraphPageProps) {
+  return (
+    <BookPage pageNumber={pageNumber} isLeft={isLeft} className="justify-center items-center">
+      <div className="max-w-md mx-auto flex flex-col justify-center h-full">
+        <motion.h3 
+          className="poem-title text-center mb-8"
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+        >
+          Эпиграф
+        </motion.h3>
+        <div className="font-serif italic text-lg text-ink-800 leading-relaxed text-center whitespace-pre-line">
+          {content}
+        </div>
+      </div>
+    </BookPage>
+  );
+}
+
+// Компонент для страницы послесловия
+export function AfterwordPage({ content, pageNumber, isLeft }: EpigraphPageProps) {
   return (
     <BookPage pageNumber={pageNumber} isLeft={isLeft}>
       <div className="max-w-prose mx-auto">
-        <h2 className="font-display text-2xl text-burgundy-800 mb-6 text-center">
-          Предисловие
-        </h2>
+        <motion.h3 
+          className="poem-title text-center mb-8"
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+        >
+          Черновик вместо послесловия
+        </motion.h3>
         <div className="divider mb-6" />
         <div className="font-serif text-ink-800 leading-relaxed whitespace-pre-line">
           {content}

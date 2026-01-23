@@ -1,6 +1,5 @@
 import { motion } from 'framer-motion';
 import { Poem } from '@/types';
-import { InlineAudioPlayer, Track } from '@/components/AudioPlayer';
 import { BookPage } from './BookPage';
 
 interface PoemPageProps {
@@ -11,24 +10,6 @@ interface PoemPageProps {
 }
 
 export function PoemPage({ poem, pageNumber, isLeft, chapterPoems }: PoemPageProps) {
-  // Create track from poem
-  const track: Track | null = poem.audioUrl ? {
-    id: poem.id,
-    title: poem.title,
-    audioUrl: poem.audioUrl,
-    chapterId: poem.chapterId,
-  } : null;
-
-  // Create chapter tracks for playlist
-  const chapterTracks: Track[] = chapterPoems
-    ?.filter(p => p.audioUrl)
-    .map(p => ({
-      id: p.id,
-      title: p.title,
-      audioUrl: p.audioUrl!,
-      chapterId: p.chapterId,
-    })) || [];
-
   return (
     <BookPage pageNumber={pageNumber} isLeft={isLeft}>
       <div className="max-w-prose mx-auto">
@@ -93,17 +74,6 @@ export function PoemPage({ poem, pageNumber, isLeft, chapterPoems }: PoemPagePro
           >
             {poem.date}
           </motion.p>
-        )}
-        
-        {/* Аудиоплеер */}
-        {track && (
-          <div className="mt-8">
-            <InlineAudioPlayer 
-              track={track} 
-              showChapterPlay={chapterTracks.length > 1}
-              chapterTracks={chapterTracks}
-            />
-          </div>
         )}
       </div>
     </BookPage>

@@ -491,12 +491,12 @@ export function ContactForm() {
             <motion.button
               type="submit"
               disabled={status === 'submitting'}
-              className="w-full py-3 px-6 bg-gradient-to-r from-burgundy-700 to-burgundy-800
+              className="w-full py-3 px-6 bg-gradient-to-r from-burgundy-800 via-burgundy-700 to-burgundy-600
                          text-parchment-100 font-serif text-lg rounded-md
-                         hover:from-burgundy-600 hover:to-burgundy-700
+                         hover:from-burgundy-700 hover:via-burgundy-600 hover:to-burgundy-500
                          disabled:opacity-50 disabled:cursor-not-allowed
                          shadow-lg hover:shadow-xl transition-all duration-300
-                         border border-burgundy-600/30
+                         border border-burgundy-500/40 ring-1 ring-burgundy-400/30
                          flex items-center justify-center gap-2"
               whileHover={{ scale: status === 'submitting' ? 1 : 1.02 }}
               whileTap={{ scale: status === 'submitting' ? 1 : 0.98 }}

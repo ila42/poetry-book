@@ -38,6 +38,12 @@ export function LandingPage() {
               >
                 Сборник
               </button>
+              <Link
+                to="/audio-archive"
+                className="text-[#2C3E50]/70 hover:text-[#2C3E50] transition-colors font-serif"
+              >
+                Аудиоархив
+              </Link>
               <button 
                 onClick={() => scrollToSection('contact')}
                 className="text-[#2C3E50]/70 hover:text-[#2C3E50] transition-colors font-serif"
@@ -54,6 +60,12 @@ export function LandingPage() {
               >
                 Сборник
               </button>
+              <Link
+                to="/audio-archive"
+                className="text-[#2C3E50]/70 hover:text-[#2C3E50] transition-colors font-serif"
+              >
+                Аудио
+              </Link>
               <button 
                 onClick={() => scrollToSection('contact')}
                 className="text-[#2C3E50]/70 hover:text-[#2C3E50] transition-colors font-serif"

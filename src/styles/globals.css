@@ -1378,12 +1378,19 @@
 
 /* Submit button */
 .landing-contact-form button[type="submit"] {
-  background: linear-gradient(135deg, #2C3E50 0%, #1a252f 100%) !important;
-  border: none !important;
+  background: #3b1420 !important;
+  background-image: linear-gradient(135deg, #5a2433 0%, #4a1b27 45%, #2a0b10 100%) !important;
+  border: 1px solid rgba(212, 175, 55, 0.35) !important;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.45), 0 0 16px rgba(212, 175, 55, 0.18) !important;
+  color: #f5f0e8 !important;
+  opacity: 1 !important;
+  filter: none !important;
 }
 
 .landing-contact-form button[type="submit"]:hover {
-  background: linear-gradient(135deg, #1a252f 0%, #0f171d 100%) !important;
+  background: #4a1b27 !important;
+  background-image: linear-gradient(135deg, #6b2a3a 0%, #5a2230 45%, #3b1420 100%) !important;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.5), 0 0 20px rgba(212, 175, 55, 0.22) !important;
 }
 
 /* File upload area */
