@@ -26,13 +26,10 @@ export function LandingPage() {
   // Последние 5 стихотворений
   const recentPoems = contentPoems.slice(-5).reverse();
   
-  // Фото (заглушки)
+  // Фото
   const photos = [
-    { id: 'photo-1', title: 'Портрет ребенка', url: '/images/gallery/photo1.jpg' },
-    { id: 'photo-2', title: 'Мальчик в лесу', url: '/images/gallery/photo2.jpg' },
-    { id: 'photo-3', title: 'Фото 3', url: '/images/gallery/photo1.jpg' },
-    { id: 'photo-4', title: 'Фото 4', url: '/images/gallery/photo2.jpg' },
-    { id: 'photo-5', title: 'Фото 5', url: '/images/gallery/photo1.jpg' },
+    { id: 'photo-1', title: 'Портрет ребенка', url: '/images/gallery/photo_2026-01-19_13-34-43 (2).jpg' },
+    { id: 'photo-2', title: 'Мальчик в лесу', url: '/images/gallery/photo_2026-01-19_13-34-43.jpg' },
   ];
   const firstTwoPhotos = photos.slice(0, 2);
   const restPhotos = photos.slice(2);
@@ -385,12 +382,15 @@ export function LandingPage() {
               Посмотреть
             </h2>
             
-            {/* Первые 2 фото */}
+            {/* Фото - основной блок (показываем 2 при свёрнуто, всё при развёрнуто) */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-              {firstTwoPhotos.map((photo) => (
+              {(showAllPhotos ? photos : firstTwoPhotos).map((photo) => (
                 <motion.div
                   key={photo.id}
                   className="relative aspect-square rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-200"
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.3 }}
                   whileHover={{ scale: 1.02 }}
                 >
                   <img
@@ -402,14 +402,14 @@ export function LandingPage() {
               ))}
             </div>
 
-            {/* Остальные фото (раскрывающиеся) */}
-            <motion.div
-              initial={false}
-              animate={{ height: showAllPhotos ? 'auto' : 0, opacity: showAllPhotos ? 1 : 0 }}
-              transition={{ duration: 0.3 }}
-              className="overflow-hidden"
-            >
-              {showAllPhotos && (
+            {/* Остальные фото (только при раскрытии и если их больше 2) */}
+            {showAllPhotos && restPhotos.length > 0 && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                transition={{ duration: 0.3 }}
+                className="overflow-hidden"
+              >
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
                   {restPhotos.map((photo) => (
                     <motion.div
@@ -428,8 +428,8 @@ export function LandingPage() {
                     </motion.div>
                   ))}
                 </div>
-              )}
-            </motion.div>
+              </motion.div>
+            )}
 
             {/* Кнопка раскрытия - только если фото больше 2 */}
             {photos.length > 2 && (

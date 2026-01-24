@@ -2,11 +2,13 @@ import { useState, useCallback, useMemo, useRef, forwardRef, useEffect } from 'r
 import HTMLFlipBook from 'react-pageflip';
 import { motion, AnimatePresence } from 'framer-motion';
 import { BookInfo, Chapter, Poem } from '@/types';
+import { useEdgeClickNavigation } from '@/hooks';
 import { BookCover } from './BookCover';
 import { BookPage, TitlePage, DedicationPage, EpigraphPage, AfterwordPage, ChapterPage } from './BookPage';
 import { PoemPage } from './PoemPage';
 import { TableOfContents } from './TableOfContents';
 import { SidebarNav } from './SidebarNav';
+import { EdgeNavigationHints } from './EdgeNavigationHints';
 
 // Хук для определения мобильного устройства
 function useIsMobile() {
@@ -42,7 +44,7 @@ const PageWrapper = forwardRef<HTMLDivElement, { children: React.ReactNode }>(
 PageWrapper.displayName = 'PageWrapper';
 
 export function Book({ bookInfo, chapters, poems }: BookProps) {
-  const [isBookOpen, setIsBookOpen] = useState(false);
+  const [isBookOpen, setIsBookOpen] = useState(true);
   const [currentPage, setCurrentPage] = useState(0);
   const bookRef = useRef<{ pageFlip: () => { flipNext: () => void; flipPrev: () => void; turnToPage: (page: number) => void; } }>(null);
   const isMobile = useIsMobile();
@@ -147,8 +149,29 @@ export function Book({ bookInfo, chapters, poems }: BookProps) {
     }
   };
 
+  // Используем хук для навигации по краям экрана
+  useEdgeClickNavigation({
+    onNextPage: handleNextPage,
+    onPrevPage: handlePrevPage,
+    edgePercentage: 15, // 15% от края экрана
+    enabled: isBookOpen, // Только когда книга открыта
+  });
+
   // Обработчик клика по странице для перелистывания
   const handlePageClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    // Не срабатываем на кликах по кнопкам, ссылкам и интерактивным элементам
+    const target = e.target as HTMLElement;
+    if (
+      target.tagName === 'BUTTON' ||
+      target.tagName === 'A' ||
+      target.closest('button') ||
+      target.closest('a') ||
+      target.closest('[data-no-flip]') ||
+      target.closest('nav') // Не срабатываем на кликах в меню навигации
+    ) {
+      return;
+    }
+
     // Получаем ширину контейнера
     const container = e.currentTarget;
     const clickX = e.clientX - container.getBoundingClientRect().left;
@@ -202,6 +225,8 @@ export function Book({ bookInfo, chapters, poems }: BookProps) {
               hasAftervord={!!bookInfo.afterword}
               epigraphPageNumber={bookInfo.epigraph ? pageStructure.findIndex(p => p.type === 'epigraph') + 1 : undefined}
               afterwordPageNumber={bookInfo.afterword ? pageStructure.findIndex(p => p.type === 'afterword') + 1 : undefined}
+              currentPage={currentPage}
+              pageStructure={pageStructure}
             />
           </PageWrapper>
         );
@@ -268,6 +293,17 @@ export function Book({ bookInfo, chapters, poems }: BookProps) {
   
   return (
     <div className="book-container w-full min-h-screen flex flex-col items-center justify-start md:justify-center p-2 md:p-4 pt-4">
+      {/* Подсказки для навигации по краям экрана */}
+      {isBookOpen && (
+        <EdgeNavigationHints
+          edgePercentage={15}
+          visible={isBookOpen}
+          hideDelay={3000}
+          onNextPage={handleNextPage}
+          onPrevPage={handlePrevPage}
+        />
+      )}
+      
       {/* Боковая навигация - ФИКСИРОВАНА в правом верхнем углу */}
       <SidebarNav
         isBookOpen={isBookOpen}
@@ -317,7 +353,7 @@ export function Book({ bookInfo, chapters, poems }: BookProps) {
             
             {/* Книга */}
             <div 
-              className="flex items-center justify-center relative cursor-pointer group"
+              className="flex items-center justify-center relative cursor-pointer group mb-6"
               onClick={handlePageClick}
             >
               {/* HTMLFlipBook - режим одной страницы на мобильных */}
@@ -353,54 +389,13 @@ export function Book({ bookInfo, chapters, poems }: BookProps) {
                 </HTMLFlipBook>
               </div>
             </div>
-
-            {/* Навигация под книгой - по центру */}
-            <motion.div
-              className="flex items-center justify-center gap-6 mt-6 px-4"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4 }}
-            >
-              {/* Кнопка "Назад" */}
-              <button
-                onClick={handlePrevPage}
-                disabled={currentPage === 0}
-                className="p-2 text-ink-400 hover:text-ink-600 disabled:text-ink-200 
-                           transition-colors duration-200"
-                aria-label="Предыдущая страница"
-                title="Предыдущая страница"
-              >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                </svg>
-              </button>
-
-              {/* Номер страницы */}
-              <span className="text-ink-400 font-serif text-sm whitespace-nowrap">
-                Страница <span className="text-ink-600 font-medium">{currentPage + 1}</span> из {pageStructure.length}
-              </span>
-
-              {/* Кнопка "Вперёд" */}
-              <button
-                onClick={handleNextPage}
-                disabled={currentPage >= pageStructure.length - 2}
-                className="p-2 text-ink-400 hover:text-ink-600 disabled:text-ink-200 
-                           transition-colors duration-200"
-                aria-label="Следующая страница"
-                title="Следующая страница"
-              >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
-              </button>
-            </motion.div>
             
             {/* Скраббер страниц - тёмная тема с золотыми акцентами */}
             <motion.div
-              className="mt-3 sm:mt-6 px-2 sm:px-4 max-w-2xl mx-auto w-full"
+              className="mt-6 px-2 sm:px-4 max-w-2xl mx-auto w-full"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5 }}
+              transition={{ delay: 0.4 }}
             >
               <div className="bg-gradient-to-br from-[#3d2817]/95 to-[#2a1a0f]/95 
                               backdrop-blur-sm rounded-lg p-3 sm:p-4 

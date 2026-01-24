@@ -6,3 +6,4 @@ export { TableOfContents } from './TableOfContents';
 export { AboutPage } from './AboutPage';
 export { ContactPage } from './ContactPage';
 export { SidebarNav } from './SidebarNav';
+export { EdgeNavigationHints } from './EdgeNavigationHints';

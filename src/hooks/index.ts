@@ -1,0 +1,1 @@
+export { useEdgeClickNavigation } from './useEdgeClickNavigation';

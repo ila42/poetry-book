@@ -499,6 +499,29 @@
            border-b border-dashed border-burgundy-200/50;
   }
   
+  .toc-item:hover {
+    background-color: rgba(212, 56, 97, 0.12) !important;
+    border-left: 3px solid #C23861;
+    padding-left: 1rem;
+  }
+  
+  /* Hover effect for TOC buttons */
+  .hover-toc-item {
+    display: block;
+    padding: 8px 12px;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+  }
+  
+  .hover-toc-item:hover {
+    background: rgba(212, 56, 97, 0.15);
+    padding-left: 14px;
+    border-left: 3px solid #C23861;
+    box-shadow: inset 0 0 8px rgba(194, 56, 97, 0.1);
+    transform: translateX(2px);
+  }
+  
   .toc-dots {
     @apply flex-1 border-b border-dotted border-ink-300 mx-2;
   }
@@ -641,11 +664,14 @@
   }
   
   .sidebar-nav-quick-link:hover {
-    color: #d4af37;
-    background: rgba(212, 175, 55, 0.15);
-    border-color: rgba(212, 175, 55, 0.35);
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    color: #f5f0e8;
+    background: rgba(212, 175, 55, 0.2);
+    border: 1px solid rgba(212, 175, 55, 0.45);
+    border-left: 2px solid #C23861;
+    transform: translateY(-2px);
+    box-shadow: 
+      0 4px 12px rgba(0, 0, 0, 0.3),
+      0 0 12px rgba(194, 56, 97, 0.15);
   }
   
   .sidebar-nav-quick-link svg {
@@ -713,8 +739,12 @@
   }
   
   .sidebar-nav-volume-header:hover {
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(255, 255, 255, 0.08);
     color: #d4af37;
+    border-left: 2px solid #C23861;
+    padding-left: 10px;
+    box-shadow: inset 0 0 8px rgba(212, 175, 55, 0.1);
+    transform: translateX(2px);
   }
   
   .sidebar-nav-volume-header span {
@@ -752,8 +782,12 @@
   }
   
   .sidebar-nav-part-header:hover {
-    background: rgba(255, 255, 255, 0.05);
-    color: rgba(245, 235, 220, 1);
+    background: rgba(212, 175, 55, 0.12);
+    color: #d4af37;
+    border-left: 2px solid #C23861;
+    padding-left: 10px;
+    box-shadow: inset 0 0 8px rgba(194, 56, 97, 0.1);
+    transform: translateX(2px);
   }
   
   .sidebar-nav-part-title {
@@ -786,6 +820,7 @@
     color: rgba(245, 235, 220, 0.7);
     background: transparent;
     border: none;
+    border-left: 2px solid transparent;
     cursor: pointer;
     transition: all 0.2s ease;
     /* ТЕКСТ ПОЛНОСТЬЮ ВИДИМ */
@@ -796,8 +831,54 @@
   }
   
   .sidebar-nav-chapter:hover {
-    background: rgba(212, 175, 55, 0.12);
-    color: #d4af37;
+    background: rgba(212, 175, 55, 0.15);
+    color: #f5f0e8;
+    border-left: 2px solid #C23861;
+    padding-left: 10px;
+    box-shadow: 
+      inset 0 0 10px rgba(212, 175, 55, 0.12),
+      0 0 8px rgba(194, 56, 97, 0.15);
+    transform: translateX(2px);
+  }
+
+  /* Активный элемент - выделение текущей страницы */
+  .sidebar-nav-chapter.active {
+    background: rgba(194, 56, 97, 0.25);
+    color: #f5f0e8;
+    border-left: 3px solid #C23861;
+    padding-left: 9px;
+    box-shadow: 
+      inset 0 0 12px rgba(194, 56, 97, 0.15),
+      0 0 8px rgba(194, 56, 97, 0.2);
+  }
+  
+  .sidebar-nav-chapter.active:hover {
+    background: rgba(194, 56, 97, 0.35);
+    color: #ffffff;
+  }
+  
+  /* Active poem in table of contents */
+  .active-poem {
+    background: rgba(194, 56, 97, 0.15);
+    padding: 4px 8px;
+    border-radius: 4px;
+    color: #C23861;
+  }
+  
+  .active-poem:hover {
+    background: rgba(194, 56, 97, 0.25);
+  }
+  
+  /* Active TOC item (Epigraph, Afterword) */
+  .active-toc {
+    background: rgba(194, 56, 97, 0.2) !important;
+    padding: 10px 12px;
+    border-radius: 6px;
+    border-left: 3px solid #C23861;
+  }
+  
+  .active-toc:hover {
+    background: rgba(194, 56, 97, 0.3) !important;
   }
   
   .sidebar-nav-chapter-num {

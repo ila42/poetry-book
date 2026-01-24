@@ -49,6 +49,14 @@ export function SidebarNav({ isBookOpen, currentPage, onNavigate, pageStructure 
     return pageStructure.findIndex(p => p.id === id);
   };
 
+  // Проверяем, активен ли элемент (находится ли пользователь на этой странице)
+  const isItemActive = (type: string, id?: string) => {
+    if (!id) return false;
+    const pageItem = pageStructure[currentPage];
+    if (!pageItem) return false;
+    return pageItem.type === type && pageItem.id === id;
+  };
+
   const handleNavigateToPage = (type: string, id?: string) => {
     const pageIndex = getPageIndex(type, id);
     if (pageIndex >= 0) {
@@ -172,40 +180,6 @@ export function SidebarNav({ isBookOpen, currentPage, onNavigate, pageStructure 
               {/* Divider */}
               <div className="sidebar-nav-divider" />
 
-              {/* Quick Links */}
-              <div className="sidebar-nav-quick">
-                <button 
-                  onClick={() => handleNavigateToPage('toc')}
-                  className="sidebar-nav-quick-link"
-                >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 6h16M4 10h16M4 14h16M4 18h16" />
-                  </svg>
-                  Оглавление
-                </button>
-                <button 
-                  onClick={() => handleNavigateToPage('epigraph')}
-                  className="sidebar-nav-quick-link"
-                >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                  </svg>
-                  Эпиграф
-                </button>
-                <button 
-                  onClick={() => handleNavigateToPage('afterword')}
-                  className="sidebar-nav-quick-link"
-                >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
-                  </svg>
-                  Послесловие
-                </button>
-              </div>
-
-              {/* Divider */}
-              <div className="sidebar-nav-divider" />
-
               {/* Content Structure */}
               <div className="sidebar-nav-content">
                 {contentData.volumes.map((volume) => (
@@ -271,7 +245,7 @@ export function SidebarNav({ isBookOpen, currentPage, onNavigate, pageStructure 
                                       <button
                                         key={chapter.id}
                                         onClick={() => handleNavigateToPage('chapter', chapter.id)}
-                                        className="sidebar-nav-chapter"
+                                        className={`sidebar-nav-chapter ${isItemActive('chapter', chapter.id) ? 'active' : ''}`}
                                       >
                                         <span className="sidebar-nav-chapter-num">{chapter.number}.</span>
                                         <span className="sidebar-nav-chapter-title">{chapter.title}</span>

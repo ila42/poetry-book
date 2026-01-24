@@ -14,6 +14,8 @@ interface TableOfContentsProps {
   hasAftervord?: boolean;
   epigraphPageNumber?: number;
   afterwordPageNumber?: number;
+  currentPage?: number;
+  pageStructure?: Array<{ type: string; content?: unknown; id?: string }>;
 }
 
 export function TableOfContents({ 
@@ -27,7 +29,9 @@ export function TableOfContents({
   hasEpigraph = false,
   hasAftervord = false,
   epigraphPageNumber,
-  afterwordPageNumber
+  afterwordPageNumber,
+  currentPage,
+  pageStructure
 }: TableOfContentsProps) {
   const sortedChapters = [...chapters].sort((a, b) => a.order - b.order);
 
@@ -44,31 +48,36 @@ export function TableOfContents({
         
         <div className="divider mb-8" />
         
-        <nav className="space-y-6">
+        <nav className="space-y-6" data-no-flip>
           {/* Эпиграф - первый пункт */}
           {hasEpigraph && epigraphPageNumber && (
             <motion.button
-              onClick={() => onNavigate(epigraphPageNumber)}
-              className="w-full text-left group"
+              onClick={(e) => {
+                e.stopPropagation();
+                const pageIndex = pageStructure?.findIndex(p => p.type === 'epigraph') ?? -1;
+                if (pageIndex >= 0) onNavigate(pageIndex);
+              }}
+              className={`w-full text-left group hover-toc-item ${pageStructure?.[currentPage]?.type === 'epigraph' ? 'active-toc' : ''}`}
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0 }}
             >
               <div className="flex items-center">
-                <span className="font-display text-lg text-burgundy-800 group-hover:text-burgundy-600 transition-colors italic">
+                <span className={`font-display text-lg transition-colors italic ${pageStructure?.[currentPage]?.type === 'epigraph' ? 'text-parchment-100 font-semibold' : 'text-burgundy-800 group-hover:text-burgundy-600'}`}>
                   Эпиграф
                 </span>
                 <span className="toc-dots" />
-                <span className="text-ink-500 text-sm">
+                <span className={`text-sm ${pageStructure?.[currentPage]?.type === 'epigraph' ? 'text-parchment-100 font-medium' : 'text-ink-500'}`}>
                   {epigraphPageNumber}
                 </span>
               </div>
             </motion.button>
           )}
 
-          {/* Главы */}
+                {/* Главы */}
           {sortedChapters.map((chapter, index) => {
             const chapterPoems = poems.filter(p => p.chapterId === chapter.id);
+            const isChapterActive = pageStructure[currentPage]?.type === 'chapter' && pageStructure[currentPage]?.id === chapter.id;
             
             return (
               <motion.div 
@@ -79,20 +88,23 @@ export function TableOfContents({
               >
                 {/* Название главы */}
                 <button
-                  onClick={() => onNavigate(getPageForChapter(chapter.id))}
-                  className="w-full text-left group"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onNavigate(getPageForChapter(chapter.id) - 1);
+                  }}
+                  className={`w-full text-left group hover-toc-item ${isChapterActive ? 'active-toc' : ''}`}
                 >
                   <div className="flex items-center">
-                    <span className="font-display text-lg text-burgundy-800 group-hover:text-burgundy-600 transition-colors">
+                    <span className={`font-display text-lg transition-colors ${isChapterActive ? 'text-parchment-100 font-semibold' : 'text-burgundy-800 group-hover:text-burgundy-600'}`}>
                       {chapter.title}
                     </span>
                     <span className="toc-dots" />
-                    <span className="text-ink-500 text-sm">
+                    <span className={`text-sm ${isChapterActive ? 'text-parchment-100 font-medium' : 'text-ink-500'}`}>
                       {getPageForChapter(chapter.id)}
                     </span>
                   </div>
                   {chapter.subtitle && (
-                    <p className="text-sm text-ink-500 italic ml-4">
+                    <p className={`text-sm italic ml-4 ${isChapterActive ? 'text-parchment-200' : 'text-ink-500'}`}>
                       {chapter.subtitle}
                     </p>
                   )}
@@ -103,14 +115,17 @@ export function TableOfContents({
                   {chapterPoems.map(poem => (
                     <li key={poem.id}>
                       <button
-                        onClick={() => onNavigate(getPageForPoem(poem.id))}
-                        className="w-full text-left flex items-center text-sm group"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onNavigate(getPageForPoem(poem.id) - 1);
+                        }}
+                        className={`w-full text-left flex items-center text-sm group transition-all ${pageStructure?.[currentPage]?.type === 'poem' && pageStructure?.[currentPage]?.id === poem.id ? 'active-poem' : ''}`}
                       >
-                        <span className="text-ink-600 group-hover:text-burgundy-600 transition-colors">
+                        <span className={`group-hover:text-burgundy-600 transition-colors ${pageStructure?.[currentPage]?.type === 'poem' && pageStructure?.[currentPage]?.id === poem.id ? 'text-burgundy-400 font-medium' : 'text-ink-600'}`}>
                           {poem.title}
                         </span>
                         <span className="flex-1 border-b border-dotted border-ink-300 mx-2" />
-                        <span className="text-ink-400">
+                        <span className={`${pageStructure?.[currentPage]?.type === 'poem' && pageStructure?.[currentPage]?.id === poem.id ? 'text-burgundy-300' : 'text-ink-400'}`}>
                           {getPageForPoem(poem.id)}
                         </span>
                       </button>
@@ -124,18 +139,22 @@ export function TableOfContents({
           {/* Послесловие - последний пункт */}
           {hasAftervord && afterwordPageNumber && (
             <motion.button
-              onClick={() => onNavigate(afterwordPageNumber)}
-              className="w-full text-left group"
+              onClick={(e) => {
+                e.stopPropagation();
+                const pageIndex = pageStructure?.findIndex(p => p.type === 'afterword') ?? -1;
+                if (pageIndex >= 0) onNavigate(pageIndex);
+              }}
+              className={`w-full text-left group hover-toc-item ${pageStructure?.[currentPage]?.type === 'afterword' ? 'active-toc' : ''}`}
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.1 * (sortedChapters.length + (hasEpigraph ? 2 : 1)) }}
             >
               <div className="flex items-center">
-                <span className="font-display text-lg text-burgundy-800 group-hover:text-burgundy-600 transition-colors italic">
+                <span className={`font-display text-lg transition-colors italic ${pageStructure?.[currentPage]?.type === 'afterword' ? 'text-parchment-100 font-semibold' : 'text-burgundy-800 group-hover:text-burgundy-600'}`}>
                   Вместо послесловия
                 </span>
                 <span className="toc-dots" />
-                <span className="text-ink-500 text-sm">
+                <span className={`text-sm ${pageStructure?.[currentPage]?.type === 'afterword' ? 'text-parchment-100 font-medium' : 'text-ink-500'}`}>
                   {afterwordPageNumber}
                 </span>
               </div>

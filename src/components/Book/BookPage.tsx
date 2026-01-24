@@ -15,6 +15,7 @@ export function BookPage({ children, pageNumber, isLeft = false, className = '' 
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.3 }}
+      data-no-flip
     >
       {/* Содержимое страницы */}
       <div className="flex-1 p-6 md:p-8 lg:p-12 overflow-y-auto scrollbar-hide">

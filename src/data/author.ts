@@ -4,7 +4,7 @@ export const author: Author = {
   name: 'Андрей Балашов',
   fullName: 'Андрей Балашов',
   birthYear: 1975,
-  photoUrl: '/images/author/author.jpg',
+  photoUrl: '/images/author/photo_2026-01-22_17-15-55.jpg',
   biography: `Андрей Балашов — современный поэт.
 
 Поэзия Андрея Балашова отличается глубоким лиризмом, тонким чувством природы и философским осмыслением жизни.`,
