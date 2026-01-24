@@ -325,7 +325,7 @@ export function LandingPage() {
                              shadow-lg hover:shadow-xl transition-all duration-300
                              border border-burgundy-500/40 ring-1 ring-burgundy-400/30"
                 >
-                  <span>{showAllAudio ? 'Свернуть' : 'Послушать всё'}</span>
+                  <span>{showAllAudio ? 'Свернуть ↑' : 'Послушать всё ↓'}</span>
                   <svg 
                     className={`w-4 h-4 transition-transform duration-300 ${showAllAudio ? 'rotate-180' : ''}`}
                     fill="none" 
@@ -418,7 +418,7 @@ export function LandingPage() {
                              shadow-lg hover:shadow-xl transition-all duration-300
                              border border-burgundy-500/40 ring-1 ring-burgundy-400/30"
                 >
-                  <span>{showAllPhotos ? 'Свернуть' : 'Посмотреть всё'}</span>
+                  <span>{showAllPhotos ? 'Свернуть ↑' : 'Посмотреть всё ↓'}</span>
                   <svg 
                     className={`w-4 h-4 transition-transform duration-300 ${showAllPhotos ? 'rotate-180' : ''}`}
                     fill="none" 
