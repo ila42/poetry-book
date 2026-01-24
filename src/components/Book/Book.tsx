@@ -8,7 +8,6 @@ import { BookPage, TitlePage, DedicationPage, EpigraphPage, AfterwordPage, Chapt
 import { PoemPage } from './PoemPage';
 import { TableOfContents } from './TableOfContents';
 import { SidebarNav } from './SidebarNav';
-import { EdgeNavigationHints } from './EdgeNavigationHints';
 
 // Хук для определения мобильного устройства
 function useIsMobile() {
