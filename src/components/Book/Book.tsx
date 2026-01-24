@@ -319,8 +319,8 @@ export function Book({ bookInfo, chapters, poems }: BookProps) {
   
   return (
     <div className="book-container w-full min-h-screen flex flex-col items-center justify-start md:justify-center p-2 md:p-4 pt-4">
-      {/* Подсказки для навигации по краям экрана */}
-      {isBookOpen && (
+      {/* Подсказки для навигации по краям экрана - ОТКЛЮЧЕНЫ, используется перелистывание по клику */}
+      {/* isBookOpen && (
         <EdgeNavigationHints
           edgePercentage={15}
           visible={isBookOpen}
@@ -328,7 +328,7 @@ export function Book({ bookInfo, chapters, poems }: BookProps) {
           onNextPage={handleNextPage}
           onPrevPage={handlePrevPage}
         />
-      )}
+      ) */}
       
       {/* Боковая навигация - ФИКСИРОВАНА в правом верхнем углу */}
       <SidebarNav
