@@ -198,6 +198,10 @@ export function Book({ bookInfo, chapters, poems }: BookProps) {
               getPageForPoem={getPageForPoem}
               pageNumber={pageNumber}
               isLeft={isLeft}
+              hasEpigraph={!!bookInfo.epigraph}
+              hasAftervord={!!bookInfo.afterword}
+              epigraphPageNumber={bookInfo.epigraph ? pageStructure.findIndex(p => p.type === 'epigraph') + 1 : undefined}
+              afterwordPageNumber={bookInfo.afterword ? pageStructure.findIndex(p => p.type === 'afterword') + 1 : undefined}
             />
           </PageWrapper>
         );

@@ -10,6 +10,10 @@ interface TableOfContentsProps {
   getPageForPoem: (poemId: string) => number;
   pageNumber?: number;
   isLeft?: boolean;
+  hasEpigraph?: boolean;
+  hasAftervord?: boolean;
+  epigraphPageNumber?: number;
+  afterwordPageNumber?: number;
 }
 
 export function TableOfContents({ 
@@ -19,7 +23,11 @@ export function TableOfContents({
   getPageForChapter,
   getPageForPoem,
   pageNumber,
-  isLeft 
+  isLeft,
+  hasEpigraph = false,
+  hasAftervord = false,
+  epigraphPageNumber,
+  afterwordPageNumber
 }: TableOfContentsProps) {
   const sortedChapters = [...chapters].sort((a, b) => a.order - b.order);
 
@@ -37,6 +45,28 @@ export function TableOfContents({
         <div className="divider mb-8" />
         
         <nav className="space-y-6">
+          {/* Эпиграф - первый пункт */}
+          {hasEpigraph && epigraphPageNumber && (
+            <motion.button
+              onClick={() => onNavigate(epigraphPageNumber)}
+              className="w-full text-left group"
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0 }}
+            >
+              <div className="flex items-center">
+                <span className="font-display text-lg text-burgundy-800 group-hover:text-burgundy-600 transition-colors italic">
+                  Эпиграф
+                </span>
+                <span className="toc-dots" />
+                <span className="text-ink-500 text-sm">
+                  {epigraphPageNumber}
+                </span>
+              </div>
+            </motion.button>
+          )}
+
+          {/* Главы */}
           {sortedChapters.map((chapter, index) => {
             const chapterPoems = poems.filter(p => p.chapterId === chapter.id);
             
@@ -45,7 +75,7 @@ export function TableOfContents({
                 key={chapter.id}
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.1 * index }}
+                transition={{ delay: 0.1 * (index + (hasEpigraph ? 1 : 0)) }}
               >
                 {/* Название главы */}
                 <button
@@ -90,6 +120,27 @@ export function TableOfContents({
               </motion.div>
             );
           })}
+
+          {/* Послесловие - последний пункт */}
+          {hasAftervord && afterwordPageNumber && (
+            <motion.button
+              onClick={() => onNavigate(afterwordPageNumber)}
+              className="w-full text-left group"
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.1 * (sortedChapters.length + (hasEpigraph ? 2 : 1)) }}
+            >
+              <div className="flex items-center">
+                <span className="font-display text-lg text-burgundy-800 group-hover:text-burgundy-600 transition-colors italic">
+                  Вместо послесловия
+                </span>
+                <span className="toc-dots" />
+                <span className="text-ink-500 text-sm">
+                  {afterwordPageNumber}
+                </span>
+              </div>
+            </motion.button>
+          )}
         </nav>
       </div>
     </BookPage>
