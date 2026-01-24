@@ -137,12 +137,7 @@ export function LandingPage() {
                 {/* Кнопка "Читать книгу" - единый стиль */}
                 <Link
                   to="/read"
-                  className="inline-flex items-center justify-center gap-2
-                             px-8 py-4 bg-gradient-to-r from-burgundy-800 via-burgundy-700 to-burgundy-600
-                             text-parchment-100 font-serif text-lg font-medium rounded-md
-                             hover:from-burgundy-700 hover:via-burgundy-600 hover:to-burgundy-500
-                             shadow-lg hover:shadow-xl transition-all duration-300
-                             border border-burgundy-500/40 ring-1 ring-burgundy-400/30"
+                  className="btn-cta"
                 >
                   <span>Читать книгу</span>
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -507,6 +507,36 @@
            shadow-md hover:shadow-lg;
   }
   
+  /* Unified CTA Button Style - для всех основных кнопок действия */
+  .btn-cta {
+    @apply inline-flex items-center justify-center gap-2
+           px-8 py-4 
+           bg-burgundy-700
+           text-white
+           font-serif text-lg font-medium 
+           rounded-md
+           hover:bg-burgundy-600
+           shadow-lg hover:shadow-xl 
+           transition-all duration-300;
+    background: #ab2146; /* burgundy-700 - точное значение */
+    color: #ffffff; /* white - точное значение */
+    text-decoration: none; /* убираем подчеркивание для Link */
+  }
+  
+  .btn-cta:hover {
+    background: #cc2d55; /* burgundy-600 - точное значение */
+  }
+  
+  /* Убеждаемся что все SVG иконки внутри кнопки белые */
+  .btn-cta svg {
+    color: #ffffff !important; /* white - точное значение */
+  }
+  
+  /* For button elements with disabled state */
+  .btn-cta-submit {
+    @apply btn-cta w-full disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  
   /* Navigation arrows */
   .nav-arrow {
     @apply w-10 h-10 flex items-center justify-center rounded-full
@@ -1480,21 +1510,25 @@
   color: #2C3E50 !important;
 }
 
-/* Submit button */
+/* Submit button - использует те же стили что и .btn-cta */
 .landing-contact-form button[type="submit"] {
-  background: #3b1420 !important;
-  background-image: linear-gradient(135deg, #5a2433 0%, #4a1b27 45%, #2a0b10 100%) !important;
-  border: 1px solid rgba(212, 175, 55, 0.35) !important;
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.45), 0 0 16px rgba(212, 175, 55, 0.18) !important;
-  color: #f5f0e8 !important;
+  background: #ab2146 !important; /* burgundy-700 */
+  background-image: none !important;
+  color: #ffffff !important; /* white */
+  border: none !important;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
   opacity: 1 !important;
   filter: none !important;
 }
 
 .landing-contact-form button[type="submit"]:hover {
-  background: #4a1b27 !important;
-  background-image: linear-gradient(135deg, #6b2a3a 0%, #5a2230 45%, #3b1420 100%) !important;
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.5), 0 0 20px rgba(212, 175, 55, 0.22) !important;
+  background: #cc2d55 !important; /* burgundy-600 */
+  background-image: none !important;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04) !important;
+}
+
+.landing-contact-form button[type="submit"] svg {
+  color: #ffffff !important; /* white */
 }
 
 /* File upload area */
