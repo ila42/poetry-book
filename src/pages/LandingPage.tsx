@@ -28,11 +28,11 @@ export function LandingPage() {
   
   // Фото (заглушки)
   const photos = [
-    { id: 'photo-1', title: 'Портрет ребенка', url: '/images/photo_2026-01-19_13-34-43.jpg' },
-    { id: 'photo-2', title: 'Мальчик в лесу', url: '/images/photo_2026-01-19_13-34-43 (2).jpg' },
-    { id: 'photo-3', title: 'Фото 3', url: author.photoUrl },
-    { id: 'photo-4', title: 'Фото 4', url: author.photoUrl },
-    { id: 'photo-5', title: 'Фото 5', url: author.photoUrl },
+    { id: 'photo-1', title: 'Портрет ребенка', url: '/images/gallery/photo1.jpg' },
+    { id: 'photo-2', title: 'Мальчик в лесу', url: '/images/gallery/photo2.jpg' },
+    { id: 'photo-3', title: 'Фото 3', url: '/images/gallery/photo1.jpg' },
+    { id: 'photo-4', title: 'Фото 4', url: '/images/gallery/photo2.jpg' },
+    { id: 'photo-5', title: 'Фото 5', url: '/images/gallery/photo1.jpg' },
   ];
   const firstTwoPhotos = photos.slice(0, 2);
   const restPhotos = photos.slice(2);
