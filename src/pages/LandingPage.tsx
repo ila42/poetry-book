@@ -282,7 +282,7 @@ export function LandingPage() {
             </div>
 
             {/* Кнопка раскрытия - сразу после первых 5 записей */}
-            {restAudio.length > 0 && !showAllAudio && (
+            {poemsWithAudio.length > 5 && !showAllAudio && (
               <div className="flex justify-center mb-8">
                 <button
                   onClick={() => setShowAllAudio(!showAllAudio)}
@@ -294,9 +294,9 @@ export function LandingPage() {
                              shadow-lg hover:shadow-xl transition-all duration-300
                              border border-burgundy-500/40 ring-1 ring-burgundy-400/30"
                 >
-                  <span>{showAllAudio ? 'Свернуть ↑' : 'Послушать всё ↓'}</span>
+                  <span>Послушать всё ↓</span>
                   <svg 
-                    className={`w-4 h-4 transition-transform duration-300 ${showAllAudio ? 'rotate-180' : ''}`}
+                    className="w-4 h-4 transition-transform duration-300"
                     fill="none" 
                     stroke="currentColor" 
                     viewBox="0 0 24 24"
@@ -339,7 +339,7 @@ export function LandingPage() {
             </motion.div>
 
             {/* Кнопка "Свернуть" - видна когда список развёрнут */}
-            {showAllAudio && (
+            {poemsWithAudio.length > 5 && showAllAudio && (
               <div className="flex justify-center">
                 <button
                   onClick={() => setShowAllAudio(!showAllAudio)}
@@ -351,9 +351,9 @@ export function LandingPage() {
                              shadow-lg hover:shadow-xl transition-all duration-300
                              border border-burgundy-500/40 ring-1 ring-burgundy-400/30"
                 >
-                  <span>{showAllAudio ? 'Свернуть ↑' : 'Послушать всё ↓'}</span>
+                  <span>Свернуть ↑</span>
                   <svg 
-                    className={`w-4 h-4 transition-transform duration-300 ${showAllAudio ? 'rotate-180' : ''}`}
+                    className="w-4 h-4 transition-transform duration-300 rotate-180"
                     fill="none" 
                     stroke="currentColor" 
                     viewBox="0 0 24 24"
