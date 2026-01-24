@@ -16,79 +16,33 @@ export function LandingPage() {
       {/* Хедер */}
       <header className="sticky top-0 z-50 bg-[#F5F5F0]/95 backdrop-blur-sm border-b border-[#E5E5E0]">
         <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16 sm:h-20">
-            {/* Логотип / Имя автора */}
+          <div className="flex items-center justify-center h-16 sm:h-20">
+            {/* Логотип / Имя автора - по центру */}
             <a href="/" className="flex items-center gap-2">
               <span className="text-xl sm:text-2xl font-serif font-medium text-[#2C3E50]">
                 {author.name}
               </span>
             </a>
-            
-            {/* Навигация - Desktop */}
-            <nav className="hidden md:flex items-center gap-8">
-              <button 
-                onClick={() => scrollToSection('about')}
-                className="text-[#2C3E50]/70 hover:text-[#2C3E50] transition-colors font-serif"
-              >
-                Об авторе
-              </button>
-              <button 
-                onClick={() => scrollToSection('book')}
-                className="text-[#2C3E50]/70 hover:text-[#2C3E50] transition-colors font-serif"
-              >
-                Сборник
-              </button>
-              <Link
-                to="/audio-archive"
-                className="text-[#2C3E50]/70 hover:text-[#2C3E50] transition-colors font-serif"
-              >
-                Аудиоархив
-              </Link>
-              <button 
-                onClick={() => scrollToSection('contact')}
-                className="text-[#2C3E50]/70 hover:text-[#2C3E50] transition-colors font-serif"
-              >
-                Контакты
-              </button>
-            </nav>
-            
-            {/* Мобильное меню */}
-            <nav className="flex md:hidden items-center gap-4 text-sm">
-              <button 
-                onClick={() => scrollToSection('book')}
-                className="text-[#2C3E50]/70 hover:text-[#2C3E50] transition-colors font-serif"
-              >
-                Сборник
-              </button>
-              <Link
-                to="/audio-archive"
-                className="text-[#2C3E50]/70 hover:text-[#2C3E50] transition-colors font-serif"
-              >
-                Аудио
-              </Link>
-              <button 
-                onClick={() => scrollToSection('contact')}
-                className="text-[#2C3E50]/70 hover:text-[#2C3E50] transition-colors font-serif"
-              >
-                Контакты
-              </button>
-            </nav>
           </div>
         </div>
       </header>
 
       {/* Hero Section - Книга */}
-      <section id="book" className="py-16 sm:py-24 lg:py-32">
+      <section id="book-content" className="py-16 sm:py-24 lg:py-32">
         <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
-            {/* Обложка книги */}
+            {/* Обложка книги - интерактивная */}
             <motion.div
               className="flex-shrink-0"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
             >
-              <div className="relative">
+              <button
+                onClick={() => scrollToSection('book-content')}
+                className="relative group outline-none"
+                aria-label="Перейти к содержимому книги"
+              >
                 {/* Тень под книгой */}
                 <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 w-[80%] h-8 bg-black/10 blur-2xl rounded-full" />
                 
@@ -96,7 +50,8 @@ export function LandingPage() {
                 <div className="relative w-[240px] sm:w-[280px] lg:w-[320px] aspect-[3/4] 
                                 bg-gradient-to-br from-[#8B4557] via-[#6B3344] to-[#4A2332]
                                 rounded-sm shadow-2xl overflow-hidden
-                                transform hover:scale-[1.02] transition-transform duration-300">
+                                transform hover:scale-[1.02] transition-all duration-300
+                                cursor-pointer group-hover:shadow-[0_20px_40px_rgba(0,0,0,0.3)]">
                   {/* Декоративные элементы обложки */}
                   <div className="absolute inset-4 border border-[#D4AF37]/30 rounded-sm" />
                   <div className="absolute inset-6 border border-[#D4AF37]/20 rounded-sm" />
@@ -116,8 +71,20 @@ export function LandingPage() {
                     </p>
                     <div className="text-[#D4AF37]/60 text-3xl mt-4">❧</div>
                   </div>
+                  
+                  {/* Overlay с подсказкой при наведении */}
+                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 
+                                  transition-all duration-300 flex items-center justify-center
+                                  opacity-0 group-hover:opacity-100">
+                    <div className="flex flex-col items-center gap-2 text-center">
+                      <svg className="w-8 h-8 text-[#F5F0E8]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                      </svg>
+                      <span className="text-[#F5F0E8] text-xs font-serif">Откройте книгу</span>
+                    </div>
+                  </div>
                 </div>
-              </div>
+              </button>
             </motion.div>
             
             {/* Текст и CTA */}
@@ -143,33 +110,31 @@ export function LandingPage() {
                 по страницам моей книги.
               </p>
               
-              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+              {/* Подсказка о клике на обложку */}
+              <p className="text-[#2C3E50]/50 italic text-sm mb-8">
+                ↓ Нажмите на обложку слева, чтобы открыть сборник
+              </p>
+              
+              <div className="flex flex-col gap-4 justify-center lg:justify-start">
+                {/* Кнопка Аудиоархива */}
                 <Link
-                  to="/read"
-                  className="inline-flex items-center justify-center gap-2 
-                             px-8 py-4 bg-[#2C3E50] text-white
-                             font-serif text-lg rounded-md
-                             hover:bg-[#1a252f] active:bg-[#0f171d]
-                             transition-colors duration-200
-                             shadow-lg hover:shadow-xl"
+                  to="/audio-archive"
+                  className="inline-flex items-center justify-center gap-2
+                             px-8 py-3 bg-transparent text-[#8B4557]
+                             font-serif text-base rounded-md
+                             border-2 border-[#8B4557]/50
+                             hover:border-[#8B4557] hover:bg-[#8B4557]/5
+                             transition-all duration-200
+                             italic"
                 >
-                  <span>Читать онлайн</span>
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 3v9.28c-1.591 0-3-1.159-3-2.5S10.409 7.28 12 7.28c1.591 0 3 1.159 3 2.5S13.591 12.28 12 12.28V3zm8.5 8.5a2 2 0 1 1 .001-4.001A2 2 0 0 1 20.5 11.5zM4 11.5a2 2 0 1 1 .001-4.001A2 2 0 0 1 4 11.5zm12.5 7.5v-5h-1v5h1zm-8 0v-5h-1v5h1z"/>
+                  </svg>
+                  <span>Перейти в Аудиоархив</span>
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
                   </svg>
                 </Link>
-                
-                <button
-                  onClick={() => scrollToSection('about')}
-                  className="inline-flex items-center justify-center gap-2
-                             px-8 py-4 bg-transparent text-[#2C3E50]
-                             font-serif text-lg rounded-md
-                             border-2 border-[#2C3E50]/30
-                             hover:border-[#2C3E50]/60 hover:bg-[#2C3E50]/5
-                             transition-all duration-200"
-                >
-                  Об авторе
-                </button>
               </div>
             </motion.div>
           </div>
