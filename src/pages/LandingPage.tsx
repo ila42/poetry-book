@@ -104,36 +104,43 @@ export function LandingPage() {
                 {bookInfo.year} год
               </p>
               
-              <p className="font-serif text-[#2C3E50]/70 leading-relaxed mb-8 max-w-lg mx-auto lg:mx-0">
+              <p className="font-serif text-[#2C3E50]/70 leading-relaxed mb-10 max-w-lg mx-auto lg:mx-0">
                 Поэтический сборник, в котором каждое стихотворение — это отражение 
                 определённого момента, чувства, мысли. Приглашаю вас в путешествие 
                 по страницам моей книги.
               </p>
               
-              {/* Подсказка о клике на обложку */}
-              <p className="text-[#2C3E50]/50 italic text-sm mb-8">
-                ↓ Нажмите на обложку слева, чтобы открыть сборник
-              </p>
-              
-              <div className="flex flex-col gap-4 justify-center lg:justify-start">
+              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                {/* Кнопка "Читать книгу" - эстетичная */}
+                <Link
+                  to="/read"
+                  className="inline-flex items-center justify-center gap-2
+                             px-8 py-3 bg-transparent text-[#2C3E50]
+                             font-serif text-base font-medium rounded-md
+                             border-2 border-[#2C3E50]/40
+                             hover:border-[#2C3E50]/70 hover:bg-[#2C3E50]/5
+                             transition-all duration-200"
+                >
+                  <span>Читать книгу</span>
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 9l3 3m0 0l-3 3m3-3H8m13 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </Link>
+                
                 {/* Кнопка Аудиоархива */}
                 <Link
                   to="/audio-archive"
                   className="inline-flex items-center justify-center gap-2
                              px-8 py-3 bg-transparent text-[#8B4557]
                              font-serif text-base rounded-md
-                             border-2 border-[#8B4557]/50
-                             hover:border-[#8B4557] hover:bg-[#8B4557]/5
-                             transition-all duration-200
-                             italic"
+                             border-2 border-[#8B4557]/40
+                             hover:border-[#8B4557]/70 hover:bg-[#8B4557]/5
+                             transition-all duration-200"
                 >
                   <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M12 3v9.28c-1.591 0-3-1.159-3-2.5S10.409 7.28 12 7.28c1.591 0 3 1.159 3 2.5S13.591 12.28 12 12.28V3zm8.5 8.5a2 2 0 1 1 .001-4.001A2 2 0 0 1 20.5 11.5zM4 11.5a2 2 0 1 1 .001-4.001A2 2 0 0 1 4 11.5zm12.5 7.5v-5h-1v5h1zm-8 0v-5h-1v5h1z"/>
                   </svg>
-                  <span>Перейти в Аудиоархив</span>
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                  </svg>
+                  <span>Аудиоархив</span>
                 </Link>
               </div>
             </motion.div>
