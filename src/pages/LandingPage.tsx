@@ -281,6 +281,32 @@ export function LandingPage() {
               ))}
             </div>
 
+            {/* Кнопка раскрытия - сразу после первых 5 записей */}
+            {restAudio.length > 0 && !showAllAudio && (
+              <div className="flex justify-center mb-8">
+                <button
+                  onClick={() => setShowAllAudio(!showAllAudio)}
+                  className="inline-flex items-center gap-2 
+                             px-6 py-3
+                             bg-gradient-to-r from-burgundy-700 via-burgundy-600 to-burgundy-500
+                             text-parchment-100 font-serif font-medium rounded-md
+                             hover:from-burgundy-600 hover:via-burgundy-500 hover:to-burgundy-400
+                             shadow-lg hover:shadow-xl transition-all duration-300
+                             border border-burgundy-500/40 ring-1 ring-burgundy-400/30"
+                >
+                  <span>{showAllAudio ? 'Свернуть ↑' : 'Послушать всё ↓'}</span>
+                  <svg 
+                    className={`w-4 h-4 transition-transform duration-300 ${showAllAudio ? 'rotate-180' : ''}`}
+                    fill="none" 
+                    stroke="currentColor" 
+                    viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                  </svg>
+                </button>
+              </div>
+            )}
+
             {/* Остальные аудиозаписи (раскрывающиеся) */}
             <motion.div
               initial={false}
@@ -312,8 +338,8 @@ export function LandingPage() {
               )}
             </motion.div>
 
-            {/* Кнопка раскрытия */}
-            {restAudio.length > 0 && (
+            {/* Кнопка "Свернуть" - видна когда список развёрнут */}
+            {showAllAudio && (
               <div className="flex justify-center">
                 <button
                   onClick={() => setShowAllAudio(!showAllAudio)}
