@@ -45,8 +45,8 @@ export function BookReader() {
         {/* Глобальный аудиоплеер */}
         <GlobalAudioPlayer />
         
-        {/* Футер */}
-        <footer className="fixed bottom-20 left-0 right-0 py-2 text-center pointer-events-none">
+        {/* Футер - в конце контента */}
+        <footer className="mt-16 py-8 text-center">
           <p className="text-parchment-200/40 text-xs font-serif">
             © {new Date().getFullYear()} {author.name}. Все права защищены.
           </p>
