@@ -146,6 +146,22 @@ export function Book({ bookInfo, chapters, poems }: BookProps) {
       bookRef.current.pageFlip().flipNext();
     }
   };
+
+  // Обработчик клика по странице для перелистывания
+  const handlePageClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    // Получаем ширину контейнера
+    const container = e.currentTarget;
+    const clickX = e.clientX - container.getBoundingClientRect().left;
+    const containerWidth = container.getBoundingClientRect().width;
+    
+    // Если клик в правой половине - листаем вперед
+    if (clickX > containerWidth * 0.5) {
+      handleNextPage();
+    } else {
+      // Если в левой половине - листаем назад
+      handlePrevPage();
+    }
+  };
   
   // Рендер страницы по типу
   const renderPage = (page: { type: string; content?: unknown; id?: string }, index: number) => {
@@ -296,21 +312,10 @@ export function Book({ bookInfo, chapters, poems }: BookProps) {
             </motion.button>
             
             {/* Книга */}
-            <div className="flex items-center justify-center relative">
-              {/* Кнопка "Назад" - Desktop */}
-              <motion.button
-                onClick={handlePrevPage}
-                className="nav-arrow nav-arrow-large mr-2 sm:mr-4 hidden md:flex"
-                disabled={currentPage === 0}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: currentPage === 0 ? 0.3 : 1, x: 0 }}
-                transition={{ delay: 0.4 }}
-              >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                </svg>
-              </motion.button>
-              
+            <div 
+              className="flex items-center justify-center relative cursor-pointer group"
+              onClick={handlePageClick}
+            >
               {/* HTMLFlipBook - режим одной страницы на мобильных */}
               <div className="shadow-book rounded-lg overflow-hidden book-container-inner">
                 <HTMLFlipBook
@@ -343,44 +348,48 @@ export function Book({ bookInfo, chapters, poems }: BookProps) {
                   {pageStructure.map((page, index) => renderPage(page, index))}
                 </HTMLFlipBook>
               </div>
-              
-              {/* Кнопка "Вперёд" - Desktop */}
-              <motion.button
+            </div>
+
+            {/* Навигация под книгой - по центру */}
+            <motion.div
+              className="flex items-center justify-center gap-6 mt-6 px-4"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4 }}
+            >
+              {/* Кнопка "Назад" */}
+              <button
+                onClick={handlePrevPage}
+                disabled={currentPage === 0}
+                className="p-2 text-ink-400 hover:text-ink-600 disabled:text-ink-200 
+                           transition-colors duration-200"
+                aria-label="Предыдущая страница"
+                title="Предыдущая страница"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                </svg>
+              </button>
+
+              {/* Номер страницы */}
+              <span className="text-ink-400 font-serif text-sm whitespace-nowrap">
+                Страница <span className="text-ink-600 font-medium">{currentPage + 1}</span> из {pageStructure.length}
+              </span>
+
+              {/* Кнопка "Вперёд" */}
+              <button
                 onClick={handleNextPage}
-                className="nav-arrow nav-arrow-large ml-2 sm:ml-4 hidden md:flex"
                 disabled={currentPage >= pageStructure.length - 2}
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: currentPage >= pageStructure.length - 2 ? 0.3 : 1, x: 0 }}
-                transition={{ delay: 0.4 }}
+                className="p-2 text-ink-400 hover:text-ink-600 disabled:text-ink-200 
+                           transition-colors duration-200"
+                aria-label="Следующая страница"
+                title="Следующая страница"
               >
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                 </svg>
-              </motion.button>
-              
-              {/* Мобильные кнопки навигации - по бокам книги */}
-              <button
-                onClick={handlePrevPage}
-                disabled={currentPage === 0}
-                className="md:hidden absolute left-0 top-1/2 -translate-y-1/2 nav-arrow-mobile nav-arrow-mobile-left"
-                aria-label="Предыдущая страница"
-              >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
-                </svg>
               </button>
-              
-              <button
-                onClick={handleNextPage}
-                disabled={currentPage >= pageStructure.length - 1}
-                className="md:hidden absolute right-0 top-1/2 -translate-y-1/2 nav-arrow-mobile nav-arrow-mobile-right"
-                aria-label="Следующая страница"
-              >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
-                </svg>
-              </button>
-            </div>
+            </motion.div>
             
             {/* Скраббер страниц - тёмная тема с золотыми акцентами */}
             <motion.div
