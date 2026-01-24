@@ -28,8 +28,8 @@ export function LandingPage() {
   
   // Фото (заглушки)
   const photos = [
-    { id: 'photo-1', title: 'Фото 1', url: author.photoUrl },
-    { id: 'photo-2', title: 'Фото 2', url: author.photoUrl },
+    { id: 'photo-1', title: 'Портрет ребенка', url: '/images/photo_2026-01-19_13-34-43.jpg' },
+    { id: 'photo-2', title: 'Мальчик в лесу', url: '/images/photo_2026-01-19_13-34-43 (2).jpg' },
     { id: 'photo-3', title: 'Фото 3', url: author.photoUrl },
     { id: 'photo-4', title: 'Фото 4', url: author.photoUrl },
     { id: 'photo-5', title: 'Фото 5', url: author.photoUrl },
@@ -431,8 +431,8 @@ export function LandingPage() {
               )}
             </motion.div>
 
-            {/* Кнопка раскрытия */}
-            {restPhotos.length > 0 && (
+            {/* Кнопка раскрытия - только если фото больше 2 */}
+            {photos.length > 2 && (
               <div className="flex justify-center">
                 <button
                   onClick={() => setShowAllPhotos(!showAllPhotos)}
