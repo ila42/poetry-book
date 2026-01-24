@@ -137,33 +137,34 @@ export function LandingPage() {
               </p>
               
               <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                {/* Кнопка "Читать книгу" - эстетичная */}
+                {/* Кнопка "Читать книгу" - единый стиль */}
                 <Link
                   to="/read"
                   className="inline-flex items-center justify-center gap-2
-                             px-8 py-3 bg-transparent text-[#2C3E50]
-                             font-serif text-base font-medium rounded-md
-                             border-2 border-[#2C3E50]/40
-                             hover:border-[#2C3E50]/70 hover:bg-[#2C3E50]/5
-                             transition-all duration-200"
+                             px-8 py-4 bg-gradient-to-r from-burgundy-800 via-burgundy-700 to-burgundy-600
+                             text-parchment-100 font-serif text-lg font-medium rounded-md
+                             hover:from-burgundy-700 hover:via-burgundy-600 hover:to-burgundy-500
+                             shadow-lg hover:shadow-xl transition-all duration-300
+                             border border-burgundy-500/40 ring-1 ring-burgundy-400/30"
                 >
                   <span>Читать книгу</span>
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 9l3 3m0 0l-3 3m3-3H8m13 0a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                 </Link>
                 
-                {/* Кнопка Аудиоархива */}
+                {/* Кнопка Аудиоархива - вторичный стиль */}
                 <Link
                   to="/audio-archive"
                   className="inline-flex items-center justify-center gap-2
-                             px-8 py-3 bg-transparent text-[#8B4557]
-                             font-serif text-base rounded-md
-                             border-2 border-[#8B4557]/40
-                             hover:border-[#8B4557]/70 hover:bg-[#8B4557]/5
-                             transition-all duration-200"
+                             px-8 py-4 bg-transparent text-burgundy-700
+                             font-serif text-lg font-medium rounded-md
+                             border-2 border-burgundy-400
+                             hover:border-burgundy-600 hover:bg-burgundy-50/20
+                             transition-all duration-300
+                             shadow-md hover:shadow-lg"
                 >
-                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M12 3v9.28c-1.591 0-3-1.159-3-2.5S10.409 7.28 12 7.28c1.591 0 3 1.159 3 2.5S13.591 12.28 12 12.28V3zm8.5 8.5a2 2 0 1 1 .001-4.001A2 2 0 0 1 20.5 11.5zM4 11.5a2 2 0 1 1 .001-4.001A2 2 0 0 1 4 11.5zm12.5 7.5v-5h-1v5h1zm-8 0v-5h-1v5h1z"/>
                   </svg>
                   <span>Аудиоархив</span>
@@ -316,10 +317,13 @@ export function LandingPage() {
               <div className="flex justify-center">
                 <button
                   onClick={() => setShowAllAudio(!showAllAudio)}
-                  className="inline-flex items-center gap-2 px-6 py-3
-                             text-[#2C3E50] font-serif border-2 border-[#2C3E50]/30
-                             rounded-md hover:border-[#2C3E50]/60 hover:bg-[#2C3E50]/5
-                             transition-all duration-200"
+                  className="inline-flex items-center gap-2 
+                             px-6 py-3
+                             bg-gradient-to-r from-burgundy-700 via-burgundy-600 to-burgundy-500
+                             text-parchment-100 font-serif font-medium rounded-md
+                             hover:from-burgundy-600 hover:via-burgundy-500 hover:to-burgundy-400
+                             shadow-lg hover:shadow-xl transition-all duration-300
+                             border border-burgundy-500/40 ring-1 ring-burgundy-400/30"
                 >
                   <span>{showAllAudio ? 'Свернуть' : 'Послушать всё'}</span>
                   <svg 
@@ -406,10 +410,13 @@ export function LandingPage() {
               <div className="flex justify-center">
                 <button
                   onClick={() => setShowAllPhotos(!showAllPhotos)}
-                  className="inline-flex items-center gap-2 px-6 py-3
-                             text-[#2C3E50] font-serif border-2 border-[#2C3E50]/30
-                             rounded-md hover:border-[#2C3E50]/60 hover:bg-[#2C3E50]/5
-                             transition-all duration-200"
+                  className="inline-flex items-center gap-2 
+                             px-6 py-3
+                             bg-gradient-to-r from-burgundy-700 via-burgundy-600 to-burgundy-500
+                             text-parchment-100 font-serif font-medium rounded-md
+                             hover:from-burgundy-600 hover:via-burgundy-500 hover:to-burgundy-400
+                             shadow-lg hover:shadow-xl transition-all duration-300
+                             border border-burgundy-500/40 ring-1 ring-burgundy-400/30"
                 >
                   <span>{showAllPhotos ? 'Свернуть' : 'Посмотреть всё'}</span>
                   <svg 
