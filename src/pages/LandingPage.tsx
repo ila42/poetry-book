@@ -1,7 +1,9 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { useState } from 'react';
 import { author, bookInfo } from '@/data/author';
 import { ContactForm } from '@/components/ContactForm';
+import { contentPoems } from '@/data/contentHelpers';
 
 export function LandingPage() {
   const scrollToSection = (id: string) => {
@@ -10,6 +12,30 @@ export function LandingPage() {
       element.scrollIntoView({ behavior: 'smooth' });
     }
   };
+
+  // State для раскрытия списков
+  const [showAllAudio, setShowAllAudio] = useState(false);
+  const [showAllPhotos, setShowAllPhotos] = useState(false);
+  const [expandedPoem, setExpandedPoem] = useState<string | null>(null);
+  
+  // Фильтруем стихи с аудио
+  const poemsWithAudio = contentPoems.filter(p => p.audioUrl);
+  const firstFiveAudio = poemsWithAudio.slice(0, 5);
+  const restAudio = poemsWithAudio.slice(5);
+  
+  // Последние 5 стихотворений
+  const recentPoems = contentPoems.slice(-5).reverse();
+  
+  // Фото (заглушки)
+  const photos = [
+    { id: 'photo-1', title: 'Фото 1', url: author.photoUrl },
+    { id: 'photo-2', title: 'Фото 2', url: author.photoUrl },
+    { id: 'photo-3', title: 'Фото 3', url: author.photoUrl },
+    { id: 'photo-4', title: 'Фото 4', url: author.photoUrl },
+    { id: 'photo-5', title: 'Фото 5', url: author.photoUrl },
+  ];
+  const firstTwoPhotos = photos.slice(0, 2);
+  const restPhotos = photos.slice(2);
 
   return (
     <div className="min-h-screen bg-[#F5F5F0]">
@@ -212,6 +238,256 @@ export function LandingPage() {
                   {author.biography}
                 </div>
               </div>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Разделитель */}
+      <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="h-px bg-gradient-to-r from-transparent via-[#2C3E50]/20 to-transparent" />
+      </div>
+
+      {/* Послушать - Аудио */}
+      <section id="audio" className="py-16 sm:py-24">
+        <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+          >
+            <h2 className="font-serif text-2xl sm:text-3xl text-[#2C3E50] text-center mb-12">
+              Послушать
+            </h2>
+            
+            {/* Первые 5 аудиозаписей */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+              {firstFiveAudio.map((poem) => (
+                <motion.div
+                  key={poem.id}
+                  className="p-4 bg-white rounded-lg border border-[#2C3E50]/10 hover:border-[#2C3E50]/30 transition-all duration-200 shadow-sm hover:shadow-md"
+                  whileHover={{ y: -2 }}
+                >
+                  <h3 className="font-serif text-lg text-[#2C3E50] mb-2">{poem.title}</h3>
+                  <p className="text-sm text-[#2C3E50]/60 mb-3 italic line-clamp-2">
+                    {poem.content}
+                  </p>
+                  <audio controls className="w-full h-8">
+                    <source src={poem.audioUrl || ''} type="audio/mp4" />
+                  </audio>
+                </motion.div>
+              ))}
+            </div>
+
+            {/* Остальные аудиозаписи (раскрывающиеся) */}
+            <motion.div
+              initial={false}
+              animate={{ height: showAllAudio ? 'auto' : 0, opacity: showAllAudio ? 1 : 0 }}
+              transition={{ duration: 0.3 }}
+              className="overflow-hidden"
+            >
+              {showAllAudio && (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+                  {restAudio.map((poem) => (
+                    <motion.div
+                      key={poem.id}
+                      className="p-4 bg-white rounded-lg border border-[#2C3E50]/10 hover:border-[#2C3E50]/30 transition-all duration-200 shadow-sm hover:shadow-md"
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.3 }}
+                      whileHover={{ y: -2 }}
+                    >
+                      <h3 className="font-serif text-lg text-[#2C3E50] mb-2">{poem.title}</h3>
+                      <p className="text-sm text-[#2C3E50]/60 mb-3 italic line-clamp-2">
+                        {poem.content}
+                      </p>
+                      <audio controls className="w-full h-8">
+                        <source src={poem.audioUrl || ''} type="audio/mp4" />
+                      </audio>
+                    </motion.div>
+                  ))}
+                </div>
+              )}
+            </motion.div>
+
+            {/* Кнопка раскрытия */}
+            {restAudio.length > 0 && (
+              <div className="flex justify-center">
+                <button
+                  onClick={() => setShowAllAudio(!showAllAudio)}
+                  className="inline-flex items-center gap-2 px-6 py-3
+                             text-[#2C3E50] font-serif border-2 border-[#2C3E50]/30
+                             rounded-md hover:border-[#2C3E50]/60 hover:bg-[#2C3E50]/5
+                             transition-all duration-200"
+                >
+                  <span>{showAllAudio ? 'Свернуть' : 'Послушать всё'}</span>
+                  <svg 
+                    className={`w-4 h-4 transition-transform duration-300 ${showAllAudio ? 'rotate-180' : ''}`}
+                    fill="none" 
+                    stroke="currentColor" 
+                    viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                  </svg>
+                </button>
+              </div>
+            )}
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Разделитель */}
+      <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="h-px bg-gradient-to-r from-transparent via-[#2C3E50]/20 to-transparent" />
+      </div>
+
+      {/* Посмотреть - Фотогалерея */}
+      <section id="gallery" className="py-16 sm:py-24">
+        <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+          >
+            <h2 className="font-serif text-2xl sm:text-3xl text-[#2C3E50] text-center mb-12">
+              Посмотреть
+            </h2>
+            
+            {/* Первые 2 фото */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+              {firstTwoPhotos.map((photo) => (
+                <motion.div
+                  key={photo.id}
+                  className="relative aspect-square rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-200"
+                  whileHover={{ scale: 1.02 }}
+                >
+                  <img
+                    src={photo.url}
+                    alt={photo.title}
+                    className="w-full h-full object-cover"
+                  />
+                </motion.div>
+              ))}
+            </div>
+
+            {/* Остальные фото (раскрывающиеся) */}
+            <motion.div
+              initial={false}
+              animate={{ height: showAllPhotos ? 'auto' : 0, opacity: showAllPhotos ? 1 : 0 }}
+              transition={{ duration: 0.3 }}
+              className="overflow-hidden"
+            >
+              {showAllPhotos && (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                  {restPhotos.map((photo) => (
+                    <motion.div
+                      key={photo.id}
+                      className="relative aspect-square rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-200"
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ duration: 0.3 }}
+                      whileHover={{ scale: 1.02 }}
+                    >
+                      <img
+                        src={photo.url}
+                        alt={photo.title}
+                        className="w-full h-full object-cover"
+                      />
+                    </motion.div>
+                  ))}
+                </div>
+              )}
+            </motion.div>
+
+            {/* Кнопка раскрытия */}
+            {restPhotos.length > 0 && (
+              <div className="flex justify-center">
+                <button
+                  onClick={() => setShowAllPhotos(!showAllPhotos)}
+                  className="inline-flex items-center gap-2 px-6 py-3
+                             text-[#2C3E50] font-serif border-2 border-[#2C3E50]/30
+                             rounded-md hover:border-[#2C3E50]/60 hover:bg-[#2C3E50]/5
+                             transition-all duration-200"
+                >
+                  <span>{showAllPhotos ? 'Свернуть' : 'Посмотреть всё'}</span>
+                  <svg 
+                    className={`w-4 h-4 transition-transform duration-300 ${showAllPhotos ? 'rotate-180' : ''}`}
+                    fill="none" 
+                    stroke="currentColor" 
+                    viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                  </svg>
+                </button>
+              </div>
+            )}
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Разделитель */}
+      <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="h-px bg-gradient-to-r from-transparent via-[#2C3E50]/20 to-transparent" />
+      </div>
+
+      {/* Новое - Свежие стихи */}
+      <section id="new" className="py-16 sm:py-24">
+        <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+          >
+            <h2 className="font-serif text-2xl sm:text-3xl text-[#2C3E50] text-center mb-12">
+              Новое
+            </h2>
+            
+            {/* Список стихотворений аккордеоном */}
+            <div className="space-y-3 max-w-2xl mx-auto">
+              {recentPoems.map((poem) => (
+                <motion.div
+                  key={poem.id}
+                  className="border border-[#2C3E50]/20 rounded-lg overflow-hidden"
+                  initial={false}
+                >
+                  {/* Заголовок - кликабельный */}
+                  <button
+                    onClick={() => setExpandedPoem(expandedPoem === poem.id ? null : poem.id)}
+                    className="w-full flex items-center justify-between p-4 bg-white hover:bg-[#F5F5F0] transition-colors duration-200"
+                  >
+                    <h3 className="font-serif text-lg text-[#2C3E50] text-left">
+                      {poem.title}
+                    </h3>
+                    <svg
+                      className={`w-5 h-5 text-[#2C3E50] transition-transform duration-300 ${
+                        expandedPoem === poem.id ? 'rotate-180' : ''
+                      }`}
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                    </svg>
+                  </button>
+
+                  {/* Текст - раскрывающийся */}
+                  <motion.div
+                    initial={false}
+                    animate={{ height: expandedPoem === poem.id ? 'auto' : 0, opacity: expandedPoem === poem.id ? 1 : 0 }}
+                    transition={{ duration: 0.3 }}
+                    className="overflow-hidden"
+                  >
+                    <div className="p-4 bg-[#F5F5F0]/50 border-t border-[#2C3E50]/10">
+                      <p className="font-serif text-[#2C3E50] leading-relaxed whitespace-pre-line">
+                        {poem.content}
+                      </p>
+                    </div>
+                  </motion.div>
+                </motion.div>
+              ))}
             </div>
           </motion.div>
         </div>
