@@ -489,7 +489,7 @@ export function ContactForm() {
               type="submit"
               disabled={status === 'submitting'}
               className="w-full py-3 px-6 bg-gradient-to-r from-burgundy-800 via-burgundy-700 to-burgundy-600
-                         text-parchment-100 font-serif text-lg rounded-md
+                         text-parchment-100 font-serif text-lg font-medium rounded-md
                          hover:from-burgundy-700 hover:via-burgundy-600 hover:to-burgundy-500
                          disabled:opacity-50 disabled:cursor-not-allowed
                          shadow-lg hover:shadow-xl transition-all duration-300
