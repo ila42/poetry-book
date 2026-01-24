@@ -150,7 +150,30 @@
     pointer-events: none !important;
   }
   
-  /* ===== ЗАЩИТА ОТ HOVER-ПЕРЕЛИСТЫВАНИЯ ===== */
+  /* ===== КНИГА И НАВИГАЦИЯ ===== */
+  
+  /* Контейнер с книгой - интерактивный курсор */
+  .book-interactive-container {
+    cursor: pointer;
+    position: relative;
+    user-select: none;
+  }
+  
+  /* Интерактивный курсор при наведении - показываем зоны клика */
+  .book-interactive-container:hover {
+    /* Курсор по умолчанию - указатель */
+  }
+  
+  /* На мобильных - более явная интерактивность */
+  @media (max-width: 768px) {
+    .book-interactive-container {
+      cursor: grab;
+    }
+    
+    .book-interactive-container:active {
+      cursor: grabbing;
+    }
+  }
   /* 
    * Страницы книги НЕ реагируют на mousemove БЕЗ нажатой кнопки.
    * pointer-events включаются ТОЛЬКО когда контейнер имеет класс .is-dragging

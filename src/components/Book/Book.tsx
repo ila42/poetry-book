@@ -159,29 +159,55 @@ export function Book({ bookInfo, chapters, poems }: BookProps) {
 
   // Обработчик клика по странице для перелистывания
   const handlePageClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    // Не срабатываем на кликах по кнопкам, ссылкам и интерактивным элементам
     const target = e.target as HTMLElement;
+    
+    // ===== Исключения: НЕ срабатываем на интерактивных элементах =====
+    
+    // 1. Стандартные интерактивные элементы
     if (
       target.tagName === 'BUTTON' ||
       target.tagName === 'A' ||
+      target.tagName === 'INPUT' ||
+      target.tagName === 'TEXTAREA' ||
       target.closest('button') ||
       target.closest('a') ||
-      target.closest('[data-no-flip]') ||
-      target.closest('nav') // Не срабатываем на кликах в меню навигации
+      target.closest('input') ||
+      target.closest('textarea')
     ) {
       return;
     }
+    
+    // 2. Элементы с специальными классами
+    if (
+      target.closest('[data-no-flip]') ||
+      target.closest('nav') ||
+      target.closest('.toc') ||
+      target.closest('.epigraph') ||
+      target.closest('.table-of-contents') ||
+      target.closest('.menu') ||
+      target.closest('[contenteditable]')
+    ) {
+      return;
+    }
+    
+    // 3. Если пользователь выделяет текст - не срабатываем
+    if (window.getSelection()?.toString()) {
+      return;
+    }
 
-    // Получаем ширину контейнера
+    // ===== Определяем зону клика =====
     const container = e.currentTarget;
     const clickX = e.clientX - container.getBoundingClientRect().left;
     const containerWidth = container.getBoundingClientRect().width;
     
-    // Если клик в правой половине - листаем вперед
+    // Клик в правой половине - следующая страница
     if (clickX > containerWidth * 0.5) {
+      e.preventDefault?.();
       handleNextPage();
-    } else {
-      // Если в левой половине - листаем назад
+    } 
+    // Клик в левой половине - предыдущая страница
+    else {
+      e.preventDefault?.();
       handlePrevPage();
     }
   };
@@ -353,7 +379,7 @@ export function Book({ bookInfo, chapters, poems }: BookProps) {
             
             {/* Книга */}
             <div 
-              className="flex items-center justify-center relative cursor-pointer group mb-6"
+              className="flex items-center justify-center relative cursor-pointer group mb-6 book-interactive-container"
               onClick={handlePageClick}
             >
               {/* HTMLFlipBook - режим одной страницы на мобильных */}

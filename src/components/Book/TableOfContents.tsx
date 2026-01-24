@@ -57,17 +57,17 @@ export function TableOfContents({
                 const pageIndex = pageStructure?.findIndex(p => p.type === 'epigraph') ?? -1;
                 if (pageIndex >= 0) onNavigate(pageIndex);
               }}
-              className={`w-full text-left group hover-toc-item ${pageStructure?.[currentPage]?.type === 'epigraph' ? 'active-toc' : ''}`}
+              className={`w-full text-left group hover-toc-item ${(pageStructure?.[currentPage ?? 0])?.type === 'epigraph' ? 'active-toc' : ''}`}
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0 }}
             >
               <div className="flex items-center">
-                <span className={`font-display text-lg transition-colors italic ${pageStructure?.[currentPage]?.type === 'epigraph' ? 'text-parchment-100 font-semibold' : 'text-burgundy-800 group-hover:text-burgundy-600'}`}>
+                <span className={`font-display text-lg transition-colors italic ${(pageStructure?.[currentPage ?? 0])?.type === 'epigraph' ? 'text-parchment-100 font-semibold' : 'text-burgundy-800 group-hover:text-burgundy-600'}`}>
                   Эпиграф
                 </span>
                 <span className="toc-dots" />
-                <span className={`text-sm ${pageStructure?.[currentPage]?.type === 'epigraph' ? 'text-parchment-100 font-medium' : 'text-ink-500'}`}>
+                <span className={`text-sm ${(pageStructure?.[currentPage ?? 0])?.type === 'epigraph' ? 'text-parchment-100 font-medium' : 'text-ink-500'}`}>
                   {epigraphPageNumber}
                 </span>
               </div>
@@ -77,7 +77,7 @@ export function TableOfContents({
                 {/* Главы */}
           {sortedChapters.map((chapter, index) => {
             const chapterPoems = poems.filter(p => p.chapterId === chapter.id);
-            const isChapterActive = pageStructure[currentPage]?.type === 'chapter' && pageStructure[currentPage]?.id === chapter.id;
+            const isChapterActive = (pageStructure?.[currentPage ?? 0])?.type === 'chapter' && (pageStructure?.[currentPage ?? 0])?.id === chapter.id;
             
             return (
               <motion.div 
@@ -119,13 +119,13 @@ export function TableOfContents({
                           e.stopPropagation();
                           onNavigate(getPageForPoem(poem.id) - 1);
                         }}
-                        className={`w-full text-left flex items-center text-sm group transition-all ${pageStructure?.[currentPage]?.type === 'poem' && pageStructure?.[currentPage]?.id === poem.id ? 'active-poem' : ''}`}
+                        className={`w-full text-left flex items-center text-sm group transition-all ${(pageStructure?.[currentPage ?? 0])?.type === 'poem' && (pageStructure?.[currentPage ?? 0])?.id === poem.id ? 'active-poem' : ''}`}
                       >
-                        <span className={`group-hover:text-burgundy-600 transition-colors ${pageStructure?.[currentPage]?.type === 'poem' && pageStructure?.[currentPage]?.id === poem.id ? 'text-burgundy-400 font-medium' : 'text-ink-600'}`}>
+                        <span className={`group-hover:text-burgundy-600 transition-colors ${(pageStructure?.[currentPage ?? 0])?.type === 'poem' && (pageStructure?.[currentPage ?? 0])?.id === poem.id ? 'text-burgundy-400 font-medium' : 'text-ink-600'}`}>
                           {poem.title}
                         </span>
                         <span className="flex-1 border-b border-dotted border-ink-300 mx-2" />
-                        <span className={`${pageStructure?.[currentPage]?.type === 'poem' && pageStructure?.[currentPage]?.id === poem.id ? 'text-burgundy-300' : 'text-ink-400'}`}>
+                        <span className={`${(pageStructure?.[currentPage ?? 0])?.type === 'poem' && (pageStructure?.[currentPage ?? 0])?.id === poem.id ? 'text-burgundy-300' : 'text-ink-400'}`}>
                           {getPageForPoem(poem.id)}
                         </span>
                       </button>
@@ -144,17 +144,17 @@ export function TableOfContents({
                 const pageIndex = pageStructure?.findIndex(p => p.type === 'afterword') ?? -1;
                 if (pageIndex >= 0) onNavigate(pageIndex);
               }}
-              className={`w-full text-left group hover-toc-item ${pageStructure?.[currentPage]?.type === 'afterword' ? 'active-toc' : ''}`}
+              className={`w-full text-left group hover-toc-item ${(pageStructure?.[currentPage ?? 0])?.type === 'afterword' ? 'active-toc' : ''}`}
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.1 * (sortedChapters.length + (hasEpigraph ? 2 : 1)) }}
             >
               <div className="flex items-center">
-                <span className={`font-display text-lg transition-colors italic ${pageStructure?.[currentPage]?.type === 'afterword' ? 'text-parchment-100 font-semibold' : 'text-burgundy-800 group-hover:text-burgundy-600'}`}>
+                <span className={`font-display text-lg transition-colors italic ${(pageStructure?.[currentPage ?? 0])?.type === 'afterword' ? 'text-parchment-100 font-semibold' : 'text-burgundy-800 group-hover:text-burgundy-600'}`}>
                   Вместо послесловия
                 </span>
                 <span className="toc-dots" />
-                <span className={`text-sm ${pageStructure?.[currentPage]?.type === 'afterword' ? 'text-parchment-100 font-medium' : 'text-ink-500'}`}>
+                <span className={`text-sm ${(pageStructure?.[currentPage ?? 0])?.type === 'afterword' ? 'text-parchment-100 font-medium' : 'text-ink-500'}`}>
                   {afterwordPageNumber}
                 </span>
               </div>
