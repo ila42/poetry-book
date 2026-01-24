@@ -266,13 +266,10 @@ export function ContactForm() {
         <div className="p-8 pt-6">
           {/* Header */}
           <div className="text-center mb-6">
-            <h3 className="font-display text-2xl text-burgundy-800 mb-2">
+            <h3 className="font-display text-2xl text-burgundy-800 mb-6">
               Письмо автору
             </h3>
             <div className="w-24 h-0.5 mx-auto bg-gradient-to-r from-transparent via-burgundy-400 to-transparent" />
-            <p className="mt-3 text-sm text-ink-600 font-serif italic">
-              Буду рад вашим отзывам и размышлениям
-            </p>
           </div>
           
           <form ref={formRef} onSubmit={handleSubmit} className="space-y-5">

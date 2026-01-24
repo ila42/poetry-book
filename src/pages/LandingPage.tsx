@@ -507,14 +507,11 @@ export function LandingPage() {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <h2 className="font-serif text-2xl sm:text-3xl text-[#2C3E50] text-center mb-4">
+            <h2 className="font-serif text-2xl sm:text-3xl text-[#2C3E50] text-center mb-10">
               Обратная связь
             </h2>
-            <p className="text-center text-[#2C3E50]/60 font-serif mb-10">
-              Буду рад вашим отзывам и размышлениям
-            </p>
             
-            {/* Форма контактов - переопределяем стили */}
+            {/* Форма контактов */}
             <div className="landing-contact-form">
               <ContactForm />
             </div>
