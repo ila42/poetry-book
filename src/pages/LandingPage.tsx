@@ -6,13 +6,6 @@ import { ContactForm } from '@/components/ContactForm';
 import { contentPoems } from '@/data/contentHelpers';
 
 export function LandingPage() {
-  const scrollToSection = (id: string) => {
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
   // State для раскрытия списков
   const [showAllAudio, setShowAllAudio] = useState(false);
   const [showAllPhotos, setShowAllPhotos] = useState(false);

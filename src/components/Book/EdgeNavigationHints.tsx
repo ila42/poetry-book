@@ -1,9 +1,7 @@
 import { motion } from 'framer-motion';
 
 interface EdgeNavigationHintsProps {
-  edgePercentage?: number;
   visible?: boolean;
-  hideDelay?: number;
   onNextPage?: () => void;
   onPrevPage?: () => void;
 }
@@ -13,9 +11,7 @@ interface EdgeNavigationHintsProps {
  * Стрелки расположены вертикально в центре, минималистичны и не отвлекают
  */
 export function EdgeNavigationHints({
-  edgePercentage = 15,
   visible = true,
-  hideDelay = 5000,
   onNextPage,
   onPrevPage,
 }: EdgeNavigationHintsProps) {
