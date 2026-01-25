@@ -149,42 +149,48 @@ export function Book({ bookInfo, chapters, poems }: BookProps) {
     }
   }, []);
 
-  // Обработчик клика по Overlay для перелистывания страниц
-  const handleOverlayClick = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
-    console.log('=== Overlay Click Detected ===');
+  // Обработчик клика/тача по Overlay для перелистывания страниц
+  const handleOverlayClick = useCallback((e: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>) => {
+    // Получаем координаты клика/тача
+    let clientX: number;
+    let clientY: number;
+    
+    if ('touches' in e) {
+      // Touch event
+      if (e.touches.length === 0) return;
+      clientX = e.touches[0].clientX;
+      clientY = e.touches[0].clientY;
+    } else {
+      // Mouse event
+      clientX = e.clientX;
+      clientY = e.clientY;
+    }
     
     // Получаем элемент под курсором (под overlay)
     const overlay = e.currentTarget;
     overlay.style.pointerEvents = 'none';
-    const elementBelow = document.elementFromPoint(e.clientX, e.clientY) as HTMLElement;
+    const elementBelow = document.elementFromPoint(clientX, clientY) as HTMLElement;
     overlay.style.pointerEvents = 'auto';
-    
-    console.log('Element below:', elementBelow?.tagName, elementBelow?.className?.slice(0, 50));
     
     // Проверяем только кликабельные элементы (кнопки, ссылки, формы)
     const clickableElement = elementBelow?.closest('button, a[href], input, textarea, select, audio, video');
     
     if (clickableElement) {
-      console.log('Clickable element found:', clickableElement.tagName);
       clickableElement.dispatchEvent(new MouseEvent('click', { bubbles: true }));
       return;
     }
     
     // Определяем зону клика
     const rect = overlay.getBoundingClientRect();
-    const clickX = e.clientX - rect.left;
+    const clickX = clientX - rect.left;
     const containerWidth = rect.width;
-    
-    console.log('Flipping page. Click zone:', (clickX / containerWidth * 100).toFixed(1) + '%');
     
     // Правая половина - следующая страница
     if (clickX > containerWidth * 0.5) {
-      console.log('>>> flipNext()');
       bookRef.current?.pageFlip()?.flipNext();
     } 
     // Левая половина - предыдущая страница
     else {
-      console.log('<<< flipPrev()');
       bookRef.current?.pageFlip()?.flipPrev();
     }
   }, []);
@@ -360,8 +366,8 @@ export function Book({ bookInfo, chapters, poems }: BookProps) {
                   startZIndex={0}
                   autoSize={true}
                   clickEventForward={false}
-                  useMouseEvents={false}
-                  swipeDistance={0}
+                  useMouseEvents={true}
+                  swipeDistance={isMobile ? 30 : 0}
                   showPageCorners={false}
                   disableFlipByClick={true}
                 >
@@ -369,11 +375,16 @@ export function Book({ bookInfo, chapters, poems }: BookProps) {
                 </HTMLFlipBook>
               </div>
               
-              {/* Прозрачный Overlay для перехвата кликов - покрывает всю книгу */}
+              {/* Прозрачный Overlay для перехвата кликов и тачей - покрывает всю книгу */}
               <div 
-                className="absolute top-0 left-0 w-full h-full cursor-pointer"
-                style={{ zIndex: 100 }}
+                className="absolute top-0 left-0 w-full h-full cursor-pointer select-none"
+                style={{ 
+                  zIndex: 100,
+                  touchAction: 'manipulation', // Предотвращает zoom при double-tap
+                  WebkitTapHighlightColor: 'transparent', // Убирает подсветку при тапе на iOS
+                }}
                 onClick={handleOverlayClick}
+                onTouchStart={handleOverlayClick}
               />
             </div>
             

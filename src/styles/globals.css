@@ -1608,3 +1608,104 @@
     display: none;
   }
 }
+
+/* ===== MOBILE OPTIMIZATIONS ===== */
+
+/* Предотвращение выделения текста на элементах навигации */
+.book-interactive-container,
+.book-flip,
+.page-wrapper,
+.nav-arrow,
+.nav-arrow-mobile,
+.sidebar-nav-toggle,
+.edge-navigation-hints button {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none; /* iOS: отключает контекстное меню при долгом нажатии */
+}
+
+/* Предотвращение zoom при double-tap на книге */
+.book-interactive-container,
+.book-container-inner,
+.book-flip {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Улучшенная отзывчивость на тач-устройствах */
+@media (hover: none) and (pointer: coarse) {
+  /* На тач-устройствах делаем стрелки более заметными */
+  .edge-navigation-hints button {
+    opacity: 0.9;
+  }
+  
+  /* Убираем hover-эффекты на тач-устройствах */
+  .edge-navigation-hints button:hover {
+    transform: none;
+  }
+  
+  /* Активное состояние для тач */
+  .edge-navigation-hints button:active {
+    transform: scale(0.9);
+    opacity: 0.7;
+  }
+}
+
+/* Мобильная адаптация книги - режим одной страницы */
+@media (max-width: 768px) {
+  /* Книга занимает больше места на экране */
+  .book-interactive-container {
+    width: 100%;
+    max-width: calc(100vw - 24px);
+  }
+  
+  /* Уменьшаем отступы у страниц на мобильных */
+  .page {
+    padding: 1rem 1.25rem;
+  }
+  
+  /* Меньший размер шрифта для стихов */
+  .poem-text {
+    font-size: 0.9rem;
+    line-height: 1.7;
+  }
+  
+  .poem-title {
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+  }
+  
+  /* Скраббер страниц - больше для удобства на тач */
+  .page-scrubber::-webkit-slider-thumb {
+    width: 28px;
+    height: 28px;
+  }
+}
+
+/* Маленькие мобильные экраны */
+@media (max-width: 480px) {
+  .book-interactive-container {
+    max-width: calc(100vw - 16px);
+  }
+  
+  .page {
+    padding: 0.75rem 1rem;
+  }
+  
+  .poem-text {
+    font-size: 0.85rem;
+    line-height: 1.65;
+  }
+  
+  .poem-title {
+    font-size: 1.1rem;
+  }
+  
+  /* Ещё больший thumb для маленьких экранов */
+  .page-scrubber::-webkit-slider-thumb {
+    width: 32px;
+    height: 32px;
+  }
+}
