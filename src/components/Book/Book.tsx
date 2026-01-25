@@ -128,10 +128,11 @@ export function Book({ bookInfo, chapters, poems }: BookProps) {
     setIsBookOpen(true);
   };
   
-  const handleCloseBook = () => {
-    setIsBookOpen(false);
-    setCurrentPage(0);
-  };
+  // handleCloseBook не используется, но оставлен для возможного будущего использования
+  // const handleCloseBook = () => {
+  //   setIsBookOpen(false);
+  //   setCurrentPage(0);
+  // };
   
   const handleFlip = (e: { data: number }) => {
     setCurrentPage(e.data);
@@ -206,14 +207,16 @@ export function Book({ bookInfo, chapters, poems }: BookProps) {
     
     const container = bookContainerRef.current;
     
-    // Основной обработчик клика
-    const handleClick = (e: MouseEvent) => {
-      handlePageClick(e);
+    // Основной обработчик клика (типизирован как EventListener)
+    const handleClick: EventListener = (e: Event) => {
+      const mouseEvent = e as MouseEvent;
+      handlePageClick(mouseEvent);
     };
     
-    // Обработчик mousedown (срабатывает раньше)
-    const handleMouseDown = (e: MouseEvent) => {
-      const target = e.target as HTMLElement;
+    // Обработчик mousedown (срабатывает раньше, типизирован как EventListener)
+    const handleMouseDown: EventListener = (e: Event) => {
+      const mouseEvent = e as MouseEvent;
+      const target = mouseEvent.target as HTMLElement;
       
       // Проверяем, что это не интерактивный элемент
       if (target.closest('button, a, input, textarea, [data-no-flip]')) {
@@ -221,16 +224,17 @@ export function Book({ bookInfo, chapters, poems }: BookProps) {
       }
       
       // Сохраняем позицию для определения клика vs drag
-      const startX = e.clientX;
-      const startY = e.clientY;
+      const startX = mouseEvent.clientX;
+      const startY = mouseEvent.clientY;
       
-      const handleMouseUp = (upEvent: MouseEvent) => {
-        const deltaX = Math.abs(upEvent.clientX - startX);
-        const deltaY = Math.abs(upEvent.clientY - startY);
+      const handleMouseUp: EventListener = (upEvent: Event) => {
+        const mouseUpEvent = upEvent as MouseEvent;
+        const deltaX = Math.abs(mouseUpEvent.clientX - startX);
+        const deltaY = Math.abs(mouseUpEvent.clientY - startY);
         
         // Если движение меньше 5px - это клик, не drag
         if (deltaX <= 5 && deltaY <= 5) {
-          handlePageClick(upEvent);
+          handlePageClick(mouseUpEvent);
         }
         
         document.removeEventListener('mouseup', handleMouseUp);
@@ -243,21 +247,21 @@ export function Book({ bookInfo, chapters, poems }: BookProps) {
     container.addEventListener('click', handleClick, true);
     container.addEventListener('mousedown', handleMouseDown, true);
     
-      // Также добавляем на сам HTMLFlipBook элемент после его монтирования
-      const timeoutId = setTimeout(() => {
-        const flipBookElement = container.querySelector('.book-flip');
-        if (flipBookElement) {
-          flipBookElement.addEventListener('click', handleClick, true);
-          flipBookElement.addEventListener('mousedown', handleMouseDown, true);
-        }
-        
-        // Добавляем на страницы внутри
-        const pages = container.querySelectorAll('.stf__item, .stf__page, .stf__block');
-        pages.forEach((page) => {
-          page.addEventListener('click', handleClick, true);
-          page.addEventListener('mousedown', handleMouseDown, true);
-        });
-      }, 200);
+    // Также добавляем на сам HTMLFlipBook элемент после его монтирования
+    const timeoutId = setTimeout(() => {
+      const flipBookElement = container.querySelector('.book-flip');
+      if (flipBookElement) {
+        flipBookElement.addEventListener('click', handleClick, true);
+        flipBookElement.addEventListener('mousedown', handleMouseDown, true);
+      }
+      
+      // Добавляем на страницы внутри
+      const pages = container.querySelectorAll('.stf__item, .stf__page, .stf__block');
+      pages.forEach((page) => {
+        page.addEventListener('click', handleClick, true);
+        page.addEventListener('mousedown', handleMouseDown, true);
+      });
+    }, 200);
     
     return () => {
       container.removeEventListener('click', handleClick, true);
