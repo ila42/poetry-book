@@ -85,7 +85,8 @@ PageWrapper.displayName = 'PageWrapper';
 export function Book({ bookInfo, chapters, poems }: BookProps) {
   const [isBookOpen, setIsBookOpen] = useState(true);
   const [currentPage, setCurrentPage] = useState(0);
-  const bookRef = useRef<{ pageFlip: () => { flipNext: () => void; flipPrev: () => void; turnToPage: (page: number) => void; } }>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const bookRef = useRef<any>(null);
   const { isMobile, screenWidth, screenHeight } = useDeviceInfo();
   
   // Вычисляем оптимальные размеры книги в зависимости от устройства
@@ -214,47 +215,6 @@ export function Book({ bookInfo, chapters, poems }: BookProps) {
   const handleNextPage = useCallback(() => {
     if (bookRef.current?.pageFlip()) {
       bookRef.current.pageFlip().flipNext();
-    }
-  }, []);
-
-  // Обработчик клика по overlay для перелистывания страниц
-  const handleOverlayClick = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
-    e.stopPropagation();
-    e.preventDefault();
-    
-    const rect = e.currentTarget.getBoundingClientRect();
-    const clickX = e.clientX - rect.left;
-    const containerWidth = rect.width;
-    
-    // Для мобильных (одна страница): левые 30% = назад, остальное = вперёд
-    // Для десктопа (разворот): левая половина = назад, правая = вперёд
-    const threshold = isMobile ? 0.3 : 0.5;
-    
-    if (clickX > containerWidth * threshold) {
-      bookRef.current?.pageFlip()?.flipNext();
-    } else {
-      bookRef.current?.pageFlip()?.flipPrev();
-    }
-  }, [isMobile]);
-
-  // Обработчик тача для мобильных
-  const handleOverlayTouch = useCallback((e: React.TouchEvent<HTMLDivElement>) => {
-    e.stopPropagation();
-    e.preventDefault();
-    
-    // Используем changedTouches для touchend
-    const touch = e.changedTouches[0] || e.touches[0];
-    if (!touch) return;
-    
-    const rect = e.currentTarget.getBoundingClientRect();
-    const touchX = touch.clientX - rect.left;
-    const containerWidth = rect.width;
-    
-    // Левые 30% экрана = назад, остальное = вперёд
-    if (touchX > containerWidth * 0.3) {
-      bookRef.current?.pageFlip()?.flipNext();
-    } else {
-      bookRef.current?.pageFlip()?.flipPrev();
     }
   }, []);
 
@@ -460,24 +420,14 @@ export function Book({ bookInfo, chapters, poems }: BookProps) {
                   WebkitTapHighlightColor: 'transparent',
                 }}
                 onClick={() => {
-                  if (bookRef.current && bookRef.current.pageFlip) {
-                    const pageFlip = bookRef.current.pageFlip();
-                    const currPage = pageFlip.getCurrentPageIndex();
-                    console.log('LEFT CLICK - current page:', currPage);
-                    if (currPage > 0) {
-                      pageFlip.turnToPage(currPage - 1);
-                    }
+                  if (currentPage > 0 && bookRef.current?.pageFlip) {
+                    bookRef.current.pageFlip().turnToPage(currentPage - 1);
                   }
                 }}
                 onTouchEnd={(e) => {
                   e.preventDefault();
-                  if (bookRef.current && bookRef.current.pageFlip) {
-                    const pageFlip = bookRef.current.pageFlip();
-                    const currPage = pageFlip.getCurrentPageIndex();
-                    console.log('LEFT TOUCH - current page:', currPage);
-                    if (currPage > 0) {
-                      pageFlip.turnToPage(currPage - 1);
-                    }
+                  if (currentPage > 0 && bookRef.current?.pageFlip) {
+                    bookRef.current.pageFlip().turnToPage(currentPage - 1);
                   }
                 }}
               />
@@ -493,26 +443,14 @@ export function Book({ bookInfo, chapters, poems }: BookProps) {
                   WebkitTapHighlightColor: 'transparent',
                 }}
                 onClick={() => {
-                  if (bookRef.current && bookRef.current.pageFlip) {
-                    const pageFlip = bookRef.current.pageFlip();
-                    const currPage = pageFlip.getCurrentPageIndex();
-                    const pageCount = pageFlip.getPageCount();
-                    console.log('RIGHT CLICK - current page:', currPage, 'total:', pageCount);
-                    if (currPage < pageCount - 1) {
-                      pageFlip.turnToPage(currPage + 1);
-                    }
+                  if (currentPage < pageStructure.length - 1 && bookRef.current?.pageFlip) {
+                    bookRef.current.pageFlip().turnToPage(currentPage + 1);
                   }
                 }}
                 onTouchEnd={(e) => {
                   e.preventDefault();
-                  if (bookRef.current && bookRef.current.pageFlip) {
-                    const pageFlip = bookRef.current.pageFlip();
-                    const currPage = pageFlip.getCurrentPageIndex();
-                    const pageCount = pageFlip.getPageCount();
-                    console.log('RIGHT TOUCH - current page:', currPage, 'total:', pageCount);
-                    if (currPage < pageCount - 1) {
-                      pageFlip.turnToPage(currPage + 1);
-                    }
+                  if (currentPage < pageStructure.length - 1 && bookRef.current?.pageFlip) {
+                    bookRef.current.pageFlip().turnToPage(currentPage + 1);
                   }
                 }}
               />
