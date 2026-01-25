@@ -185,7 +185,7 @@ export function ContactForm() {
       
       
       setStatus('success');
-      setStatusMessage('Спасибо! Ваше письмо успешно отправлено. Мы ответим вам в ближайшее время.');
+      setStatusMessage('Спасибо! Ваше письмо отправлено. Я отвечу вам в ближайшее время');
       
       // Reset form
       setFormData({

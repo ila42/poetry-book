@@ -142,8 +142,12 @@
   }
   
   /* ОТКЛЮЧЕНИЕ анимации углов при наведении */
+  /* Отключены уголки страниц - не показываем их */
   .book-flip .stf__corner,
   .stf__corner {
+    display: none !important;
+    pointer-events: none !important;
+    opacity: 0 !important;
     display: none !important;
     visibility: hidden !important;
     opacity: 0 !important;
@@ -152,11 +156,40 @@
   
   /* ===== КНИГА И НАВИГАЦИЯ ===== */
   
-  /* Контейнер с книгой - интерактивный курсор */
+  /* Контейнер с книгой - интерактивный курсор (без drag) */
   .book-interactive-container {
     cursor: pointer;
     position: relative;
     user-select: none;
+    pointer-events: auto;
+    z-index: 10;
+  }
+  
+  /* Убеждаемся, что страницы внутри кликабельны */
+  .book-interactive-container .book-flip,
+  .book-interactive-container .stf__item,
+  .book-interactive-container .stf__page,
+  .book-interactive-container .stf__block {
+    pointer-events: auto !important;
+    cursor: pointer !important;
+  }
+  
+  /* Отключаем все эффекты перетаскивания */
+  .book-interactive-container * {
+    user-select: none;
+    -webkit-user-drag: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+  }
+  
+  /* Отключаем hover-эффекты уголков страниц */
+  .book-interactive-container .stf__page-corner,
+  .book-interactive-container .stf__page-corner-stf__page-corner-top-left,
+  .book-interactive-container .stf__page-corner-stf__page-corner-top-right,
+  .book-interactive-container .stf__page-corner-stf__page-corner-bottom-left,
+  .book-interactive-container .stf__page-corner-stf__page-corner-bottom-right {
+    display: none !important;
+    pointer-events: none !important;
   }
   
   /* Интерактивный курсор при наведении - показываем зоны клика */
@@ -164,14 +197,14 @@
     /* Курсор по умолчанию - указатель */
   }
   
-  /* На мобильных - более явная интерактивность */
+  /* На мобильных - обычный курсор (без grab) */
   @media (max-width: 768px) {
     .book-interactive-container {
-      cursor: grab;
+      cursor: pointer;
     }
     
     .book-interactive-container:active {
-      cursor: grabbing;
+      cursor: pointer;
     }
   }
   /* 

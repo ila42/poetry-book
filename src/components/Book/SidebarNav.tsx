@@ -138,7 +138,7 @@ export function SidebarNav({ isBookOpen, currentPage, onNavigate, pageStructure 
             >
               {/* Header */}
               <div className="sidebar-nav-header">
-                <span className="sidebar-nav-title">Навигация</span>
+                <span className="sidebar-nav-title">Содержание</span>
                 <span className="sidebar-nav-page">стр. {currentPage + 1} / {pageStructure.length}</span>
               </div>
 

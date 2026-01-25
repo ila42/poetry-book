@@ -28,7 +28,7 @@ export function AudioArchive() {
       <div className="fixed inset-0 leather-wear" />
       <div className="fixed inset-0 leather-vignette" />
 
-      {/* Кнопка "Вернуться в библиотеку" - в левом верхнем углу */}
+      {/* Кнопка "Вернуться на главную" - в левом верхнем углу */}
       <Link
         to="/"
         className="fixed top-4 left-4 z-50 flex items-center gap-2 px-4 py-2.5
@@ -44,7 +44,7 @@ export function AudioArchive() {
         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
         </svg>
-        <span>Вернуться в библиотеку</span>
+        <span>Вернуться на главную</span>
       </Link>
 
       {/* Основной контент */}
@@ -65,14 +65,6 @@ export function AudioArchive() {
             >
               Аудиоархив
             </motion.h1>
-            <motion.p
-              className="font-serif text-parchment-200/70 text-lg"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.3 }}
-            >
-              Аудиозаписи стихотворений из сборника
-            </motion.p>
             <motion.div
               className="w-24 h-px mx-auto mt-4 bg-gradient-to-r from-transparent via-[#d4af37]/50 to-transparent"
               initial={{ scaleX: 0 }}

@@ -2,12 +2,12 @@ import { useState, useCallback, useMemo, useRef, forwardRef, useEffect } from 'r
 import HTMLFlipBook from 'react-pageflip';
 import { motion, AnimatePresence } from 'framer-motion';
 import { BookInfo, Chapter, Poem } from '@/types';
-import { useEdgeClickNavigation } from '@/hooks';
 import { BookCover } from './BookCover';
 import { BookPage, TitlePage, DedicationPage, EpigraphPage, AfterwordPage, ChapterPage } from './BookPage';
 import { PoemPage } from './PoemPage';
 import { TableOfContents } from './TableOfContents';
 import { SidebarNav } from './SidebarNav';
+import { EdgeNavigationHints } from './EdgeNavigationHints';
 
 // Хук для определения мобильного устройства
 function useIsMobile() {
@@ -46,6 +46,7 @@ export function Book({ bookInfo, chapters, poems }: BookProps) {
   const [isBookOpen, setIsBookOpen] = useState(true);
   const [currentPage, setCurrentPage] = useState(0);
   const bookRef = useRef<{ pageFlip: () => { flipNext: () => void; flipPrev: () => void; turnToPage: (page: number) => void; } }>(null);
+  const bookContainerRef = useRef<HTMLDivElement>(null);
   const isMobile = useIsMobile();
   
   // Сортируем главы
@@ -148,69 +149,123 @@ export function Book({ bookInfo, chapters, poems }: BookProps) {
     }
   };
 
-  // Используем хук для навигации по краям экрана
-  useEdgeClickNavigation({
-    onNextPage: handleNextPage,
-    onPrevPage: handlePrevPage,
-    edgePercentage: 15, // 15% от края экрана
-    enabled: isBookOpen, // Только когда книга открыта
-  });
-
-  // Обработчик клика по странице для перелистывания
-  const handlePageClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    const target = e.target as HTMLElement;
+  // Обработчик клика по странице для перелистывания (улучшенная версия)
+  const handlePageClick = useCallback((e: React.MouseEvent<HTMLDivElement> | MouseEvent) => {
+    const target = (e.target || (e as MouseEvent).target) as HTMLElement;
     
-    // ===== Исключения: НЕ срабатываем на интерактивных элементах =====
+    // Проверяем, что клик внутри контейнера книги
+    if (!bookContainerRef.current) return;
     
-    // 1. Стандартные интерактивные элементы
-    if (
-      target.tagName === 'BUTTON' ||
-      target.tagName === 'A' ||
-      target.tagName === 'INPUT' ||
-      target.tagName === 'TEXTAREA' ||
-      target.closest('button') ||
-      target.closest('a') ||
-      target.closest('input') ||
-      target.closest('textarea')
-    ) {
+    const container = bookContainerRef.current;
+    if (!container.contains(target)) {
       return;
     }
     
-    // 2. Элементы с специальными классами
-    if (
-      target.closest('[data-no-flip]') ||
-      target.closest('nav') ||
-      target.closest('.toc') ||
-      target.closest('.epigraph') ||
-      target.closest('.table-of-contents') ||
-      target.closest('.menu') ||
-      target.closest('[contenteditable]')
-    ) {
+    // Расширенная проверка на интерактивные элементы
+    const interactiveSelectors = [
+      'button', 'a', 'input', 'textarea', 'select',
+      '[data-no-flip]', '[data-interactive]',
+      'nav', '.toc', '.epigraph', '.table-of-contents', '.menu',
+      '[contenteditable]', 'audio', 'video',
+      '.sidebar-nav', '.page-scrubber'
+    ];
+    
+    if (target.closest(interactiveSelectors.join(', '))) {
       return;
     }
     
-    // 3. Если пользователь выделяет текст - не срабатываем
-    if (window.getSelection()?.toString()) {
+    // Если пользователь выделяет текст - не срабатываем
+    const selection = window.getSelection();
+    if (selection && selection.toString().length > 0) {
       return;
     }
 
-    // ===== Определяем зону клика =====
-    const container = e.currentTarget;
-    const clickX = e.clientX - container.getBoundingClientRect().left;
-    const containerWidth = container.getBoundingClientRect().width;
+    // Определяем зону клика относительно контейнера книги
+    const rect = container.getBoundingClientRect();
+    const clientX = 'clientX' in e ? e.clientX : (e as MouseEvent).clientX;
+    const clickX = clientX - rect.left;
+    const containerWidth = rect.width;
     
-    // Клик в правой половине - следующая страница
-    if (clickX > containerWidth * 0.5) {
-      e.preventDefault?.();
+    // Клик в правой половине (60% справа) - следующая страница
+    if (clickX > containerWidth * 0.4) {
+      if ('preventDefault' in e) e.preventDefault();
+      if ('stopPropagation' in e) e.stopPropagation();
       handleNextPage();
     } 
-    // Клик в левой половине - предыдущая страница
-    else {
-      e.preventDefault?.();
+    // Клик в левой половине (40% слева) - предыдущая страница
+    else if (clickX < containerWidth * 0.4) {
+      if ('preventDefault' in e) e.preventDefault();
+      if ('stopPropagation' in e) e.stopPropagation();
       handlePrevPage();
     }
-  };
-  
+  }, [handleNextPage, handlePrevPage]);
+
+  // Добавляем обработчик клика для книги (несколько методов для надежности)
+  useEffect(() => {
+    if (!isBookOpen || !bookContainerRef.current) return;
+    
+    const container = bookContainerRef.current;
+    
+    // Основной обработчик клика
+    const handleClick = (e: MouseEvent) => {
+      handlePageClick(e);
+    };
+    
+    // Обработчик mousedown (срабатывает раньше)
+    const handleMouseDown = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      
+      // Проверяем, что это не интерактивный элемент
+      if (target.closest('button, a, input, textarea, [data-no-flip]')) {
+        return;
+      }
+      
+      // Сохраняем позицию для определения клика vs drag
+      const startX = e.clientX;
+      const startY = e.clientY;
+      
+      const handleMouseUp = (upEvent: MouseEvent) => {
+        const deltaX = Math.abs(upEvent.clientX - startX);
+        const deltaY = Math.abs(upEvent.clientY - startY);
+        
+        // Если движение меньше 5px - это клик, не drag
+        if (deltaX <= 5 && deltaY <= 5) {
+          handlePageClick(upEvent);
+        }
+        
+        document.removeEventListener('mouseup', handleMouseUp);
+      };
+      
+      document.addEventListener('mouseup', handleMouseUp, { once: true });
+    };
+    
+    // Используем capture phase для перехвата до HTMLFlipBook
+    container.addEventListener('click', handleClick, true);
+    container.addEventListener('mousedown', handleMouseDown, true);
+    
+      // Также добавляем на сам HTMLFlipBook элемент после его монтирования
+      const timeoutId = setTimeout(() => {
+        const flipBookElement = container.querySelector('.book-flip');
+        if (flipBookElement) {
+          flipBookElement.addEventListener('click', handleClick, true);
+          flipBookElement.addEventListener('mousedown', handleMouseDown, true);
+        }
+        
+        // Добавляем на страницы внутри
+        const pages = container.querySelectorAll('.stf__item, .stf__page, .stf__block');
+        pages.forEach((page) => {
+          page.addEventListener('click', handleClick, true);
+          page.addEventListener('mousedown', handleMouseDown, true);
+        });
+      }, 200);
+    
+    return () => {
+      container.removeEventListener('click', handleClick, true);
+      container.removeEventListener('mousedown', handleMouseDown, true);
+      clearTimeout(timeoutId);
+    };
+  }, [isBookOpen, handlePageClick]);
+
   // Рендер страницы по типу
   const renderPage = (page: { type: string; content?: unknown; id?: string }, index: number) => {
     const pageNumber = index + 1;
@@ -317,18 +372,7 @@ export function Book({ bookInfo, chapters, poems }: BookProps) {
   };
   
   return (
-    <div className="book-container w-full min-h-screen flex flex-col items-center justify-start md:justify-center p-2 md:p-4 pt-4">
-      {/* Подсказки для навигации по краям экрана - ОТКЛЮЧЕНЫ, используется перелистывание по клику */}
-      {/* isBookOpen && (
-        <EdgeNavigationHints
-          edgePercentage={15}
-          visible={isBookOpen}
-          hideDelay={3000}
-          onNextPage={handleNextPage}
-          onPrevPage={handlePrevPage}
-        />
-      ) */}
-      
+    <div className="book-container w-full min-h-screen flex flex-col items-center justify-center p-2 md:p-4 pt-16 md:pt-4">
       {/* Боковая навигация - ФИКСИРОВАНА в правом верхнем углу */}
       <SidebarNav
         isBookOpen={isBookOpen}
@@ -353,33 +397,25 @@ export function Book({ bookInfo, chapters, poems }: BookProps) {
         ) : (
           <motion.div
             key="book"
-            className="relative w-full max-w-[98vw] sm:max-w-[95vw] lg:max-w-[85vw] xl:max-w-[1400px] flex flex-col"
+            className="relative w-full max-w-[98vw] sm:max-w-[95vw] lg:max-w-[85vw] xl:max-w-[1400px] flex flex-col items-center justify-center mt-8 sm:mt-4"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.5 }}
           >
-            {/* Кнопка закрытия - адаптивная */}
-            <motion.button
-              onClick={handleCloseBook}
-              className="absolute -top-10 sm:-top-12 right-1 sm:right-0 text-parchment-200 hover:text-parchment-100 
-                         transition-colors z-10 flex items-center gap-1 sm:gap-2 font-serif text-xs sm:text-sm
-                         bg-burgundy-900/50 sm:bg-transparent rounded px-2 py-1 sm:p-0"
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
-            >
-              <span className="hidden sm:inline">Закрыть книгу</span>
-              <span className="sm:hidden">Закрыть</span>
-              <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </motion.button>
+            {/* Стрелки навигации */}
+            <EdgeNavigationHints
+              onNextPage={handleNextPage}
+              onPrevPage={handlePrevPage}
+              visible={isBookOpen}
+            />
             
             {/* Книга */}
             <div 
-              className="flex items-center justify-center relative cursor-pointer group mb-6 book-interactive-container"
+              ref={bookContainerRef}
+              className="flex items-center justify-center relative mb-6 cursor-pointer book-interactive-container"
               onClick={handlePageClick}
+              onClickCapture={handlePageClick}
             >
               {/* HTMLFlipBook - режим одной страницы на мобильных */}
               <div className="shadow-book rounded-lg overflow-hidden book-container-inner">
@@ -404,11 +440,11 @@ export function Book({ bookInfo, chapters, poems }: BookProps) {
                   usePortrait={true}
                   startZIndex={0}
                   autoSize={true}
-                  clickEventForward={false}
+                  clickEventForward={true}
                   useMouseEvents={false}
-                  swipeDistance={isMobile ? 30 : 0}
-                  showPageCorners={!isMobile}
-                  disableFlipByClick={isMobile}
+                  swipeDistance={0}
+                  showPageCorners={false}
+                  disableFlipByClick={true}
                 >
                   {pageStructure.map((page, index) => renderPage(page, index))}
                 </HTMLFlipBook>

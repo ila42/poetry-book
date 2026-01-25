@@ -42,7 +42,7 @@ export function LandingPage() {
           <div className="flex items-center justify-center h-16 sm:h-20">
             {/* Логотип / Имя автора - по центру */}
             <a href="/" className="flex items-center gap-2">
-              <span className="text-xl sm:text-2xl font-serif font-medium text-[#2C3E50]">
+              <span className="font-serif text-3xl sm:text-4xl lg:text-5xl text-[#2C3E50] leading-tight">
                 {author.name}
               </span>
             </a>
@@ -61,10 +61,10 @@ export function LandingPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
             >
-              <button
-                onClick={() => scrollToSection('book-content')}
-                className="relative group outline-none"
-                aria-label="Перейти к содержимому книги"
+              <Link
+                to="/read"
+                className="relative group outline-none block"
+                aria-label="Открыть книгу для чтения"
               >
                 {/* Тень под книгой */}
                 <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 w-[80%] h-8 bg-black/10 blur-2xl rounded-full" />
@@ -107,7 +107,7 @@ export function LandingPage() {
                     </div>
                   </div>
                 </div>
-              </button>
+              </Link>
             </motion.div>
             
             {/* Текст и CTA */}
@@ -117,7 +117,7 @@ export function LandingPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
             >
-              <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl text-[#2C3E50] mb-4 leading-tight">
+              <h1 className="font-serif text-2xl sm:text-3xl lg:text-4xl text-[#2C3E50] mb-4 leading-tight">
                 Сборник стихов
               </h1>
               <p className="font-serif text-lg sm:text-xl text-[#2C3E50]/60 mb-2">
