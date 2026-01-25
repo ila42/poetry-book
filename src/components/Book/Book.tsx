@@ -46,7 +46,6 @@ export function Book({ bookInfo, chapters, poems }: BookProps) {
   const [isBookOpen, setIsBookOpen] = useState(true);
   const [currentPage, setCurrentPage] = useState(0);
   const bookRef = useRef<{ pageFlip: () => { flipNext: () => void; flipPrev: () => void; turnToPage: (page: number) => void; } }>(null);
-  const bookContainerRef = useRef<HTMLDivElement>(null);
   const isMobile = useIsMobile();
   
   // Сортируем главы
@@ -138,137 +137,52 @@ export function Book({ bookInfo, chapters, poems }: BookProps) {
     setCurrentPage(e.data);
   };
   
-  const handlePrevPage = () => {
+  const handlePrevPage = useCallback(() => {
     if (bookRef.current?.pageFlip()) {
       bookRef.current.pageFlip().flipPrev();
     }
-  };
+  }, []);
   
-  const handleNextPage = () => {
+  const handleNextPage = useCallback(() => {
     if (bookRef.current?.pageFlip()) {
       bookRef.current.pageFlip().flipNext();
     }
-  };
+  }, []);
 
-  // Обработчик клика по странице для перелистывания (улучшенная версия)
-  const handlePageClick = useCallback((e: React.MouseEvent<HTMLDivElement> | MouseEvent) => {
-    const target = (e.target || (e as MouseEvent).target) as HTMLElement;
+  // Обработчик клика по Overlay для перелистывания страниц
+  const handleOverlayClick = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    // Получаем элемент под курсором (под overlay)
+    const overlay = e.currentTarget;
+    overlay.style.pointerEvents = 'none';
+    const elementBelow = document.elementFromPoint(e.clientX, e.clientY) as HTMLElement;
+    overlay.style.pointerEvents = 'auto';
     
-    // Проверяем, что клик внутри контейнера книги
-    if (!bookContainerRef.current) return;
-    
-    const container = bookContainerRef.current;
-    if (!container.contains(target)) {
+    // Если под курсором интерактивный элемент - пропускаем клик к нему
+    if (elementBelow?.closest('button, a, input, textarea, select, audio, video, [data-no-flip], nav')) {
+      // Симулируем клик на элементе под overlay
+      elementBelow.click();
       return;
     }
     
-    // Расширенная проверка на интерактивные элементы
-    const interactiveSelectors = [
-      'button', 'a', 'input', 'textarea', 'select',
-      '[data-no-flip]', '[data-interactive]',
-      'nav', '.toc', '.epigraph', '.table-of-contents', '.menu',
-      '[contenteditable]', 'audio', 'video',
-      '.sidebar-nav', '.page-scrubber'
-    ];
-    
-    if (target.closest(interactiveSelectors.join(', '))) {
-      return;
-    }
-    
-    // Если пользователь выделяет текст - не срабатываем
-    const selection = window.getSelection();
-    if (selection && selection.toString().length > 0) {
-      return;
-    }
-
-    // Определяем зону клика относительно контейнера книги
-    const rect = container.getBoundingClientRect();
-    const clientX = 'clientX' in e ? e.clientX : (e as MouseEvent).clientX;
-    const clickX = clientX - rect.left;
+    // Определяем зону клика
+    const rect = overlay.getBoundingClientRect();
+    const clickX = e.clientX - rect.left;
     const containerWidth = rect.width;
     
-    // Клик в правой половине (60% справа) - следующая страница
-    if (clickX > containerWidth * 0.4) {
-      if ('preventDefault' in e) e.preventDefault();
-      if ('stopPropagation' in e) e.stopPropagation();
-      handleNextPage();
+    // Правая половина - следующая страница
+    if (clickX > containerWidth * 0.5) {
+      if (bookRef.current?.pageFlip()) {
+        bookRef.current.pageFlip().flipNext();
+      }
     } 
-    // Клик в левой половине (40% слева) - предыдущая страница
-    else if (clickX < containerWidth * 0.4) {
-      if ('preventDefault' in e) e.preventDefault();
-      if ('stopPropagation' in e) e.stopPropagation();
-      handlePrevPage();
+    // Левая половина - предыдущая страница
+    else {
+      if (bookRef.current?.pageFlip()) {
+        bookRef.current.pageFlip().flipPrev();
+      }
     }
-  }, [handleNextPage, handlePrevPage]);
+  }, []);
 
-  // Добавляем обработчик клика для книги (несколько методов для надежности)
-  useEffect(() => {
-    if (!isBookOpen || !bookContainerRef.current) return;
-    
-    const container = bookContainerRef.current;
-    
-    // Основной обработчик клика (типизирован как EventListener)
-    const handleClick: EventListener = (e: Event) => {
-      const mouseEvent = e as MouseEvent;
-      handlePageClick(mouseEvent);
-    };
-    
-    // Обработчик mousedown (срабатывает раньше, типизирован как EventListener)
-    const handleMouseDown: EventListener = (e: Event) => {
-      const mouseEvent = e as MouseEvent;
-      const target = mouseEvent.target as HTMLElement;
-      
-      // Проверяем, что это не интерактивный элемент
-      if (target.closest('button, a, input, textarea, [data-no-flip]')) {
-        return;
-      }
-      
-      // Сохраняем позицию для определения клика vs drag
-      const startX = mouseEvent.clientX;
-      const startY = mouseEvent.clientY;
-      
-      const handleMouseUp: EventListener = (upEvent: Event) => {
-        const mouseUpEvent = upEvent as MouseEvent;
-        const deltaX = Math.abs(mouseUpEvent.clientX - startX);
-        const deltaY = Math.abs(mouseUpEvent.clientY - startY);
-        
-        // Если движение меньше 5px - это клик, не drag
-        if (deltaX <= 5 && deltaY <= 5) {
-          handlePageClick(mouseUpEvent);
-        }
-        
-        document.removeEventListener('mouseup', handleMouseUp);
-      };
-      
-      document.addEventListener('mouseup', handleMouseUp, { once: true });
-    };
-    
-    // Используем capture phase для перехвата до HTMLFlipBook
-    container.addEventListener('click', handleClick, true);
-    container.addEventListener('mousedown', handleMouseDown, true);
-    
-    // Также добавляем на сам HTMLFlipBook элемент после его монтирования
-    const timeoutId = setTimeout(() => {
-      const flipBookElement = container.querySelector('.book-flip');
-      if (flipBookElement) {
-        flipBookElement.addEventListener('click', handleClick, true);
-        flipBookElement.addEventListener('mousedown', handleMouseDown, true);
-      }
-      
-      // Добавляем на страницы внутри
-      const pages = container.querySelectorAll('.stf__item, .stf__page, .stf__block');
-      pages.forEach((page) => {
-        page.addEventListener('click', handleClick, true);
-        page.addEventListener('mousedown', handleMouseDown, true);
-      });
-    }, 200);
-    
-    return () => {
-      container.removeEventListener('click', handleClick, true);
-      container.removeEventListener('mousedown', handleMouseDown, true);
-      clearTimeout(timeoutId);
-    };
-  }, [isBookOpen, handlePageClick]);
 
   // Рендер страницы по типу
   const renderPage = (page: { type: string; content?: unknown; id?: string }, index: number) => {
@@ -414,14 +328,9 @@ export function Book({ bookInfo, chapters, poems }: BookProps) {
               visible={isBookOpen}
             />
             
-            {/* Книга */}
-            <div 
-              ref={bookContainerRef}
-              className="flex items-center justify-center relative mb-6 cursor-pointer book-interactive-container"
-              onClick={handlePageClick}
-              onClickCapture={handlePageClick}
-            >
-              {/* HTMLFlipBook - режим одной страницы на мобильных */}
+            {/* Книга с Overlay для перелистывания кликом */}
+            <div className="flex items-center justify-center relative mb-6 book-interactive-container">
+              {/* HTMLFlipBook */}
               <div className="shadow-book rounded-lg overflow-hidden book-container-inner">
                 <HTMLFlipBook
                   ref={bookRef}
@@ -444,7 +353,7 @@ export function Book({ bookInfo, chapters, poems }: BookProps) {
                   usePortrait={true}
                   startZIndex={0}
                   autoSize={true}
-                  clickEventForward={true}
+                  clickEventForward={false}
                   useMouseEvents={false}
                   swipeDistance={0}
                   showPageCorners={false}
@@ -453,6 +362,13 @@ export function Book({ bookInfo, chapters, poems }: BookProps) {
                   {pageStructure.map((page, index) => renderPage(page, index))}
                 </HTMLFlipBook>
               </div>
+              
+              {/* Прозрачный Overlay для перехвата кликов */}
+              <div 
+                className="absolute inset-0 cursor-pointer z-10"
+                onClick={handleOverlayClick}
+                style={{ background: 'transparent' }}
+              />
             </div>
             
             {/* Скраббер страниц - тёмная тема с золотыми акцентами */}
