@@ -151,16 +151,22 @@ export function Book({ bookInfo, chapters, poems }: BookProps) {
 
   // Обработчик клика по Overlay для перелистывания страниц
   const handleOverlayClick = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    console.log('=== Overlay Click Detected ===');
+    
     // Получаем элемент под курсором (под overlay)
     const overlay = e.currentTarget;
     overlay.style.pointerEvents = 'none';
     const elementBelow = document.elementFromPoint(e.clientX, e.clientY) as HTMLElement;
     overlay.style.pointerEvents = 'auto';
     
-    // Если под курсором интерактивный элемент - пропускаем клик к нему
-    if (elementBelow?.closest('button, a, input, textarea, select, audio, video, [data-no-flip], nav')) {
-      // Симулируем клик на элементе под overlay
-      elementBelow.click();
+    console.log('Element below:', elementBelow?.tagName, elementBelow?.className?.slice(0, 50));
+    
+    // Проверяем только кликабельные элементы (кнопки, ссылки, формы)
+    const clickableElement = elementBelow?.closest('button, a[href], input, textarea, select, audio, video');
+    
+    if (clickableElement) {
+      console.log('Clickable element found:', clickableElement.tagName);
+      clickableElement.dispatchEvent(new MouseEvent('click', { bubbles: true }));
       return;
     }
     
@@ -169,17 +175,17 @@ export function Book({ bookInfo, chapters, poems }: BookProps) {
     const clickX = e.clientX - rect.left;
     const containerWidth = rect.width;
     
+    console.log('Flipping page. Click zone:', (clickX / containerWidth * 100).toFixed(1) + '%');
+    
     // Правая половина - следующая страница
     if (clickX > containerWidth * 0.5) {
-      if (bookRef.current?.pageFlip()) {
-        bookRef.current.pageFlip().flipNext();
-      }
+      console.log('>>> flipNext()');
+      bookRef.current?.pageFlip()?.flipNext();
     } 
     // Левая половина - предыдущая страница
     else {
-      if (bookRef.current?.pageFlip()) {
-        bookRef.current.pageFlip().flipPrev();
-      }
+      console.log('<<< flipPrev()');
+      bookRef.current?.pageFlip()?.flipPrev();
     }
   }, []);
 
@@ -329,7 +335,7 @@ export function Book({ bookInfo, chapters, poems }: BookProps) {
             />
             
             {/* Книга с Overlay для перелистывания кликом */}
-            <div className="flex items-center justify-center relative mb-6 book-interactive-container">
+            <div className="relative mb-6 book-interactive-container">
               {/* HTMLFlipBook */}
               <div className="shadow-book rounded-lg overflow-hidden book-container-inner">
                 <HTMLFlipBook
@@ -363,11 +369,11 @@ export function Book({ bookInfo, chapters, poems }: BookProps) {
                 </HTMLFlipBook>
               </div>
               
-              {/* Прозрачный Overlay для перехвата кликов */}
+              {/* Прозрачный Overlay для перехвата кликов - покрывает всю книгу */}
               <div 
-                className="absolute inset-0 cursor-pointer z-10"
+                className="absolute top-0 left-0 w-full h-full cursor-pointer"
+                style={{ zIndex: 100 }}
                 onClick={handleOverlayClick}
-                style={{ background: 'transparent' }}
               />
             </div>
             
