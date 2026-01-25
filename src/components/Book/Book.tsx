@@ -9,21 +9,61 @@ import { TableOfContents } from './TableOfContents';
 import { SidebarNav } from './SidebarNav';
 import { EdgeNavigationHints } from './EdgeNavigationHints';
 
-// Хук для определения мобильного устройства
-function useIsMobile() {
-  const [isMobile, setIsMobile] = useState(false);
+// Хук для определения мобильного устройства и ориентации экрана
+function useDeviceInfo() {
+  // Инициализируем с реальными значениями если window доступен
+  const getInitialState = () => {
+    if (typeof window === 'undefined') {
+      return {
+        isMobile: true, // По умолчанию считаем мобильным для SSR
+        isPortrait: true,
+        isLandscape: false,
+        screenWidth: 375,
+        screenHeight: 667,
+      };
+    }
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+    return {
+      isMobile: width < 768,
+      isPortrait: height > width,
+      isLandscape: width >= height,
+      screenWidth: width,
+      screenHeight: height,
+    };
+  };
+  
+  const [deviceInfo, setDeviceInfo] = useState(getInitialState);
   
   useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
+    const updateDeviceInfo = () => {
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+      const isMobile = width < 768;
+      const isPortrait = height > width;
+      
+      setDeviceInfo({
+        isMobile,
+        isPortrait,
+        isLandscape: !isPortrait,
+        screenWidth: width,
+        screenHeight: height,
+      });
     };
     
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
+    // Обновляем сразу при монтировании
+    updateDeviceInfo();
+    
+    window.addEventListener('resize', updateDeviceInfo);
+    window.addEventListener('orientationchange', updateDeviceInfo);
+    
+    return () => {
+      window.removeEventListener('resize', updateDeviceInfo);
+      window.removeEventListener('orientationchange', updateDeviceInfo);
+    };
   }, []);
   
-  return isMobile;
+  return deviceInfo;
 }
 
 interface BookProps {
@@ -46,7 +86,35 @@ export function Book({ bookInfo, chapters, poems }: BookProps) {
   const [isBookOpen, setIsBookOpen] = useState(true);
   const [currentPage, setCurrentPage] = useState(0);
   const bookRef = useRef<{ pageFlip: () => { flipNext: () => void; flipPrev: () => void; turnToPage: (page: number) => void; } }>(null);
-  const isMobile = useIsMobile();
+  const { isMobile, screenWidth, screenHeight } = useDeviceInfo();
+  
+  // Вычисляем оптимальные размеры книги в зависимости от устройства
+  const bookDimensions = useMemo(() => {
+    if (isMobile) {
+      // Мобильные устройства - ОДНА страница на весь экран (портретный режим)
+      const width = screenWidth - 16; // 16px отступы по бокам
+      const height = Math.round(screenHeight * 0.75); // 75% высоты экрана
+      
+      return {
+        width,
+        height,
+        minWidth: 300,
+        maxWidth: screenWidth,
+        minHeight: 400,
+        maxHeight: screenHeight,
+      };
+    }
+    
+    // Десктоп - разворот (две страницы)
+    return {
+      width: 550,
+      height: 733,
+      minWidth: 320,
+      maxWidth: 700,
+      minHeight: 450,
+      maxHeight: 950,
+    };
+  }, [isMobile, screenWidth, screenHeight]);
   
   // Сортируем главы
   const sortedChapters = useMemo(() => 
@@ -149,52 +217,46 @@ export function Book({ bookInfo, chapters, poems }: BookProps) {
     }
   }, []);
 
-  // Обработчик клика/тача по Overlay для перелистывания страниц
-  const handleOverlayClick = useCallback((e: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>) => {
-    // Получаем координаты клика/тача
-    let clientX: number;
-    let clientY: number;
+  // Обработчик клика по overlay для перелистывания страниц
+  const handleOverlayClick = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+    e.preventDefault();
     
-    if ('touches' in e) {
-      // Touch event
-      if (e.touches.length === 0) return;
-      clientX = e.touches[0].clientX;
-      clientY = e.touches[0].clientY;
-    } else {
-      // Mouse event
-      clientX = e.clientX;
-      clientY = e.clientY;
-    }
-    
-    // Получаем элемент под курсором (под overlay)
-    const overlay = e.currentTarget;
-    overlay.style.pointerEvents = 'none';
-    const elementBelow = document.elementFromPoint(clientX, clientY) as HTMLElement;
-    overlay.style.pointerEvents = 'auto';
-    
-    // Проверяем только кликабельные элементы (кнопки, ссылки, формы)
-    const clickableElement = elementBelow?.closest('button, a[href], input, textarea, select, audio, video');
-    
-    if (clickableElement) {
-      clickableElement.dispatchEvent(new MouseEvent('click', { bubbles: true }));
-      return;
-    }
-    
-    // Определяем зону клика
-    const rect = overlay.getBoundingClientRect();
-    const clickX = clientX - rect.left;
+    const rect = e.currentTarget.getBoundingClientRect();
+    const clickX = e.clientX - rect.left;
     const containerWidth = rect.width;
     
-    // Правая половина - следующая страница
-    if (clickX > containerWidth * 0.5) {
+    // Для мобильных (одна страница): левые 30% = назад, остальное = вперёд
+    // Для десктопа (разворот): левая половина = назад, правая = вперёд
+    const threshold = isMobile ? 0.3 : 0.5;
+    
+    if (clickX > containerWidth * threshold) {
       bookRef.current?.pageFlip()?.flipNext();
-    } 
-    // Левая половина - предыдущая страница
-    else {
+    } else {
+      bookRef.current?.pageFlip()?.flipPrev();
+    }
+  }, [isMobile]);
+
+  // Обработчик тача для мобильных
+  const handleOverlayTouch = useCallback((e: React.TouchEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+    e.preventDefault();
+    
+    // Используем changedTouches для touchend
+    const touch = e.changedTouches[0] || e.touches[0];
+    if (!touch) return;
+    
+    const rect = e.currentTarget.getBoundingClientRect();
+    const touchX = touch.clientX - rect.left;
+    const containerWidth = rect.width;
+    
+    // Левые 30% экрана = назад, остальное = вперёд
+    if (touchX > containerWidth * 0.3) {
+      bookRef.current?.pageFlip()?.flipNext();
+    } else {
       bookRef.current?.pageFlip()?.flipPrev();
     }
   }, []);
-
 
   // Рендер страницы по типу
   const renderPage = (page: { type: string; content?: unknown; id?: string }, index: number) => {
@@ -302,7 +364,8 @@ export function Book({ bookInfo, chapters, poems }: BookProps) {
   };
   
   return (
-    <div className="book-container w-full min-h-screen flex flex-col items-center justify-center p-2 md:p-4 pt-16 md:pt-4">
+    <div className={`book-container w-full flex flex-col items-center justify-center
+                     ${isMobile ? 'min-h-[100dvh] p-1 pt-10' : 'min-h-screen p-2 md:p-4 pt-16 md:pt-4'}`}>
       {/* Боковая навигация - ФИКСИРОВАНА в правом верхнем углу */}
       <SidebarNav
         isBookOpen={isBookOpen}
@@ -327,34 +390,44 @@ export function Book({ bookInfo, chapters, poems }: BookProps) {
         ) : (
           <motion.div
             key="book"
-            className="relative w-full max-w-[98vw] sm:max-w-[95vw] lg:max-w-[85vw] xl:max-w-[1400px] flex flex-col items-center justify-center mt-8 sm:mt-4"
+            className={`relative w-full flex flex-col items-center justify-center
+                       ${isMobile 
+                         ? 'max-w-[100vw] mt-1' 
+                         : 'max-w-[98vw] sm:max-w-[95vw] lg:max-w-[85vw] xl:max-w-[1400px] mt-8 sm:mt-4'
+                       }`}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.5 }}
           >
-            {/* Стрелки навигации */}
-            <EdgeNavigationHints
-              onNextPage={handleNextPage}
-              onPrevPage={handlePrevPage}
-              visible={isBookOpen}
-            />
+            {/* Стрелки навигации - только на десктопе */}
+            {!isMobile && (
+              <EdgeNavigationHints
+                onNextPage={handleNextPage}
+                onPrevPage={handlePrevPage}
+                visible={isBookOpen}
+              />
+            )}
             
-            {/* Книга с Overlay для перелистывания кликом */}
-            <div className="relative mb-6 book-interactive-container">
+            {/* Книга с зонами навигации */}
+            <div 
+              className={`book-interactive-container ${isMobile ? 'mb-2' : 'mb-6'}`}
+              style={{ position: 'relative' }}
+            >
               {/* HTMLFlipBook */}
-              <div className="shadow-book rounded-lg overflow-hidden book-container-inner">
+              <div className={`rounded-lg overflow-hidden book-container-inner
+                              ${isMobile ? 'shadow-md' : 'shadow-book'}`}>
                 <HTMLFlipBook
                   ref={bookRef}
-                  width={isMobile ? 320 : 550}
-                  height={isMobile ? 480 : 750}
+                  width={bookDimensions.width}
+                  height={bookDimensions.height}
                   size="stretch"
-                  minWidth={isMobile ? 280 : 320}
-                  maxWidth={isMobile ? 400 : 700}
-                  minHeight={isMobile ? 400 : 450}
-                  maxHeight={isMobile ? 600 : 950}
+                  minWidth={bookDimensions.minWidth}
+                  maxWidth={bookDimensions.maxWidth}
+                  minHeight={bookDimensions.minHeight}
+                  maxHeight={bookDimensions.maxHeight}
                   maxShadowOpacity={isMobile ? 0.3 : 0.5}
-                  showCover={false}
+                  showCover={true}
                   mobileScrollSupport={false}
                   onFlip={handleFlip}
                   className="book-flip"
@@ -362,12 +435,12 @@ export function Book({ bookInfo, chapters, poems }: BookProps) {
                   startPage={0}
                   drawShadow={!isMobile}
                   flippingTime={isMobile ? 400 : 600}
-                  usePortrait={true}
+                  usePortrait={isMobile}
                   startZIndex={0}
                   autoSize={true}
                   clickEventForward={false}
-                  useMouseEvents={true}
-                  swipeDistance={isMobile ? 30 : 0}
+                  useMouseEvents={false}
+                  swipeDistance={0}
                   showPageCorners={false}
                   disableFlipByClick={true}
                 >
@@ -375,31 +448,89 @@ export function Book({ bookInfo, chapters, poems }: BookProps) {
                 </HTMLFlipBook>
               </div>
               
-              {/* Прозрачный Overlay для перехвата кликов и тачей - покрывает всю книгу */}
-              <div 
-                className="absolute top-0 left-0 w-full h-full cursor-pointer select-none"
+              {/* Левая зона - предыдущая страница */}
+              <button
+                type="button"
+                aria-label="Предыдущая страница"
+                className="absolute top-0 left-0 h-full bg-transparent border-none outline-none cursor-pointer"
                 style={{ 
+                  width: isMobile ? '30%' : '50%',
                   zIndex: 100,
-                  touchAction: 'manipulation', // Предотвращает zoom при double-tap
-                  WebkitTapHighlightColor: 'transparent', // Убирает подсветку при тапе на iOS
+                  touchAction: 'manipulation',
+                  WebkitTapHighlightColor: 'transparent',
                 }}
-                onClick={handleOverlayClick}
-                onTouchStart={handleOverlayClick}
+                onClick={() => {
+                  if (bookRef.current && bookRef.current.pageFlip) {
+                    const pageFlip = bookRef.current.pageFlip();
+                    const currPage = pageFlip.getCurrentPageIndex();
+                    console.log('LEFT CLICK - current page:', currPage);
+                    if (currPage > 0) {
+                      pageFlip.turnToPage(currPage - 1);
+                    }
+                  }
+                }}
+                onTouchEnd={(e) => {
+                  e.preventDefault();
+                  if (bookRef.current && bookRef.current.pageFlip) {
+                    const pageFlip = bookRef.current.pageFlip();
+                    const currPage = pageFlip.getCurrentPageIndex();
+                    console.log('LEFT TOUCH - current page:', currPage);
+                    if (currPage > 0) {
+                      pageFlip.turnToPage(currPage - 1);
+                    }
+                  }
+                }}
+              />
+              {/* Правая зона - следующая страница */}
+              <button
+                type="button"
+                aria-label="Следующая страница"
+                className="absolute top-0 right-0 h-full bg-transparent border-none outline-none cursor-pointer"
+                style={{ 
+                  width: isMobile ? '70%' : '50%',
+                  zIndex: 100,
+                  touchAction: 'manipulation',
+                  WebkitTapHighlightColor: 'transparent',
+                }}
+                onClick={() => {
+                  if (bookRef.current && bookRef.current.pageFlip) {
+                    const pageFlip = bookRef.current.pageFlip();
+                    const currPage = pageFlip.getCurrentPageIndex();
+                    const pageCount = pageFlip.getPageCount();
+                    console.log('RIGHT CLICK - current page:', currPage, 'total:', pageCount);
+                    if (currPage < pageCount - 1) {
+                      pageFlip.turnToPage(currPage + 1);
+                    }
+                  }
+                }}
+                onTouchEnd={(e) => {
+                  e.preventDefault();
+                  if (bookRef.current && bookRef.current.pageFlip) {
+                    const pageFlip = bookRef.current.pageFlip();
+                    const currPage = pageFlip.getCurrentPageIndex();
+                    const pageCount = pageFlip.getPageCount();
+                    console.log('RIGHT TOUCH - current page:', currPage, 'total:', pageCount);
+                    if (currPage < pageCount - 1) {
+                      pageFlip.turnToPage(currPage + 1);
+                    }
+                  }
+                }}
               />
             </div>
             
-            {/* Скраббер страниц - тёмная тема с золотыми акцентами */}
+            {/* Скраббер страниц - компактный на мобильных */}
             <motion.div
-              className="mt-6 px-2 sm:px-4 max-w-2xl mx-auto w-full"
+              className={`px-2 sm:px-4 max-w-2xl mx-auto w-full ${isMobile ? 'mt-1' : 'mt-6'}`}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 }}
             >
-              <div className="bg-gradient-to-br from-[#3d2817]/95 to-[#2a1a0f]/95 
-                              backdrop-blur-sm rounded-lg p-3 sm:p-4 
-                              shadow-xl border border-[#d4af37]/20">
+              <div className={`bg-gradient-to-br from-[#3d2817]/95 to-[#2a1a0f]/95 
+                              backdrop-blur-sm rounded-lg shadow-xl border border-[#d4af37]/20
+                              ${isMobile ? 'p-2' : 'p-3 sm:p-4'}`}>
                 {/* Информация о странице */}
-                <div className="flex justify-between items-center mb-2 sm:mb-3 text-xs sm:text-sm font-serif">
+                <div className={`flex justify-between items-center font-serif
+                                ${isMobile ? 'mb-1 text-[10px]' : 'mb-2 sm:mb-3 text-xs sm:text-sm'}`}>
                   <span className="text-[#d4af37]">
                     <span className="hidden sm:inline">Страница </span>
                     <span className="sm:hidden">Стр. </span>
@@ -420,8 +551,9 @@ export function Book({ bookInfo, chapters, poems }: BookProps) {
                   className="page-scrubber w-full"
                 />
                 
-                {/* Быстрые переходы */}
-                <div className="flex justify-between mt-2 sm:mt-3 text-[10px] sm:text-xs font-serif text-[#d4af37]/50">
+                {/* Быстрые переходы - скрыты на мобильных для экономии места */}
+                <div className={`flex justify-between font-serif text-[#d4af37]/50
+                                ${isMobile ? 'hidden' : 'mt-2 sm:mt-3 text-[10px] sm:text-xs'}`}>
                   <button 
                     onClick={() => handleNavigate(0)}
                     className="hover:text-[#d4af37] active:text-[#f4d03f] transition-colors py-1 px-2"

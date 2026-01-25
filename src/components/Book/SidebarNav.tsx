@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import contentData from '@/data/content.json';
 
@@ -99,11 +98,20 @@ export function SidebarNav({ isBookOpen, currentPage, onNavigate, pageStructure 
   if (!isBookOpen) return null;
 
   return (
-    <div ref={menuRef} className="sidebar-nav-container" data-no-drag="true">
+    <div 
+      ref={menuRef} 
+      className="sidebar-nav-container" 
+      data-no-drag="true"
+      style={{ position: 'fixed', top: 16, right: 16, zIndex: 9999 }}
+    >
       {/* Hamburger Button */}
       <motion.button
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={(e) => {
+          e.stopPropagation();
+          setIsOpen(!isOpen);
+        }}
         className="sidebar-nav-toggle"
+        style={{ position: 'relative', zIndex: 10000 }}
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ delay: 0.5 }}
@@ -142,16 +150,16 @@ export function SidebarNav({ isBookOpen, currentPage, onNavigate, pageStructure 
                 <span className="sidebar-nav-page">стр. {currentPage + 1} / {pageStructure.length}</span>
               </div>
 
-              {/* Ссылка на главную */}
-              <Link 
-                to="/"
-                className="sidebar-nav-home-link"
+              {/* Кнопка закрытия меню - Вернуться к книге */}
+              <button 
+                onClick={() => setIsOpen(false)}
+                className="sidebar-nav-home-link w-full text-left"
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M6 18L18 6M6 6l12 12" />
                 </svg>
-                Вернуться на главную
-              </Link>
+                Вернуться к книге
+              </button>
 
               {/* Divider */}
               <div className="sidebar-nav-divider" />

@@ -1611,6 +1611,13 @@
 
 /* ===== MOBILE OPTIMIZATIONS ===== */
 
+/* Использование dvh (dynamic viewport height) для мобильных */
+@supports (height: 100dvh) {
+  .book-container {
+    min-height: 100dvh;
+  }
+}
+
 /* Предотвращение выделения текста на элементах навигации */
 .book-interactive-container,
 .book-flip,
@@ -1636,76 +1643,125 @@
 
 /* Улучшенная отзывчивость на тач-устройствах */
 @media (hover: none) and (pointer: coarse) {
-  /* На тач-устройствах делаем стрелки более заметными */
-  .edge-navigation-hints button {
-    opacity: 0.9;
-  }
-  
-  /* Убираем hover-эффекты на тач-устройствах */
-  .edge-navigation-hints button:hover {
-    transform: none;
-  }
-  
-  /* Активное состояние для тач */
+  /* На тач-устройствах делаем стрелки более заметными при активации */
   .edge-navigation-hints button:active {
     transform: scale(0.9);
-    opacity: 0.7;
+    opacity: 0.9;
   }
 }
 
-/* Мобильная адаптация книги - режим одной страницы */
-@media (max-width: 768px) {
-  /* Книга занимает больше места на экране */
+/* ===== ПОРТРЕТНЫЙ РЕЖИМ НА МОБИЛЬНЫХ ===== */
+@media (max-width: 600px) and (orientation: portrait) {
+  /* Книга занимает максимум экрана */
   .book-interactive-container {
     width: 100%;
-    max-width: calc(100vw - 24px);
+    max-width: 95vw;
   }
   
-  /* Уменьшаем отступы у страниц на мобильных */
+  .book-container-inner {
+    width: 100%;
+  }
+  
+  /* Убираем лишние отступы */
+  .book-container {
+    padding-left: 4px;
+    padding-right: 4px;
+  }
+  
+  /* Минимальные отступы у страниц */
   .page {
-    padding: 1rem 1.25rem;
+    padding: 0.75rem 0.875rem;
   }
   
-  /* Меньший размер шрифта для стихов */
+  /* Оптимальный размер текста для чтения */
+  .poem-text {
+    font-size: 0.95rem;
+    line-height: 1.75;
+  }
+  
+  .poem-title {
+    font-size: 1.2rem;
+    margin-bottom: 0.75rem;
+  }
+  
+  .chapter-title {
+    font-size: 1.4rem;
+  }
+  
+  /* Компактный скраббер */
+  .page-scrubber {
+    height: 6px;
+  }
+  
+  .page-scrubber::-webkit-slider-thumb {
+    width: 24px;
+    height: 24px;
+  }
+  
+  .page-scrubber::-moz-range-thumb {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+/* ===== ЛАНДШАФТНЫЙ РЕЖИМ НА МОБИЛЬНЫХ ===== */
+@media (max-width: 900px) and (orientation: landscape) {
+  /* Двухстраничный разворот в ландшафте */
+  .book-interactive-container {
+    width: 100%;
+    max-width: 90vw;
+  }
+  
+  .book-container {
+    padding-top: 8px;
+    padding-bottom: 8px;
+  }
+  
+  /* Меньше места под скраббер */
+  .page-scrubber::-webkit-slider-thumb {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+/* ===== ОБЩИЕ СТИЛИ ДЛЯ МАЛЕНЬКИХ ЭКРАНОВ ===== */
+@media (max-width: 480px) {
+  .book-interactive-container {
+    max-width: 98vw;
+  }
+  
+  .page {
+    padding: 0.625rem 0.75rem;
+  }
+  
   .poem-text {
     font-size: 0.9rem;
     line-height: 1.7;
   }
   
   .poem-title {
-    font-size: 1.25rem;
-    margin-bottom: 1rem;
+    font-size: 1.1rem;
   }
   
-  /* Скраббер страниц - больше для удобства на тач */
+  /* Больший thumb для удобства на маленьких экранах */
   .page-scrubber::-webkit-slider-thumb {
+    width: 28px;
+    height: 28px;
+  }
+  
+  .page-scrubber::-moz-range-thumb {
     width: 28px;
     height: 28px;
   }
 }
 
-/* Маленькие мобильные экраны */
-@media (max-width: 480px) {
-  .book-interactive-container {
-    max-width: calc(100vw - 16px);
+/* ===== ПРЕДОТВРАЩЕНИЕ ЛИШНЕЙ ПРОКРУТКИ ===== */
+@media (max-width: 768px) {
+  html, body {
+    overflow-x: hidden;
   }
   
-  .page {
-    padding: 0.75rem 1rem;
-  }
-  
-  .poem-text {
-    font-size: 0.85rem;
-    line-height: 1.65;
-  }
-  
-  .poem-title {
-    font-size: 1.1rem;
-  }
-  
-  /* Ещё больший thumb для маленьких экранов */
-  .page-scrubber::-webkit-slider-thumb {
-    width: 32px;
-    height: 32px;
+  .book-container {
+    overflow: hidden;
   }
 }
