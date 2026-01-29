@@ -1,14 +1,14 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 
-// Types
+// Types - единая модель для content.json
 export interface Poem {
   id: string;
   number: number;
   title: string;
   alternateTitle?: string;
-  firstLine: string;
+  firstLine?: string;
   text: string;
-  audioUrl: string;
+  audioUrl?: string | null; // может быть null в JSON
   isNew?: boolean;
   isDiptych?: boolean;
   isTriptych?: boolean;
@@ -18,7 +18,7 @@ export interface Chapter {
   id: string;
   number: number | null;
   title: string;
-  subtitle: string | null;
+  subtitle?: string | null;
   isIntermezzo?: boolean;
   poems: Poem[];
 }
@@ -27,10 +27,10 @@ export interface Part {
   id: string;
   number: number | null;
   title: string;
-  subtitle: string | null;
+  subtitle?: string | null;
   romanNumeral?: string;
   isEpilogue?: boolean;
-  chapters: Chapter[] | null;
+  chapters?: Chapter[] | null; // может быть null или отсутствовать
   poems?: Poem[];
 }
 
@@ -38,7 +38,7 @@ export interface Volume {
   id: string;
   number: number;
   title: string;
-  subtitle: string;
+  subtitle?: string;
   parts: Part[];
 }
 
@@ -46,8 +46,8 @@ export interface BookData {
   book: {
     title: string;
     author: string;
-    year: number | string; // Поддерживает диапазон вида "1980-2025"
-    version: string;
+    year: number | string;
+    version?: string;
     epigraph?: string | {
       text: string;
       source: string;
@@ -106,7 +106,8 @@ export function ContentProvider({ children }: ContentProviderProps) {
         } else {
           // Load from content.json
           const response = await import('@/data/content.json');
-          setData(response.default as BookData);
+          // JSON структура соответствует BookData
+          setData(response.default as unknown as BookData);
         }
       } catch (err) {
         setError('Failed to load content data');

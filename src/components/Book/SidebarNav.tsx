@@ -1,6 +1,54 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import contentData from '@/data/content.json';
+import contentDataRaw from '@/data/content.json';
+
+// Типы для content.json
+interface ContentPoem {
+  id: string;
+  number: number;
+  title: string;
+  text: string;
+  audioUrl?: string | null;
+}
+
+interface ContentChapter {
+  id: string;
+  number: number | null;
+  title: string;
+  subtitle?: string | null;
+  poems?: ContentPoem[];
+}
+
+interface ContentPart {
+  id: string;
+  number: number | null;
+  title: string;
+  subtitle?: string | null;
+  romanNumeral?: string;
+  chapters?: ContentChapter[] | null;
+  poems?: ContentPoem[];
+}
+
+interface ContentVolume {
+  id: string;
+  number: number;
+  title: string;
+  subtitle?: string;
+  parts: ContentPart[];
+}
+
+interface ContentData {
+  book: {
+    title: string;
+    author: string;
+    year: string;
+    version?: string;
+    epigraph?: { text: string; source: string };
+  };
+  volumes: ContentVolume[];
+}
+
+const contentData = contentDataRaw as ContentData;
 
 interface SidebarNavProps {
   isBookOpen: boolean;
@@ -221,10 +269,10 @@ export function SidebarNav({ isBookOpen, currentPage, onNavigate, pageStructure 
                             <div key={part.id} className="sidebar-nav-part">
                               {/* Part Header */}
                               <button
-                                onClick={() => part.chapters ? togglePart(part.id) : handleNavigateToPage('part', part.id)}
+                                onClick={() => (part.chapters && part.chapters.length > 0) ? togglePart(part.id) : handleNavigateToPage('part', part.id)}
                                 className="sidebar-nav-part-header"
                               >
-                                {part.chapters && (
+                                {part.chapters && part.chapters.length > 0 && (
                                   <svg 
                                     className={`w-2.5 h-2.5 transition-transform ${expandedParts.has(part.id) ? 'rotate-90' : ''}`}
                                     fill="currentColor" 
@@ -234,14 +282,14 @@ export function SidebarNav({ isBookOpen, currentPage, onNavigate, pageStructure 
                                   </svg>
                                 )}
                                 <span className="sidebar-nav-part-title">
-                                  {'romanNumeral' in part && part.romanNumeral && <span className="sidebar-nav-roman">{part.romanNumeral}.</span>}
+                                  {part.romanNumeral && <span className="sidebar-nav-roman">{part.romanNumeral}.</span>}
                                   {part.title}
                                 </span>
                               </button>
 
                               {/* Chapters */}
                               <AnimatePresence>
-                                {part.chapters && expandedParts.has(part.id) && (
+                                {part.chapters && part.chapters.length > 0 && expandedParts.has(part.id) && (
                                   <motion.div
                                     initial={{ height: 0, opacity: 0 }}
                                     animate={{ height: 'auto', opacity: 1 }}
@@ -249,13 +297,13 @@ export function SidebarNav({ isBookOpen, currentPage, onNavigate, pageStructure 
                                     transition={{ duration: 0.2 }}
                                     className="overflow-hidden"
                                   >
-                                    {part.chapters.map((chapter) => (
+                                    {part.chapters.map((chapter: ContentChapter) => (
                                       <button
                                         key={chapter.id}
                                         onClick={() => handleNavigateToPage('chapter', chapter.id)}
                                         className={`sidebar-nav-chapter ${isItemActive('chapter', chapter.id) ? 'active' : ''}`}
                                       >
-                                        <span className="sidebar-nav-chapter-num">{chapter.number}.</span>
+                                        <span className="sidebar-nav-chapter-num">{chapter.number ?? ''}.</span>
                                         <span className="sidebar-nav-chapter-title">{chapter.title}</span>
                                       </button>
                                     ))}
@@ -264,7 +312,7 @@ export function SidebarNav({ isBookOpen, currentPage, onNavigate, pageStructure 
                               </AnimatePresence>
 
                               {/* Direct Poems (no chapters) */}
-                              {!part.chapters && part.poems && part.poems.length > 0 && (
+                              {(!part.chapters || part.chapters.length === 0) && part.poems && part.poems.length > 0 && (
                                 <div className="sidebar-nav-poems-count">
                                   {part.poems.length} стих{part.poems.length > 4 ? 'ов' : part.poems.length > 1 ? 'а' : ''}
                                 </div>

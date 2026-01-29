@@ -33,7 +33,7 @@ export function AuthorEditor() {
         title: data.book.title,
         author: data.book.author,
         year: data.book.year,
-        version: data.book.version,
+        version: data.book.version || '',
         epigraph: epigraphValue,
         afterword: data.book.afterword || '',
       });
