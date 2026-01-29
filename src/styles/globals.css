@@ -1607,6 +1607,34 @@
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
   }
+
+  /* Ползунок у края страницы — тонкий, с отступом, без прыжков текста */
+  .scrollbar-edge {
+    scrollbar-width: thin;
+    scrollbar-color: transparent transparent; /* скрыт по умолчанию */
+    scrollbar-gutter: stable; /* резервируем место под скроллбар */
+    padding-right: 8px; /* отступ от текста до скроллбара */
+  }
+  .scrollbar-edge.scrollbar-visible {
+    scrollbar-color: #7a1d39 transparent; /* показываем при прокрутке */
+  }
+  .scrollbar-edge::-webkit-scrollbar {
+    width: 4px; /* тонкий скроллбар */
+  }
+  .scrollbar-edge::-webkit-scrollbar-track {
+    background: transparent;
+    margin: 8px 0;
+  }
+  .scrollbar-edge::-webkit-scrollbar-thumb {
+    background: transparent; /* скрыт по умолчанию */
+    border-radius: 2px;
+  }
+  .scrollbar-edge.scrollbar-visible::-webkit-scrollbar-thumb {
+    background: rgba(122, 29, 57, 0.5); /* полупрозрачный бордовый */
+  }
+  .scrollbar-edge.scrollbar-visible::-webkit-scrollbar-thumb:hover {
+    background: rgba(122, 29, 57, 0.8);
+  }
 }
 
 /* ===== MOBILE OPTIMIZATIONS ===== */

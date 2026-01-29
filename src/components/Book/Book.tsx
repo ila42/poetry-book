@@ -68,7 +68,7 @@ function useDeviceInfo() {
 
 interface BookProps {
   bookInfo: BookInfo;
-  chapters: Chapter[];
+  chapters?: Chapter[]; // Необязательный для обратной совместимости
   poems: Poem[];
 }
 
@@ -82,7 +82,7 @@ const PageWrapper = forwardRef<HTMLDivElement, { children: React.ReactNode }>(
 );
 PageWrapper.displayName = 'PageWrapper';
 
-export function Book({ bookInfo, chapters, poems }: BookProps) {
+export function Book({ bookInfo, chapters = [], poems }: BookProps) {
   const [isBookOpen, setIsBookOpen] = useState(true);
   const [currentPage, setCurrentPage] = useState(0);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -117,64 +117,34 @@ export function Book({ bookInfo, chapters, poems }: BookProps) {
     };
   }, [isMobile, screenWidth, screenHeight]);
   
-  // Сортируем главы
-  const sortedChapters = useMemo(() => 
-    [...chapters].sort((a, b) => a.order - b.order), 
-    [chapters]
-  );
-  
   // Вычисляем структуру страниц
+  // Структура: 1-титульная, 2-оглавление, 3-эпиграф (если есть), 4+-стихи
   const pageStructure = useMemo(() => {
-    const pages: Array<{ type: string; content?: unknown; id?: string }> = [];
+    const pages: Array<{ type: string; content?: unknown; id?: string; poemIndex?: number }> = [];
     
-    // Титульная страница
+    // Страница 1: Титульная
     pages.push({ type: 'title' });
     
-    // Посвящение (если есть)
-    if (bookInfo.dedication) {
-      pages.push({ type: 'dedication', content: bookInfo.dedication });
-    }
-    
-    // Содержание
+    // Страница 2: Содержание
     pages.push({ type: 'toc' });
     
-    // Эпиграф (вместо предисловия)
+    // Страница 3: Эпиграф (если есть)
     if (bookInfo.epigraph) {
       pages.push({ type: 'epigraph', content: bookInfo.epigraph });
     }
     
-    // Главы и стихи
-    sortedChapters.forEach(chapter => {
-      // Страница главы
-      pages.push({ type: 'chapter', content: chapter, id: chapter.id });
-      
-      // Стихи главы
-      const chapterPoems = poems.filter(p => p.chapterId === chapter.id);
-      chapterPoems.forEach(poem => {
-        pages.push({ type: 'poem', content: poem, id: poem.id });
-      });
+    // Страницы 4+: Стихи (по одному на страницу)
+    poems.forEach((poem, index) => {
+      pages.push({ type: 'poem', content: poem, id: poem.id, poemIndex: index });
     });
     
-    // Послесловие на странице 310
-    if (bookInfo.afterword) {
-      const targetPageIndex = 309; // Страница 310 (индекс 309, т.к. нумерация с 1)
-      
-      // Если текущее количество страниц меньше целевого, добавляем пустые страницы
-      while (pages.length < targetPageIndex) {
-        pages.push({ type: 'empty' });
-      }
-      
-      // Вставляем послесловие на страницу 310
-      pages.push({ type: 'afterword', content: bookInfo.afterword });
-    }
-    
-    // Финальная проверка на четность всего каталога
+    // Финальная проверка на четность
     if (pages.length % 2 !== 0) {
       pages.push({ type: 'empty' });
     }
     
     return pages;
-  }, [bookInfo, sortedChapters, poems]);
+  }, [bookInfo, poems]);
   
   // Функции для получения номера страницы
   const getPageForChapter = useCallback((chapterId: string) => {
@@ -317,7 +287,7 @@ export function Book({ bookInfo, chapters, poems }: BookProps) {
             </BookPage>
           </PageWrapper>
         );
-        
+
       default:
         return null;
     }
@@ -386,21 +356,21 @@ export function Book({ bookInfo, chapters, poems }: BookProps) {
                   maxWidth={bookDimensions.maxWidth}
                   minHeight={bookDimensions.minHeight}
                   maxHeight={bookDimensions.maxHeight}
-                  maxShadowOpacity={isMobile ? 0.3 : 0.5}
-                  showCover={true}
+                  maxShadowOpacity={0.5}
+                  showCover={false}
                   mobileScrollSupport={false}
                   onFlip={handleFlip}
                   className="book-flip"
                   style={{}}
                   startPage={0}
-                  drawShadow={!isMobile}
-                  flippingTime={isMobile ? 400 : 600}
+                  drawShadow={true}
+                  flippingTime={500}
                   usePortrait={isMobile}
                   startZIndex={0}
                   autoSize={true}
                   clickEventForward={false}
                   useMouseEvents={false}
-                  swipeDistance={0}
+                  swipeDistance={30}
                   showPageCorners={false}
                   disableFlipByClick={true}
                 >
@@ -409,48 +379,68 @@ export function Book({ bookInfo, chapters, poems }: BookProps) {
               </div>
               
               {/* Левая зона - предыдущая страница */}
-              <button
-                type="button"
+              <div
+                role="button"
+                tabIndex={0}
                 aria-label="Предыдущая страница"
-                className="absolute top-0 left-0 h-full bg-transparent border-none outline-none cursor-pointer"
+                className="absolute top-0 left-0 h-full cursor-pointer select-none hover:bg-black/5 active:bg-black/10 transition-colors"
                 style={{ 
-                  width: isMobile ? '30%' : '50%',
-                  zIndex: 100,
+                  width: isMobile ? '20%' : '15%',
+                  zIndex: 200,
                   touchAction: 'manipulation',
                   WebkitTapHighlightColor: 'transparent',
+                  pointerEvents: 'auto',
                 }}
-                onClick={() => {
-                  if (currentPage > 0 && bookRef.current?.pageFlip) {
-                    bookRef.current.pageFlip().turnToPage(currentPage - 1);
-                  }
+                onPointerDown={(e) => {
+                  e.stopPropagation();
+                }}
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  handlePrevPage();
                 }}
                 onTouchEnd={(e) => {
                   e.preventDefault();
-                  if (currentPage > 0 && bookRef.current?.pageFlip) {
-                    bookRef.current.pageFlip().turnToPage(currentPage - 1);
+                  e.stopPropagation();
+                  handlePrevPage();
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    handlePrevPage();
                   }
                 }}
               />
               {/* Правая зона - следующая страница */}
-              <button
-                type="button"
+              <div
+                role="button"
+                tabIndex={0}
                 aria-label="Следующая страница"
-                className="absolute top-0 right-0 h-full bg-transparent border-none outline-none cursor-pointer"
+                className="absolute top-0 right-0 h-full cursor-pointer select-none hover:bg-black/5 active:bg-black/10 transition-colors"
                 style={{ 
-                  width: isMobile ? '70%' : '50%',
-                  zIndex: 100,
+                  width: isMobile ? '20%' : '15%',
+                  zIndex: 200,
                   touchAction: 'manipulation',
                   WebkitTapHighlightColor: 'transparent',
+                  pointerEvents: 'auto',
                 }}
-                onClick={() => {
-                  if (currentPage < pageStructure.length - 1 && bookRef.current?.pageFlip) {
-                    bookRef.current.pageFlip().turnToPage(currentPage + 1);
-                  }
+                onPointerDown={(e) => {
+                  e.stopPropagation();
+                }}
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  handleNextPage();
                 }}
                 onTouchEnd={(e) => {
                   e.preventDefault();
-                  if (currentPage < pageStructure.length - 1 && bookRef.current?.pageFlip) {
-                    bookRef.current.pageFlip().turnToPage(currentPage + 1);
+                  e.stopPropagation();
+                  handleNextPage();
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    handleNextPage();
                   }
                 }}
               />

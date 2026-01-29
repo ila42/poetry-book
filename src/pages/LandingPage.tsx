@@ -121,9 +121,7 @@ export function LandingPage() {
               </p>
               
               <p className="font-serif text-[#2C3E50]/70 leading-relaxed mb-10 max-w-lg mx-auto lg:mx-0">
-                Поэтический сборник, в котором каждое стихотворение — это отражение 
-                определённого момента, чувства, мысли. Приглашаю вас в путешествие 
-                по страницам моей книги.
+                Приглашаю вас в путешествие по страницам моей книги.
               </p>
               
               <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">

@@ -1,5 +1,6 @@
-import { ReactNode } from 'react';
+import { ReactNode, useRef } from 'react';
 import { motion } from 'framer-motion';
+import { useScrollbarReveal } from '@/hooks';
 
 interface BookPageProps {
   children: ReactNode;
@@ -9,6 +10,9 @@ interface BookPageProps {
 }
 
 export function BookPage({ children, pageNumber, isLeft = false, className = '' }: BookPageProps) {
+  const scrollRef = useRef<HTMLDivElement>(null);
+  useScrollbarReveal(scrollRef);
+
   return (
     <motion.div
       className={`page w-full h-full flex flex-col ${className}`}
@@ -17,8 +21,15 @@ export function BookPage({ children, pageNumber, isLeft = false, className = '' 
       transition={{ duration: 0.3 }}
       data-no-flip
     >
-      {/* Содержимое страницы */}
-      <div className="flex-1 p-6 md:p-8 lg:p-12 overflow-y-auto scrollbar-hide">
+      {/* Содержимое страницы - с прокруткой */}
+      <div 
+        ref={scrollRef}
+        className="scrollbar-edge flex-1 p-4 md:p-6 lg:p-8 overflow-y-auto"
+        style={{ 
+          touchAction: 'pan-y',
+          overscrollBehavior: 'contain'
+        }}
+      >
         {children}
       </div>
       
@@ -92,20 +103,36 @@ interface EpigraphPageProps {
 }
 
 export function EpigraphPage({ content, pageNumber, isLeft }: EpigraphPageProps) {
+  const scrollRef = useRef<HTMLDivElement>(null);
+  useScrollbarReveal(scrollRef);
+
   return (
-    <BookPage pageNumber={pageNumber} isLeft={isLeft} className="justify-center items-center">
-      <div className="max-w-md mx-auto flex flex-col justify-center h-full">
+    <BookPage pageNumber={pageNumber} isLeft={isLeft}>
+      <div className="w-full h-full flex flex-col">
+        {/* Заголовок - как у стихов */}
         <motion.h3 
-          className="poem-title text-center mb-8"
+          className="poem-title text-center"
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
         >
           Эпиграф
         </motion.h3>
-        <div className="font-serif italic text-lg text-ink-800 leading-relaxed text-center whitespace-pre-line">
+        
+        {/* Декоративный разделитель */}
+        <div className="divider" />
+        
+        {/* Текст эпиграфа - как текст стиха, с тонким скроллбаром */}
+        <motion.div 
+          ref={scrollRef}
+          className="scrollbar-edge poem-text flex-1 overflow-y-auto text-center"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.2 }}
+          style={{ touchAction: 'pan-y' }}
+        >
           {content}
-        </div>
+        </motion.div>
       </div>
     </BookPage>
   );

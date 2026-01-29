@@ -46,7 +46,7 @@ export interface BookData {
   book: {
     title: string;
     author: string;
-    year: number;
+    year: number | string; // Поддерживает диапазон вида "1980-2025"
     version: string;
     epigraph?: string | {
       text: string;

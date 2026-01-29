@@ -31,7 +31,7 @@ export interface BookInfo {
   title: string;
   subtitle?: string;
   author: string;
-  year: number;
+  year: number | string;
   epigraph?: string;
   afterword?: string;
   dedication?: string;

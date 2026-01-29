@@ -3,10 +3,17 @@ import { useContent } from '../context/ContentContext';
 
 export function AuthorEditor() {
   const { data, loading, updateBook } = useContent();
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<{
+    title: string;
+    author: string;
+    year: number | string;
+    version: string;
+    epigraph: string;
+    afterword: string;
+  }>({
     title: '',
     author: '',
-    year: 2024,
+    year: '',
     version: '',
     epigraph: '',
     afterword: '',
