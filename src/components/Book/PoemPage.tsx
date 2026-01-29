@@ -1,8 +1,5 @@
-import { useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Poem } from '@/types';
-import { BookPage } from './BookPage';
-import { useScrollbarReveal } from '@/hooks';
 
 interface PoemPageProps {
   poem: Poem;
@@ -12,37 +9,45 @@ interface PoemPageProps {
 }
 
 export function PoemPage({ poem, pageNumber, isLeft }: PoemPageProps) {
-  const poemScrollRef = useRef<HTMLDivElement>(null);
-  useScrollbarReveal(poemScrollRef);
-
   return (
-    <BookPage pageNumber={pageNumber} isLeft={isLeft}>
-      <div className="w-full h-full flex flex-col" data-no-flip>
-        {/* Название стихотворения - как было раньше */}
-        <motion.h3 
-          className="poem-title text-center"
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-        >
+    <motion.div
+      className="page w-full h-full flex flex-col"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.3 }}
+      data-no-flip
+    >
+      {/* Контент страницы */}
+      <div className="flex-1 flex flex-col p-3 md:p-4 overflow-hidden">
+        {/* Название стихотворения */}
+        <h3 className="poem-title text-center shrink-0">
           {poem.title}
-        </motion.h3>
+        </h3>
         
         {/* Декоративный разделитель */}
-        <div className="divider" />
+        <div className="divider shrink-0" />
         
-        {/* Текст стихотворения - широкий, с прокруткой */}
-        <motion.div 
-          ref={poemScrollRef}
-          className="scrollbar-edge poem-text flex-1 overflow-y-auto text-center md:text-left"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.2 }}
-          style={{ touchAction: 'pan-y' }}
+        {/* Текст стихотворения - прокрутка колёсиком и пальцем */}
+        <div 
+          className="poem-text flex-1 overflow-y-auto overflow-x-hidden pr-2"
+          style={{ 
+            touchAction: 'pan-y',
+            overscrollBehavior: 'contain',
+            WebkitOverflowScrolling: 'touch',
+            scrollbarWidth: 'thin',
+            scrollbarColor: 'rgba(122, 29, 57, 0.4) transparent'
+          }}
         >
           {poem.content}
-        </motion.div>
+        </div>
       </div>
-    </BookPage>
+      
+      {/* Номер страницы */}
+      {pageNumber !== undefined && (
+        <div className={`page-number ${isLeft ? 'page-number-left' : 'page-number-right'}`}>
+          {pageNumber}
+        </div>
+      )}
+    </motion.div>
   );
 }

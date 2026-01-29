@@ -294,8 +294,8 @@
     background-image: 
       linear-gradient(180deg, rgba(255,255,255,0.3) 0%, transparent 20%, transparent 80%, rgba(0,0,0,0.02) 100%),
       linear-gradient(to right, rgba(0,0,0,0.02) 0%, transparent 3%, transparent 97%, rgba(0,0,0,0.02) 100%);
-    /* Увеличенные отступы для большей книги */
-    padding: 2rem 2.5rem;
+    /* Компактные отступы для больше текста */
+    padding: 1rem 1.25rem;
     /* Оптимизация рендеринга */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -308,13 +308,13 @@
   
   @media (min-width: 768px) {
     .page {
-      padding: 2.5rem 3rem;
+      padding: 1.25rem 1.5rem;
     }
   }
   
   @media (min-width: 1024px) {
     .page {
-      padding: 3rem 3.5rem;
+      padding: 1.5rem 2rem;
     }
   }
   
@@ -412,12 +412,12 @@
     background: radial-gradient(ellipse 80% 70% at 50% 50%, transparent 50%, rgba(0, 0, 0, 0.15) 100%);
   }
   
-  /* Typography for poems - масштабируется с книгой + оптимизация рендеринга */
+  /* Typography for poems - компактный стиль */
   .poem-text {
-    @apply font-serif leading-relaxed;
+    @apply font-serif;
     white-space: pre-line;
-    font-size: clamp(0.95rem, 1.5vw, 1.2rem);
-    line-height: 1.85;
+    font-size: clamp(0.9rem, 1.8vw, 1.15rem);
+    line-height: 1.4; /* Уменьшенный межстрочный интервал */
     color: #1a1a1a;
     /* Улучшенный рендеринг текста */
     -webkit-font-smoothing: antialiased;
@@ -425,11 +425,26 @@
     text-rendering: optimizeLegibility;
     font-feature-settings: "kern" 1, "liga" 1;
   }
+
+  /* Тонкий скроллбар для текста стиха */
+  .poem-text::-webkit-scrollbar {
+    width: 4px;
+  }
+  .poem-text::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .poem-text::-webkit-scrollbar-thumb {
+    background: rgba(122, 29, 57, 0.4);
+    border-radius: 2px;
+  }
+  .poem-text::-webkit-scrollbar-thumb:hover {
+    background: rgba(122, 29, 57, 0.6);
+  }
   
   .poem-title {
-    @apply font-display font-semibold mb-6;
+    @apply font-display font-semibold mb-3;
     color: #7a1d39;
-    font-size: clamp(1.5rem, 2.5vw, 2.25rem);
+    font-size: clamp(1.1rem, 2vw, 1.5rem);
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
     letter-spacing: 0.01em;
@@ -455,7 +470,7 @@
   }
   
   .divider {
-    @apply w-24 h-px mx-auto my-6;
+    @apply w-16 h-px mx-auto my-3;
     background: linear-gradient(to right, transparent, #7a1d39, transparent);
   }
   
