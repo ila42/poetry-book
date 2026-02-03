@@ -12,7 +12,7 @@ export const author: Author = {
 };
 
 export const bookInfo: BookInfo = {
-  title: 'Сборник стихов',
+  title: 'Книга стихов',
   subtitle: 'Избранные стихотворения',
   author: author.name,
   year: '1980-2025',

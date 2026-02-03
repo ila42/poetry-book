@@ -1,0 +1,223 @@
+/* Hamburger: fixed top-right */
+.hamburger {
+  position: fixed;
+  top: 12px;
+  right: 12px;
+  z-index: 1001;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0;
+  border: none;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.86);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.06);
+  cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
+}
+
+.hamburger:hover {
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.hamburger:active {
+  transform: scale(0.97);
+}
+
+.hamburgerBar {
+  display: block;
+  width: 20px;
+  height: 2px;
+  background: #374151;
+  border-radius: 1px;
+  transition: transform 0.2s, opacity 0.2s;
+}
+
+/* Floating panel */
+.panel {
+  position: fixed;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%) translateY(-16px);
+  z-index: 1000;
+  max-width: 720px;
+  width: calc(100% - 24px);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.86);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.08);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    transform 0.25s ease-out,
+    opacity 0.25s ease-out,
+    visibility 0.25s;
+}
+
+.panelOpen {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+/* TOC panel: taller, scrollable */
+.tocPanel {
+  max-height: min(70vh, 480px);
+  display: flex;
+  flex-direction: column;
+  min-height: 200px;
+}
+
+.tocPanelInner {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.tocBack {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 8px 12px;
+  margin: 0 8px 4px;
+  border: none;
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.06);
+  font-size: 0.9375rem;
+  font-family: inherit;
+  color: #374151;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.tocBack:hover {
+  background: rgba(0, 0, 0, 0.1);
+  color: #111827;
+}
+
+.tocBack:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+.tocListWrap {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* Backdrop: close on click outside */
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  background: rgba(0, 0, 0, 0.35);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.25s ease-out, visibility 0.25s;
+}
+
+.backdropOpen {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.toolbarInner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 8px 12px;
+  min-height: 52px;
+}
+
+/* Icon buttons: min 44x44 */
+.iconButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0;
+  border: none;
+  border-radius: 12px;
+  background: transparent;
+  color: #374151;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, transform 0.15s;
+}
+
+.iconButton:hover {
+  background: rgba(0, 0, 0, 0.06);
+  color: #111827;
+}
+
+.iconButton:active {
+  background: rgba(0, 0, 0, 0.1);
+  transform: scale(0.96);
+}
+
+.iconButton:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/* Search row (when search toggled) */
+.searchRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  max-width: 320px;
+  padding: 4px 4px 4px 12px;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.04);
+}
+
+.searchInput {
+  flex: 1;
+  min-width: 0;
+  height: 40px;
+  padding: 0 8px;
+  border: none;
+  background: transparent;
+  font-size: 1rem;
+  color: #111827;
+  font-family: inherit;
+}
+
+.searchInput::placeholder {
+  color: #6b7280;
+}
+
+.searchInput:focus {
+  outline: none;
+}
+
+.searchRow .iconButton {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  min-height: 40px;
+}

@@ -158,7 +158,7 @@ export function SidebarNav({ isBookOpen, currentPage, onNavigate, pageStructure 
           e.stopPropagation();
           setIsOpen(!isOpen);
         }}
-        className="sidebar-nav-toggle"
+        className={`sidebar-nav-toggle ${isOpen ? 'sidebar-nav-toggle--open' : ''}`}
         style={{ position: 'relative', zIndex: 10000 }}
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}

@@ -449,6 +449,41 @@
     text-rendering: optimizeLegibility;
     letter-spacing: 0.01em;
   }
+
+  /* Режим читалки: белый фон, крупный текст */
+  .reader-page-wrap .page {
+    background-color: #fff;
+    background-image: none;
+  }
+  .reader-page-wrap .page::before,
+  .reader-page-wrap .page::after {
+    display: none;
+  }
+  .reader-poem-title {
+    @apply font-display font-semibold text-center mb-4;
+    color: #1a1a1a;
+    font-size: clamp(1.5rem, 4vw, 2.25rem);
+    line-height: 1.3;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  .reader-poem-text {
+    @apply font-serif text-center;
+    white-space: pre-line;
+    font-size: clamp(1.125rem, 2.5vw, 1.5rem);
+    line-height: 1.75;
+    color: #1a1a1a;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+  .reader-poem-text::-webkit-scrollbar {
+    width: 6px;
+  }
+  .reader-poem-text::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+  }
   
   .chapter-title {
     @apply font-display font-bold;
@@ -659,6 +694,32 @@
       0 6px 25px rgba(0, 0, 0, 0.5),
       0 0 20px rgba(212, 175, 55, 0.1),
       inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  }
+  
+  /* Кнопка меню в открытом состоянии — в цветовой гамме панели содержания */
+  .sidebar-nav-toggle--open {
+    background: linear-gradient(165deg, 
+      rgba(45, 25, 20, 0.98) 0%, 
+      rgba(40, 22, 18, 0.98) 100%
+    );
+    border-color: rgba(212, 175, 55, 0.35);
+    box-shadow: 
+      0 4px 20px rgba(0, 0, 0, 0.4),
+      inset 0 1px 0 rgba(212, 175, 55, 0.08);
+  }
+  
+  .sidebar-nav-toggle--open:hover {
+    border-color: rgba(212, 175, 55, 0.5);
+    box-shadow: 
+      0 6px 25px rgba(0, 0, 0, 0.5),
+      0 0 20px rgba(212, 175, 55, 0.15),
+      inset 0 1px 0 rgba(212, 175, 55, 0.1);
+  }
+  
+  /* Иконка (три полоски / крестик) в открытом меню — кремовый тон под панель */
+  .sidebar-nav-toggle--open .hamburger-icon span {
+    background: linear-gradient(90deg, rgba(245, 235, 220, 0.95), rgba(255, 248, 235, 0.98), rgba(245, 235, 220, 0.95));
+    box-shadow: 0 0 4px rgba(245, 235, 220, 0.2);
   }
   
   /* Hamburger Icon */
