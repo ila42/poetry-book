@@ -102,17 +102,11 @@ export function TopToolbar({
   };
 
   const fontSize = readerFontSize ?? getStoredFontSize();
-  const setFontSize = onReaderFontSizeChange;
 
   const handleFontDecrease = () => {
     const next = Math.max(READER_FONT_MIN, fontSize - READER_FONT_STEP);
     if (next !== fontSize) {
       onReaderFontSizeChange?.(next);
-      try {
-        localStorage.setItem(READER_FONT_STORAGE_KEY, String(next));
-      } catch {
-        /* ignore */
-      }
     }
   };
 
@@ -120,11 +114,6 @@ export function TopToolbar({
     const next = Math.min(READER_FONT_MAX, fontSize + READER_FONT_STEP);
     if (next !== fontSize) {
       onReaderFontSizeChange?.(next);
-      try {
-        localStorage.setItem(READER_FONT_STORAGE_KEY, String(next));
-      } catch {
-        /* ignore */
-      }
     }
   };
 
