@@ -54,12 +54,12 @@ export function Book({ bookInfo, chapters = [], poems, currentPage: controlledPa
   }, [pageStructure.length]);
 
   const handlePrevPage = useCallback(() => {
-    setCurrentPage(p => Math.max(0, p - 1));
-  }, []);
+    setCurrentPage(Math.max(0, currentPage - 1));
+  }, [currentPage, setCurrentPage]);
 
   const handleNextPage = useCallback(() => {
-    setCurrentPage(p => Math.min(pageStructure.length - 1, p + 1));
-  }, [pageStructure.length]);
+    setCurrentPage(Math.min(pageStructure.length - 1, currentPage + 1));
+  }, [pageStructure.length, currentPage, setCurrentPage]);
 
   const page = pageStructure[currentPage];
   if (!page) return null;
