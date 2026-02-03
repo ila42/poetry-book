@@ -477,6 +477,16 @@
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
   }
+  /* Зона чтения: размер из панели A−/A+ (переменная --reader-font-size на .reader-page-wrap) */
+  .readerContent {
+    font-size: var(--reader-font-size, 16px);
+  }
+  .readerContent .reader-poem-title {
+    font-size: 1.4em;
+  }
+  .readerContent .reader-poem-text {
+    font-size: 1em;
+  }
   .reader-poem-text::-webkit-scrollbar {
     width: 6px;
   }

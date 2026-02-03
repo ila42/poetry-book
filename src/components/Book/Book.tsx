@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import { BookInfo, Chapter, Poem } from '@/types';
 import { BookPage, TitlePage, DedicationPage, EpigraphPage, AfterwordPage, ChapterPage } from './BookPage';
 import { PoemPage } from './PoemPage';
@@ -12,9 +12,11 @@ interface BookProps {
   currentPage?: number;
   /** Управляемый режим: переход на страницу */
   onNavigate?: (pageIndex: number) => void;
+  /** Размер шрифта в зоне чтения (px), задаёт CSS-переменную --reader-font-size */
+  readerFontSize?: number;
 }
 
-export function Book({ bookInfo, chapters = [], poems, currentPage: controlledPage, onNavigate }: BookProps) {
+export function Book({ bookInfo, chapters = [], poems, currentPage: controlledPage, onNavigate, readerFontSize = 16 }: BookProps) {
   const [internalPage, setInternalPage] = useState(0);
   const isControlled = controlledPage !== undefined && onNavigate !== undefined;
   const currentPage = isControlled ? controlledPage : internalPage;
@@ -141,8 +143,16 @@ export function Book({ bookInfo, chapters = [], poems, currentPage: controlledPa
     }
   };
 
+  const readerFontSizeStyle: React.CSSProperties | undefined =
+    typeof readerFontSize === 'number'
+      ? { ['--reader-font-size' as string]: `${readerFontSize}px` }
+      : undefined;
+
   return (
-    <div className="reader-page-wrap w-full min-h-screen flex flex-col pt-14 pb-24">
+    <div
+      className="reader-page-wrap w-full min-h-screen flex flex-col pt-14 pb-24"
+      style={readerFontSizeStyle}
+    >
       {/* Одна страница на весь экран: белый фон, контент по центру */}
       <div className="flex-1 flex flex-col min-h-0 relative bg-white">
         {/* Зоны клика влево/вправо для перелистывания */}
@@ -159,7 +169,7 @@ export function Book({ bookInfo, chapters = [], poems, currentPage: controlledPa
           onClick={handleNextPage}
         />
 
-        <div className="flex-1 flex flex-col items-center justify-center mx-auto w-full max-w-3xl px-6 py-8 overflow-y-auto">
+        <div className="readerContent flex-1 flex flex-col items-center justify-center mx-auto w-full max-w-3xl px-6 py-8 overflow-y-auto">
           {renderCurrentPage()}
         </div>
       </div>

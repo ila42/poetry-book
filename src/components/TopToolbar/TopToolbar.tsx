@@ -4,6 +4,19 @@ import { ReaderTocPanel } from '@/components/ReaderTocPanel';
 import type { TocItem } from '@/data/toc';
 import styles from './TopToolbar.module.css';
 
+const READER_FONT_MIN = 14;
+const READER_FONT_MAX = 22;
+const READER_FONT_STEP = 1;
+const READER_FONT_STORAGE_KEY = 'reader_font_size';
+
+function getStoredFontSize(): number {
+  if (typeof window === 'undefined') return 16;
+  const v = localStorage.getItem(READER_FONT_STORAGE_KEY);
+  if (v == null) return 16;
+  const n = parseInt(v, 10);
+  return Number.isNaN(n) ? 16 : Math.max(READER_FONT_MIN, Math.min(READER_FONT_MAX, n));
+}
+
 interface TopToolbarProps {
   /** Пункты оглавления (стихи). Если передан — по клику hamburger открывается панель «Содержание» */
   tocItems?: TocItem[];
@@ -11,9 +24,19 @@ interface TopToolbarProps {
   currentPageIndex?: number;
   /** Переход на страницу книги по индексу (закрывает панель) */
   onNavigateToPage?: (pageIndex: number) => void;
+  /** Размер шрифта в зоне чтения (px) */
+  readerFontSize?: number;
+  /** Изменить размер шрифта (новое значение в px) */
+  onReaderFontSizeChange?: (px: number) => void;
 }
 
-export function TopToolbar({ tocItems = [], currentPageIndex = 0, onNavigateToPage }: TopToolbarProps) {
+export function TopToolbar({
+  tocItems = [],
+  currentPageIndex = 0,
+  onNavigateToPage,
+  readerFontSize,
+  onReaderFontSizeChange,
+}: TopToolbarProps) {
   const [open, setOpen] = useState(false);
   const [tocOpen, setTocOpen] = useState(false);
   const [searchVisible, setSearchVisible] = useState(false);
@@ -78,8 +101,31 @@ export function TopToolbar({ tocItems = [], currentPageIndex = 0, onNavigateToPa
     if (!searchVisible) console.log('search');
   };
 
-  const handleSettings = () => {
-    console.log('settings');
+  const fontSize = readerFontSize ?? getStoredFontSize();
+  const setFontSize = onReaderFontSizeChange;
+
+  const handleFontDecrease = () => {
+    const next = Math.max(READER_FONT_MIN, fontSize - READER_FONT_STEP);
+    if (next !== fontSize) {
+      onReaderFontSizeChange?.(next);
+      try {
+        localStorage.setItem(READER_FONT_STORAGE_KEY, String(next));
+      } catch {
+        /* ignore */
+      }
+    }
+  };
+
+  const handleFontIncrease = () => {
+    const next = Math.min(READER_FONT_MAX, fontSize + READER_FONT_STEP);
+    if (next !== fontSize) {
+      onReaderFontSizeChange?.(next);
+      try {
+        localStorage.setItem(READER_FONT_STORAGE_KEY, String(next));
+      } catch {
+        /* ignore */
+      }
+    }
   };
 
   const handleList = () => {
@@ -201,13 +247,20 @@ export function TopToolbar({ tocItems = [], currentPageIndex = 0, onNavigateToPa
                 <button
                   type="button"
                   className={styles.iconButton}
-                  onClick={handleSettings}
-                  aria-label="Настройки"
+                  onClick={handleFontDecrease}
+                  aria-label="Уменьшить шрифт"
+                  disabled={fontSize <= READER_FONT_MIN}
                 >
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <circle cx="12" cy="12" r="3" />
-                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
-                  </svg>
+                  <span className={styles.fontButtonLabel}>A−</span>
+                </button>
+                <button
+                  type="button"
+                  className={styles.iconButton}
+                  onClick={handleFontIncrease}
+                  aria-label="Увеличить шрифт"
+                  disabled={fontSize >= READER_FONT_MAX}
+                >
+                  <span className={styles.fontButtonLabel}>A+</span>
                 </button>
                 <button
                   type="button"

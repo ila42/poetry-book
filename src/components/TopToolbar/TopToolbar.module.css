@@ -182,6 +182,19 @@
   outline-offset: 2px;
 }
 
+.iconButton:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.fontButtonLabel {
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1;
+  color: inherit;
+  letter-spacing: -0.02em;
+}
+
 /* Search row (when search toggled) */
 .searchRow {
   display: flex;
