@@ -246,3 +246,60 @@
   min-width: 40px;
   min-height: 40px;
 }
+
+/* Mobile: smaller buttons to fit all in one row */
+@media (max-width: 480px) {
+  .toolbarInner {
+    gap: 2px;
+    padding: 6px 8px;
+    min-height: 44px;
+  }
+
+  .iconButton {
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    min-height: 36px;
+    border-radius: 10px;
+  }
+
+  .iconButton svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .fontButtonLabel {
+    font-size: 0.875rem;
+  }
+}
+
+/* Very small screens: even more compact */
+@media (max-width: 360px) {
+  .toolbarInner {
+    gap: 1px;
+    padding: 4px 6px;
+    min-height: 40px;
+  }
+
+  .iconButton {
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+    min-height: 32px;
+    border-radius: 8px;
+  }
+
+  .iconButton svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .fontButtonLabel {
+    font-size: 0.8125rem;
+  }
+
+  .panel {
+    width: calc(100% - 16px);
+    border-radius: 14px;
+  }
+}
