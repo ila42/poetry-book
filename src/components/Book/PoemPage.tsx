@@ -12,6 +12,8 @@ interface PoemPageProps {
 
 export function PoemPage({ poem, pageNumber, isLeft, variant = 'default' }: PoemPageProps) {
   const isReader = variant === 'reader';
+  const hasTitle = Boolean(poem.title && poem.title.trim().length > 0);
+  const hasMeta = Boolean(poem.dedication || poem.epigraph);
 
   return (
     <motion.div
@@ -22,11 +24,22 @@ export function PoemPage({ poem, pageNumber, isLeft, variant = 'default' }: Poem
       data-no-flip
     >
       <div className={`flex flex-col overflow-hidden w-full max-w-2xl ${isReader ? 'py-4 text-center' : 'flex-1 p-3 md:p-4'}`}>
-        <h3 className={isReader ? 'reader-poem-title' : 'poem-title text-center shrink-0'}>
-          {poem.title}
-        </h3>
+        {hasTitle && (
+          <h3 className={isReader ? 'reader-poem-title' : 'poem-title text-center shrink-0'}>
+            {poem.title}
+          </h3>
+        )}
 
-        <div className="divider shrink-0 mx-auto" />
+        {hasTitle && <div className="divider shrink-0 mx-auto" />}
+
+        {hasMeta && (
+          <div
+            className={`mb-4 text-sm italic text-ink-600 ${isReader ? 'text-center' : ''} whitespace-pre-line`}
+          >
+            {poem.dedication && <div>{poem.dedication}</div>}
+            {poem.epigraph && <div>{poem.epigraph}</div>}
+          </div>
+        )}
 
         <div
           className={

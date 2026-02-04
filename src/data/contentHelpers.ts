@@ -54,6 +54,8 @@ export function extractPoems(): Poem[] {
             content: poem.text,
             chapterId: part.id,
             audioUrl: poem.audioUrl || undefined,
+            epigraph: poem.epigraph,
+            dedication: poem.dedication,
           });
         });
       }
@@ -69,6 +71,8 @@ export function extractPoems(): Poem[] {
                 content: poem.text,
                 chapterId: chapter.id,
                 audioUrl: poem.audioUrl || undefined,
+                epigraph: poem.epigraph,
+                dedication: poem.dedication,
               });
             });
           }
@@ -130,3 +134,58 @@ export function getBookInfo() {
 // Экспорт готовых данных
 export const contentPoems = extractPoems();
 export const contentChapters = extractChapters();
+
+/**
+ * Получает случайный стих из доступных
+ */
+export function getRandomPoem(poems: Poem[] = contentPoems): Poem {
+  const randomIndex = Math.floor(Math.random() * poems.length);
+  return poems[randomIndex];
+}
+
+/**
+ * Получает "Стих дня" с обновлением раз в 24 часа.
+ * Использует localStorage для сохранения выбора.
+ */
+export function getPoemOfTheDay(): Poem {
+  if (typeof window === 'undefined') {
+    return getRandomPoem(contentPoems);
+  }
+
+  const STORAGE_KEY = 'poem_of_the_day_data';
+  const TWENTY_FOUR_HOURS = 24 * 60 * 60 * 1000;
+
+  try {
+    const storedData = localStorage.getItem(STORAGE_KEY);
+    
+    if (storedData) {
+      const { id, date } = JSON.parse(storedData);
+      const lastDate = new Date(date).getTime();
+      const now = new Date().getTime();
+
+      // Если прошло меньше 24 часов
+      if (now - lastDate < TWENTY_FOUR_HOURS) {
+        const storedPoem = contentPoems.find(p => p.id === id);
+        if (storedPoem) {
+          return storedPoem;
+        }
+      }
+    }
+  } catch (e) {
+    console.error('Error reading from localStorage', e);
+  }
+
+  // Если данных нет, прошло > 24ч или сохраненный стих не найден
+  const newPoem = getRandomPoem(contentPoems);
+  
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({
+      id: newPoem.id,
+      date: new Date().toISOString()
+    }));
+  } catch (e) {
+    console.error('Error writing to localStorage', e);
+  }
+
+  return newPoem;
+}

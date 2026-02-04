@@ -7,7 +7,11 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "qa": "node scripts/qa-check.mjs",
+    "qa:routes": "node scripts/check-routes.mjs",
+    "qa:full": "node scripts/qa-check.mjs && node scripts/check-routes.mjs",
+    "parse-book": "node scripts/parse-book-final.mjs"
   },
   "dependencies": {
     "@emailjs/browser": "^4.4.1",

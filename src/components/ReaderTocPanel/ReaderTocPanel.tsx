@@ -7,12 +7,20 @@ interface ReaderTocPanelProps {
   currentPageIndex: number;
   onSelect: (pageIndex: number) => void;
   onClose?: () => void;
+  ariaLabel?: string;
+  searchPlaceholder?: string;
+  searchLabel?: string;
+  emptyLabel?: string;
 }
 
 export function ReaderTocPanel({
   items,
   currentPageIndex,
   onSelect,
+  ariaLabel = 'Содержание книги',
+  searchPlaceholder = 'Поиск по названию...',
+  searchLabel = 'Поиск по стихам',
+  emptyLabel = 'Ничего не найдено',
 }: ReaderTocPanelProps) {
   const [query, setQuery] = useState('');
 
@@ -31,20 +39,20 @@ export function ReaderTocPanel({
   };
 
   return (
-    <div className={styles.root} role="navigation" aria-label="Содержание книги">
+    <div className={styles.root} role="navigation" aria-label={ariaLabel}>
       <div className={styles.searchWrap}>
         <input
           type="search"
           className={styles.searchInput}
-          placeholder="Поиск по названию..."
+          placeholder={searchPlaceholder}
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          aria-label="Поиск по стихам"
+          aria-label={searchLabel}
         />
       </div>
       <div className={styles.list} role="list">
         {filtered.length === 0 ? (
-          <p className={styles.empty}>Ничего не найдено</p>
+          <p className={styles.empty}>{emptyLabel}</p>
         ) : (
           filtered.map((item) => (
             <button

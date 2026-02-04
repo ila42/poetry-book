@@ -2,7 +2,7 @@ import React, { useState, useCallback, useMemo } from 'react';
 import { BookInfo, Chapter, Poem } from '@/types';
 import { BookPage, TitlePage, DedicationPage, EpigraphPage, AfterwordPage, ChapterPage } from './BookPage';
 import { PoemPage } from './PoemPage';
-import { TableOfContents } from './TableOfContents';
+import { getPoemOfTheDay } from '@/data/contentHelpers';
 
 interface BookProps {
   bookInfo: BookInfo;
@@ -21,35 +21,25 @@ export function Book({ bookInfo, chapters = [], poems, currentPage: controlledPa
   const isControlled = controlledPage !== undefined && onNavigate !== undefined;
   const currentPage = isControlled ? controlledPage : internalPage;
   const setCurrentPage = isControlled ? onNavigate : setInternalPage;
+  const poemOfTheDay = useMemo(() => getPoemOfTheDay(), []);
 
   const pageStructure = useMemo(() => {
     const pages: Array<{ type: string; content?: unknown; id?: string; poemIndex?: number }> = [];
 
     pages.push({ type: 'title' });
-    pages.push({ type: 'toc' });
 
     if (bookInfo.epigraph) {
       pages.push({ type: 'epigraph', content: bookInfo.epigraph });
     }
 
+    pages.push({ type: 'poem-of-day', content: poemOfTheDay, id: 'poem-of-the-day' });
+
     poems.forEach((poem, index) => {
       pages.push({ type: 'poem', content: poem, id: poem.id, poemIndex: index });
     });
 
-    if (pages.length % 2 !== 0) {
-      pages.push({ type: 'empty' });
-    }
-
     return pages;
-  }, [bookInfo, poems]);
-
-  const getPageForChapter = useCallback((chapterId: string) => {
-    return pageStructure.findIndex(p => p.type === 'chapter' && p.id === chapterId) + 1;
-  }, [pageStructure]);
-
-  const getPageForPoem = useCallback((poemId: string) => {
-    return pageStructure.findIndex(p => p.type === 'poem' && p.id === poemId) + 1;
-  }, [pageStructure]);
+  }, [bookInfo, poems, poemOfTheDay]);
 
   const handleNavigate = useCallback((pageIndex: number) => {
     setCurrentPage(Math.max(0, Math.min(pageIndex, pageStructure.length - 1)));
@@ -78,24 +68,6 @@ export function Book({ bookInfo, chapters = [], poems, currentPage: controlledPa
         );
       case 'dedication':
         return <DedicationPage dedication={page.content as string} />;
-      case 'toc':
-        return (
-          <TableOfContents
-            chapters={chapters}
-            poems={poems}
-            onNavigate={handleNavigate}
-            getPageForChapter={getPageForChapter}
-            getPageForPoem={getPageForPoem}
-            pageNumber={currentPage + 1}
-            isLeft={currentPage % 2 === 0}
-            hasEpigraph={!!bookInfo.epigraph}
-            hasAftervord={!!bookInfo.afterword}
-            epigraphPageNumber={bookInfo.epigraph ? pageStructure.findIndex(p => p.type === 'epigraph') + 1 : undefined}
-            afterwordPageNumber={bookInfo.afterword ? pageStructure.findIndex(p => p.type === 'afterword') + 1 : undefined}
-            currentPage={currentPage}
-            pageStructure={pageStructure}
-          />
-        );
       case 'epigraph':
         return (
           <EpigraphPage
@@ -124,6 +96,20 @@ export function Book({ bookInfo, chapters = [], poems, currentPage: controlledPa
       case 'poem':
         return (
           <div id={page.id} className="reader-poem-anchor">
+            <PoemPage
+              poem={page.content as Poem}
+              pageNumber={currentPage + 1}
+              isLeft={currentPage % 2 === 0}
+              variant="reader"
+            />
+          </div>
+        );
+      case 'poem-of-day':
+        return (
+          <div id={page.id} className="reader-poem-anchor w-full">
+            <div className="mb-3 text-center font-serif text-sm text-burgundy-600">
+              Стих дня
+            </div>
             <PoemPage
               poem={page.content as Poem}
               pageNumber={currentPage + 1}

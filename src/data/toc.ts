@@ -11,18 +11,26 @@ export interface TocItem {
 }
 
 /**
- * Строит список пунктов оглавления (только стихи) с индексами страниц.
+ * Строит список пунктов оглавления (стих дня + стихи) с индексами страниц.
  * Порядок и номера страниц совпадают с pageStructure в Book.
  */
 export function getTocItems(bookInfo: BookInfo, poems: Poem[]): TocItem[] {
+  const poemOfDayPageIndex = getPoemOfTheDayPageIndex(bookInfo);
+  let pageIndex = poemOfDayPageIndex + 1;
+
+  return [
+    { id: 'poem-of-the-day', title: 'Стих дня', pageIndex: poemOfDayPageIndex },
+    ...poems.map((poem) => ({
+      id: poem.id,
+      title: poem.title,
+      pageIndex: pageIndex++,
+    })),
+  ];
+}
+
+export function getPoemOfTheDayPageIndex(bookInfo: BookInfo): number {
   let pageIndex = 0;
   pageIndex += 1; // title
-  pageIndex += 1; // toc
   if (bookInfo.epigraph) pageIndex += 1;
-
-  return poems.map((poem) => ({
-    id: poem.id,
-    title: poem.title,
-    pageIndex: pageIndex++,
-  }));
+  return pageIndex;
 }

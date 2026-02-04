@@ -20,6 +20,14 @@ function getStoredFontSize(): number {
 interface TopToolbarProps {
   /** Пункты оглавления (стихи). Если передан — по клику hamburger открывается панель «Содержание» */
   tocItems?: TocItem[];
+  /** Пункты избранного (стихи) */
+  favoriteItems?: TocItem[];
+  /** Идентификаторы избранных стихов */
+  favoritePoemIds?: string[];
+  /** Текущий стих (id), если пользователь на странице стиха */
+  currentPoemId?: string;
+  /** Переключить избранное для стиха */
+  onToggleFavorite?: (poemId: string) => void;
   /** Текущий индекс страницы книги (для подсветки в TOC) */
   currentPageIndex?: number;
   /** Переход на страницу книги по индексу (закрывает панель) */
@@ -32,6 +40,10 @@ interface TopToolbarProps {
 
 export function TopToolbar({
   tocItems = [],
+  favoriteItems = [],
+  favoritePoemIds = [],
+  currentPoemId,
+  onToggleFavorite,
   currentPageIndex = 0,
   onNavigateToPage,
   readerFontSize,
@@ -39,23 +51,37 @@ export function TopToolbar({
 }: TopToolbarProps) {
   const [open, setOpen] = useState(false);
   const [tocOpen, setTocOpen] = useState(false);
+  const [favoritesOpen, setFavoritesOpen] = useState(false);
   const [searchVisible, setSearchVisible] = useState(false);
   const panelRef = useRef<HTMLDivElement>(null);
   const hamburgerRef = useRef<HTMLButtonElement>(null);
   const navigate = useNavigate();
 
   const showToc = tocItems.length > 0 && onNavigateToPage !== undefined;
+  const showFavorites = onNavigateToPage !== undefined;
+  const isFavorite = currentPoemId ? favoritePoemIds.includes(currentPoemId) : false;
+  const canToggleFavorite = Boolean(currentPoemId && onToggleFavorite);
 
   const close = useCallback(() => {
     setOpen(false);
     setTocOpen(false);
+    setFavoritesOpen(false);
     setSearchVisible(false);
   }, []);
 
   const toggle = useCallback(() => setOpen((prev) => !prev), []);
 
-  const openToc = useCallback(() => setTocOpen(true), []);
+  const openToc = useCallback(() => {
+    setFavoritesOpen(false);
+    setTocOpen(true);
+  }, []);
   const closeToc = useCallback(() => setTocOpen(false), []);
+
+  const openFavorites = useCallback(() => {
+    setTocOpen(false);
+    setFavoritesOpen(true);
+  }, []);
+  const closeFavorites = useCallback(() => setFavoritesOpen(false), []);
 
   useEffect(() => {
     if (!open) return;
@@ -85,6 +111,14 @@ export function TopToolbar({
   };
 
   const handleTocSelect = useCallback(
+    (pageIndex: number) => {
+      onNavigateToPage?.(pageIndex);
+      close();
+    },
+    [onNavigateToPage, close]
+  );
+
+  const handleFavoritesSelect = useCallback(
     (pageIndex: number) => {
       onNavigateToPage?.(pageIndex);
       close();
@@ -122,7 +156,12 @@ export function TopToolbar({
   };
 
   const handleBookmark = () => {
-    console.log('bookmark');
+    if (!currentPoemId || !onToggleFavorite) return;
+    onToggleFavorite(currentPoemId);
+  };
+
+  const handleFavorites = () => {
+    openFavorites();
   };
 
   return (
@@ -150,9 +189,9 @@ export function TopToolbar({
 
       <div
         ref={panelRef}
-        className={`${styles.panel} ${open ? styles.panelOpen : ''} ${tocOpen && showToc ? styles.tocPanel : ''}`}
-        role={tocOpen && showToc ? 'dialog' : 'toolbar'}
-        aria-label={tocOpen && showToc ? 'Содержание книги' : 'Панель читалки'}
+        className={`${styles.panel} ${open ? styles.panelOpen : ''} ${tocOpen && showToc ? styles.tocPanel : ''} ${favoritesOpen && showFavorites ? styles.tocPanel : ''}`}
+        role={tocOpen && showToc ? 'dialog' : favoritesOpen && showFavorites ? 'dialog' : 'toolbar'}
+        aria-label={tocOpen && showToc ? 'Содержание книги' : favoritesOpen && showFavorites ? 'Избранные стихи' : 'Панель читалки'}
       >
         {tocOpen && showToc ? (
           <div className={styles.tocPanelInner}>
@@ -173,6 +212,32 @@ export function TopToolbar({
                 items={tocItems}
                 currentPageIndex={currentPageIndex}
                 onSelect={handleTocSelect}
+              />
+            </div>
+          </div>
+        ) : favoritesOpen && showFavorites ? (
+          <div className={styles.tocPanelInner}>
+            <button
+              type="button"
+              className={styles.tocBack}
+              onClick={closeFavorites}
+              aria-label="Вернуться к меню"
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="19" y1="12" x2="5" y2="12" />
+                <polyline points="12 19 5 12 12 5" />
+              </svg>
+              <span>К меню</span>
+            </button>
+            <div className={styles.tocListWrap}>
+              <ReaderTocPanel
+                items={favoriteItems}
+                currentPageIndex={currentPageIndex}
+                onSelect={handleFavoritesSelect}
+                ariaLabel="Избранные стихи"
+                searchPlaceholder="Поиск в избранном..."
+                searchLabel="Поиск по избранному"
+                emptyLabel="Пока нет избранных стихов"
               />
             </div>
           </div>
@@ -269,8 +334,22 @@ export function TopToolbar({
                 <button
                   type="button"
                   className={styles.iconButton}
+                  onClick={handleFavorites}
+                  aria-label="Избранное"
+                >
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M20 21l-8-5-8 5V5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2z" />
+                    <path d="M8 10h8" />
+                    <path d="M8 14h5" />
+                  </svg>
+                </button>
+                <button
+                  type="button"
+                  className={`${styles.iconButton} ${isFavorite ? styles.iconButtonActive : ''}`}
                   onClick={handleBookmark}
-                  aria-label="Закладка"
+                  aria-label={isFavorite ? 'Убрать из избранного' : 'Добавить в избранное'}
+                  aria-pressed={isFavorite}
+                  disabled={!canToggleFavorite}
                 >
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />

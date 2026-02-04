@@ -96,6 +96,17 @@ export function LandingPage() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 9l3 3m0 0l-3 3m3-3H8m13 0a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                 </Link>
+
+                {/* Кнопка "Стих дня" */}
+                <Link
+                  to="/poem-of-the-day"
+                  className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-transparent border-2 border-[#8B4557] text-[#8B4557] font-serif text-lg font-medium rounded-md hover:bg-[#8B4557] hover:text-white transition-all duration-300 shadow-lg hover:shadow-xl"
+                >
+                  <span>Стих дня</span>
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                  </svg>
+                </Link>
               </div>
             </motion.div>
           </div>

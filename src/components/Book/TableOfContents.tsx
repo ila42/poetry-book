@@ -36,9 +36,10 @@ export function TableOfContents({
   useScrollbarReveal(tocScrollRef);
   useScrollbarReveal(navScrollRef);
 
-  // Стихи начинаются со страницы 4 при эпиграфе, иначе с 3
-  const POEMS_START_PAGE = hasEpigraph ? 4 : 3;
-  const poemsStartIndex = hasEpigraph ? 3 : 2;
+  const poemOfDayIndex = hasEpigraph ? 3 : 2;
+  const poemsStartIndex = poemOfDayIndex + 1;
+  const poemOfDayPageNumber = poemOfDayIndex + 1;
+  const poemsStartPageNumber = poemsStartIndex + 1;
 
   return (
     <BookPage pageNumber={pageNumber} isLeft={isLeft}>
@@ -85,9 +86,38 @@ export function TableOfContents({
             </motion.button>
           )}
 
+          {/* Стих дня */}
+          <motion.button
+            onClick={(e) => {
+              e.stopPropagation();
+              const pageIndex = pageStructure?.findIndex(p => p.type === 'poem-of-day') ?? -1;
+              if (pageIndex >= 0) onNavigate(pageIndex);
+            }}
+            className={`w-full text-left group py-1 rounded transition-colors ${
+              (pageStructure?.[currentPage ?? 0])?.type === 'poem-of-day' 
+                ? 'bg-burgundy-100' 
+                : 'hover:bg-parchment-200/50'
+            }`}
+            initial={{ opacity: 0, x: -10 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.05 }}
+          >
+            <div className="flex items-center font-serif text-base">
+              <span className={`italic ${
+                (pageStructure?.[currentPage ?? 0])?.type === 'poem-of-day' 
+                  ? 'text-burgundy-700 font-semibold' 
+                  : 'text-burgundy-600 group-hover:text-burgundy-800'
+              }`}>
+                Стих дня
+              </span>
+              <span className="flex-1 border-b border-dotted border-ink-300 mx-2" />
+              <span className="text-ink-500">{poemOfDayPageNumber}</span>
+            </div>
+          </motion.button>
+
           {/* Список стихотворений */}
           {poems.map((poem, index) => {
-            const poemPageNumber = POEMS_START_PAGE + index;
+            const poemPageNumber = poemsStartPageNumber + index;
             const isActive = (pageStructure?.[currentPage ?? 0])?.type === 'poem' 
               && (pageStructure?.[currentPage ?? 0])?.id === poem.id;
             

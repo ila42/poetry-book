@@ -120,6 +120,8 @@
   flex: 1;
   min-height: 0;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 /* Backdrop: close on click outside */
@@ -185,6 +187,16 @@
 .iconButton:disabled {
   opacity: 0.45;
   cursor: not-allowed;
+}
+
+.iconButtonActive {
+  color: #b45309;
+  background: rgba(245, 158, 11, 0.12);
+}
+
+.iconButtonActive:hover {
+  background: rgba(245, 158, 11, 0.2);
+  color: #92400e;
 }
 
 .fontButtonLabel {
