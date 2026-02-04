@@ -16,7 +16,7 @@ interface BookProps {
   readerFontSize?: number;
 }
 
-export function Book({ bookInfo, chapters = [], poems, currentPage: controlledPage, onNavigate, readerFontSize = 16 }: BookProps) {
+export function Book({ bookInfo, poems, currentPage: controlledPage, onNavigate, readerFontSize = 16 }: BookProps) {
   const [internalPage, setInternalPage] = useState(0);
   const isControlled = controlledPage !== undefined && onNavigate !== undefined;
   const currentPage = isControlled ? controlledPage : internalPage;
@@ -40,10 +40,6 @@ export function Book({ bookInfo, chapters = [], poems, currentPage: controlledPa
 
     return pages;
   }, [bookInfo, poems, poemOfTheDay]);
-
-  const handleNavigate = useCallback((pageIndex: number) => {
-    setCurrentPage(Math.max(0, Math.min(pageIndex, pageStructure.length - 1)));
-  }, [pageStructure.length]);
 
   const handlePrevPage = useCallback(() => {
     setCurrentPage(Math.max(0, currentPage - 1));

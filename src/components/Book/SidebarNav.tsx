@@ -43,7 +43,7 @@ interface ContentData {
     author: string;
     year: string;
     version?: string;
-    epigraph?: { text: string; source: string };
+    epigraph?: string;
   };
   volumes: ContentVolume[];
 }

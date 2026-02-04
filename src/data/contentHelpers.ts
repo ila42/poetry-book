@@ -9,6 +9,8 @@ interface ContentPoem {
   firstLine?: string;
   text: string;
   audioUrl?: string | null;
+  epigraph?: string;
+  dedication?: string;
 }
 
 interface ContentChapter {
