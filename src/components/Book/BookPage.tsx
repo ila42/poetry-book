@@ -1,4 +1,4 @@
-import { ReactNode, useRef } from 'react';
+import { ReactNode, useRef, Fragment } from 'react';
 import { motion } from 'framer-motion';
 import { useScrollbarReveal } from '@/hooks';
 
@@ -95,6 +95,36 @@ export function DedicationPage({ dedication }: DedicationPageProps) {
   );
 }
 
+// Преобразует текст с URL в узлы с кликабельными ссылками; сохраняет переносы строк
+function textWithLinks(content: string) {
+  const urlPattern = /(https?:\/\/[^\s]+)/g;
+  const parts = content.split(urlPattern);
+  return parts.map((part, i) => (
+    <Fragment key={i}>
+      {part.match(urlPattern) ? (
+        <a
+          href={part}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-burgundy-600 underline hover:text-burgundy-700 break-all"
+        >
+          {part}
+        </a>
+      ) : (
+        (() => {
+          const lines = part.split('\n');
+          return lines.map((line, j) => (
+            <Fragment key={j}>
+              {line}
+              {j < lines.length - 1 ? <br /> : null}
+            </Fragment>
+          ));
+        })()
+      )}
+    </Fragment>
+  ));
+}
+
 // Компонент для страницы с эпиграфом
 interface EpigraphPageProps {
   content: string;
@@ -131,7 +161,16 @@ export function EpigraphPage({ content, pageNumber, isLeft }: EpigraphPageProps)
           transition={{ delay: 0.2 }}
           style={{ touchAction: 'pan-y' }}
         >
-          {content}
+          {content.includes('Почитать') ? (
+            <>
+              {textWithLinks(content.slice(0, content.indexOf('Почитать')).trim())}
+              <div className="mt-4 text-[0.9em] opacity-90">
+                {textWithLinks(content.slice(content.indexOf('Почитать')))}
+              </div>
+            </>
+          ) : (
+            textWithLinks(content)
+          )}
         </motion.div>
       </div>
     </BookPage>

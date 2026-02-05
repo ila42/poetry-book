@@ -57,7 +57,7 @@ export function Book({ bookInfo, poems, currentPage: controlledPage, onNavigate,
       case 'title':
         return (
           <TitlePage
-            title={bookInfo.title}
+            title={bookInfo.titlePageTitle ?? bookInfo.title}
             subtitle={bookInfo.subtitle}
             author={bookInfo.author}
           />

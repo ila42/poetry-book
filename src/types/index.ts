@@ -29,6 +29,8 @@ export interface Author {
 
 export interface BookInfo {
   title: string;
+  /** Заголовок на титульной странице книги (страница 1), если не задан — используется title */
+  titlePageTitle?: string;
   subtitle?: string;
   author: string;
   year: number | string;
