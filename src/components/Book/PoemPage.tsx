@@ -60,7 +60,7 @@ export function PoemPage({ poem, pageNumber, isLeft, variant = 'default', showPo
             <button
               type="button"
               onClick={hasAudio ? handleAudioClick : undefined}
-              disabled={hasAudio && isLoading && isCurrentTrack}
+              disabled={hasAudio ? (isLoading && Boolean(isCurrentTrack)) : undefined}
               className={`flex items-center justify-center w-10 h-10 rounded-full bg-burgundy-100/80 text-burgundy-700 border border-burgundy-300/50 shadow-sm transition-all disabled:opacity-60 disabled:cursor-not-allowed ${hasAudio ? 'hover:bg-burgundy-200/80 hover:shadow' : 'opacity-70 cursor-default'}`}
               aria-label={hasAudio ? (isTrackPlaying ? 'Пауза' : 'Прослушать') : 'Аудио недоступно'}
             >
