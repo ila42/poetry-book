@@ -5,7 +5,7 @@ import { author, bookInfo } from '@/data/author';
 export function LandingPage() {
   return (
     <div className="min-h-screen bg-[#F5F5F0]">
-      <section id="book-content" className="min-h-screen flex items-center">
+      <section id="book-content" className="min-h-screen flex items-center pt-20 md:pt-28 lg:pt-32">
         <div className="max-w-[1200px] w-full mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col items-center gap-12 lg:gap-16">
             {/* Обложка книги - интерактивная */}
@@ -81,7 +81,7 @@ export function LandingPage() {
                 {bookInfo.year} год
               </p>
               
-              <p className="font-serif text-[#2C3E50]/70 leading-relaxed mb-10 max-w-lg mx-auto">
+              <p className="font-serif text-[#2C3E50]/70 leading-relaxed mb-10 max-w-lg mx-auto italic">
                 Приглашаю вас в путешествие по страницам моей книги.
               </p>
               
@@ -97,13 +97,16 @@ export function LandingPage() {
                   </svg>
                 </Link>
 
-                {/* Кнопка "Стих дня" */}
+                {/* Кнопка "Стихотворение дня" */}
                 <Link
                   to="/poem-of-the-day"
-                  className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-transparent border-2 border-[#8B4557] text-[#8B4557] font-serif text-lg font-medium rounded-md hover:bg-[#8B4557] hover:text-white transition-all duration-300 shadow-lg hover:shadow-xl"
+                  className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-transparent border-2 border-[#8B4557] text-[#8B4557] font-serif text-sm font-medium rounded-md hover:bg-[#8B4557] hover:text-white transition-all duration-300 shadow-lg hover:shadow-xl"
                 >
-                  <span>Стих дня</span>
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <span className="text-center leading-tight">
+                    <span className="block">Стихотворение</span>
+                    <span className="block">дня</span>
+                  </span>
+                  <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
                   </svg>
                 </Link>

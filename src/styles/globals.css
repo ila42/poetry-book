@@ -3,6 +3,13 @@
 @tailwind utilities;
 
 @layer base {
+  /* Фон при overscroll (pull-to-refresh) на мобильных — белый, не коричневый */
+  html,
+  body {
+    background-color: #ffffff;
+    overscroll-behavior: none;
+  }
+
   html {
     font-family: 'Crimson Text', Georgia, serif;
     /* Улучшение рендеринга текста */
@@ -10,10 +17,15 @@
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
   }
-  
+
   body {
-    @apply bg-leather-900 text-ink-950 antialiased;
+    @apply text-ink-950 antialiased;
     min-height: 100vh;
+  }
+
+  #root {
+    min-height: 100vh;
+    background-color: #ffffff;
   }
   
   /* Глобальные настройки рендеринга */
@@ -1674,6 +1686,37 @@
 
 .landing-contact-form .bg-red-50 {
   background: #fef2f2 !important;
+}
+
+/* ===== SEARCH HIGHLIGHT STYLES ===== */
+
+/* Подсветка найденных совпадений */
+.search-highlight {
+  background-color: rgba(255, 235, 59, 0.5);
+  border-radius: 2px;
+  padding: 0 2px;
+  margin: 0 -2px;
+  transition: background-color 0.15s ease;
+}
+
+/* Текущее активное совпадение */
+.search-highlight-current {
+  background-color: rgba(255, 152, 0, 0.7);
+  box-shadow: 0 0 0 2px rgba(255, 152, 0, 0.3);
+}
+
+/* Анимация появления подсветки */
+@keyframes highlight-fade-in {
+  from {
+    background-color: transparent;
+  }
+  to {
+    background-color: rgba(255, 235, 59, 0.5);
+  }
+}
+
+.search-highlight {
+  animation: highlight-fade-in 0.2s ease-out;
 }
 
 @layer utilities {

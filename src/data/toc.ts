@@ -19,7 +19,7 @@ export function getTocItems(bookInfo: BookInfo, poems: Poem[]): TocItem[] {
   let pageIndex = poemOfDayPageIndex + 1;
 
   return [
-    { id: 'poem-of-the-day', title: 'Стих дня', pageIndex: poemOfDayPageIndex },
+    { id: 'poem-of-the-day', title: 'Стихотворение дня', pageIndex: poemOfDayPageIndex },
     ...poems.map((poem) => ({
       id: poem.id,
       title: poem.title,

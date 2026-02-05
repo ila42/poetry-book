@@ -89,22 +89,26 @@ export function Book({ bookInfo, poems, currentPage: controlledPage, onNavigate,
             chapterNumber={chapter.order}
           />
         );
-      case 'poem':
+      case 'poem': {
+        const poem = page.content as Poem;
+        const isPoemOfTheDay = poem.id === poemOfTheDay.id;
         return (
           <div id={page.id} className="reader-poem-anchor">
             <PoemPage
-              poem={page.content as Poem}
+              poem={poem}
               pageNumber={currentPage + 1}
               isLeft={currentPage % 2 === 0}
               variant="reader"
+              showPoemOfTheDayLabel={isPoemOfTheDay}
             />
           </div>
         );
+      }
       case 'poem-of-day':
         return (
           <div id={page.id} className="reader-poem-anchor w-full">
             <div className="mb-3 text-center font-serif text-sm text-burgundy-600">
-              Стих дня
+              Стихотворение дня
             </div>
             <PoemPage
               poem={page.content as Poem}

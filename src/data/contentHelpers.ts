@@ -146,7 +146,7 @@ export function getRandomPoem(poems: Poem[] = contentPoems): Poem {
 }
 
 /**
- * Получает "Стих дня" с обновлением раз в 24 часа.
+ * Получает "Стихотворение дня" с обновлением раз в 24 часа.
  * Использует localStorage для сохранения выбора.
  */
 export function getPoemOfTheDay(): Poem {

@@ -1,6 +1,7 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ReaderTocPanel } from '@/components/ReaderTocPanel';
+import { useSearchOptional } from '@/context/SearchContext';
 import type { TocItem } from '@/data/toc';
 import styles from './TopToolbar.module.css';
 
@@ -15,6 +16,42 @@ function getStoredFontSize(): number {
   if (v == null) return 16;
   const n = parseInt(v, 10);
   return Number.isNaN(n) ? 16 : Math.max(READER_FONT_MIN, Math.min(READER_FONT_MAX, n));
+}
+
+/**
+ * Подсвечивает совпадения в тексте
+ */
+function highlightMatch(text: string, query: string): React.ReactNode {
+  if (!query.trim()) return text;
+  
+  const lowerText = text.toLowerCase();
+  const lowerQuery = query.toLowerCase().trim();
+  const parts: React.ReactNode[] = [];
+  let lastIndex = 0;
+  let matchIndex = lowerText.indexOf(lowerQuery, lastIndex);
+  let key = 0;
+  
+  while (matchIndex !== -1) {
+    // Текст до совпадения
+    if (matchIndex > lastIndex) {
+      parts.push(text.slice(lastIndex, matchIndex));
+    }
+    // Само совпадение (выделенное)
+    parts.push(
+      <mark key={key++} className="bg-yellow-200 text-inherit rounded px-0.5">
+        {text.slice(matchIndex, matchIndex + lowerQuery.length)}
+      </mark>
+    );
+    lastIndex = matchIndex + lowerQuery.length;
+    matchIndex = lowerText.indexOf(lowerQuery, lastIndex);
+  }
+  
+  // Остаток текста
+  if (lastIndex < text.length) {
+    parts.push(text.slice(lastIndex));
+  }
+  
+  return parts;
 }
 
 interface TopToolbarProps {
@@ -52,10 +89,14 @@ export function TopToolbar({
   const [open, setOpen] = useState(false);
   const [tocOpen, setTocOpen] = useState(false);
   const [favoritesOpen, setFavoritesOpen] = useState(false);
-  const [searchVisible, setSearchVisible] = useState(false);
   const panelRef = useRef<HTMLDivElement>(null);
   const hamburgerRef = useRef<HTMLButtonElement>(null);
+  const searchInputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
+
+  // Search context (optional - may not be available)
+  const search = useSearchOptional();
+  const searchVisible = search?.isSearchActive ?? false;
 
   const showToc = tocItems.length > 0 && onNavigateToPage !== undefined;
   const showFavorites = onNavigateToPage !== undefined;
@@ -66,8 +107,8 @@ export function TopToolbar({
     setOpen(false);
     setTocOpen(false);
     setFavoritesOpen(false);
-    setSearchVisible(false);
-  }, []);
+    search?.closeSearch();
+  }, [search]);
 
   const toggle = useCallback(() => setOpen((prev) => !prev), []);
 
@@ -106,7 +147,7 @@ export function TopToolbar({
   }, [open, close]);
 
   const handleBack = () => {
-    navigate(-1);
+    navigate('/');
     close();
   };
 
@@ -126,14 +167,44 @@ export function TopToolbar({
     [onNavigateToPage, close]
   );
 
-  const handlePlayPause = () => {
-    console.log('play/pause');
-  };
+  const handleSearch = useCallback(() => {
+    if (search) {
+      if (searchVisible) {
+        search.closeSearch();
+      } else {
+        search.openSearch();
+        // Фокус на поле ввода после открытия
+        setTimeout(() => searchInputRef.current?.focus(), 100);
+      }
+    }
+  }, [search, searchVisible]);
 
-  const handleSearch = () => {
-    setSearchVisible((prev) => !prev);
-    if (!searchVisible) console.log('search');
-  };
+  const handleSearchInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    search?.setQuery(e.target.value);
+  }, [search]);
+
+  const handleSearchKeyDown = useCallback((e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      if (e.shiftKey) {
+        search?.goToPrevResult();
+      } else {
+        search?.goToNextResult();
+      }
+    } else if (e.key === 'Escape') {
+      search?.closeSearch();
+    } else if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      search?.goToNextResult();
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      search?.goToPrevResult();
+    }
+  }, [search]);
+
+  const handleCloseSearch = useCallback(() => {
+    search?.closeSearch();
+  }, [search]);
 
   const fontSize = readerFontSize ?? getStoredFontSize();
 
@@ -166,6 +237,18 @@ export function TopToolbar({
 
   return (
     <>
+      <button
+        type="button"
+        className={styles.homeButton}
+        onClick={handleBack}
+        aria-label="На главную"
+      >
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <line x1="19" y1="12" x2="5" y2="12" />
+          <polyline points="12 19 5 12 12 5" />
+        </svg>
+      </button>
+
       <button
         ref={hamburgerRef}
         type="button"
@@ -241,52 +324,90 @@ export function TopToolbar({
               />
             </div>
           </div>
+        ) : searchVisible && search ? (
+          <div className={styles.searchPanel}>
+            {/* Строка поиска */}
+            <div className={styles.searchRow}>
+              <svg className={styles.searchIcon} width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="11" cy="11" r="8" />
+                <line x1="21" y1="21" x2="16.65" y2="16.65" />
+              </svg>
+              <input
+                ref={searchInputRef}
+                type="search"
+                placeholder="Поиск по книге..."
+                className={styles.searchInput}
+                value={search.query}
+                onChange={handleSearchInputChange}
+                onKeyDown={handleSearchKeyDown}
+                autoFocus
+                aria-label="Поиск по книге"
+              />
+              {/* Счётчик результатов */}
+              {search.query.trim().length >= 2 && (
+                <span className={styles.searchCount}>
+                  {search.results.length > 0
+                    ? `${search.results.length} стих.`
+                    : 'не найдено'}
+                </span>
+              )}
+              {/* Кнопка закрытия */}
+              <button
+                type="button"
+                className={styles.iconButton}
+                onClick={handleCloseSearch}
+                aria-label="Закрыть поиск"
+                title="Закрыть (Esc)"
+              >
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="18" y1="6" x2="6" y2="18" />
+                  <line x1="6" y1="6" x2="18" y2="18" />
+                </svg>
+              </button>
+            </div>
+            
+            {/* Список результатов */}
+            {search.query.trim().length >= 2 && search.results.length > 0 && (
+              <div className={styles.searchResults}>
+                {search.results.map((result, index) => (
+                  <button
+                    key={result.poemId}
+                    type="button"
+                    className={`${styles.searchResultItem} ${index === search.currentResultIndex ? styles.searchResultItemActive : ''}`}
+                    onClick={() => search.navigateToResult(result)}
+                    onMouseEnter={() => search.selectResult(index)}
+                  >
+                    <span className={styles.searchResultTitle}>{result.title}</span>
+                    {result.context && (
+                      <span className={styles.searchResultContext}>
+                        {highlightMatch(result.context, search.query)}
+                      </span>
+                    )}
+                    <span className={styles.searchResultCount}>
+                      {result.matchCount} совп.
+                    </span>
+                  </button>
+                ))}
+              </div>
+            )}
+            
+            {/* Подсказка если меньше 2 символов */}
+            {search.query.trim().length > 0 && search.query.trim().length < 2 && (
+              <div className={styles.searchHint}>
+                Введите минимум 2 символа для поиска
+              </div>
+            )}
+            
+            {/* Ничего не найдено */}
+            {search.query.trim().length >= 2 && search.results.length === 0 && (
+              <div className={styles.searchEmpty}>
+                Ничего не найдено по запросу «{search.query}»
+              </div>
+            )}
+          </div>
         ) : (
           <div className={styles.toolbarInner}>
-            {searchVisible ? (
-              <div className={styles.searchRow}>
-                <input
-                  type="search"
-                  placeholder="Поиск..."
-                  className={styles.searchInput}
-                  autoFocus
-                  aria-label="Поиск"
-                />
-                <button
-                  type="button"
-                  className={styles.iconButton}
-                  onClick={() => setSearchVisible(false)}
-                  aria-label="Закрыть поиск"
-                >
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <line x1="18" y1="6" x2="6" y2="18" />
-                    <line x1="6" y1="6" x2="18" y2="18" />
-                  </svg>
-                </button>
-              </div>
-            ) : (
-              <>
-                <button
-                  type="button"
-                  className={styles.iconButton}
-                  onClick={handleBack}
-                  aria-label="Назад"
-                >
-                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <line x1="19" y1="12" x2="5" y2="12" />
-                    <polyline points="12 19 5 12 12 5" />
-                  </svg>
-                </button>
-                <button
-                  type="button"
-                  className={styles.iconButton}
-                  onClick={handlePlayPause}
-                  aria-label="Воспроизведение / пауза"
-                >
-                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <polygon points="5 3 19 12 5 21 5 3" />
-                  </svg>
-                </button>
+            <>
                 <button
                   type="button"
                   className={styles.iconButton}
@@ -355,8 +476,7 @@ export function TopToolbar({
                     <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
                   </svg>
                 </button>
-              </>
-            )}
+            </>
           </div>
         )}
       </div>

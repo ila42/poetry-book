@@ -86,7 +86,7 @@ export function TableOfContents({
             </motion.button>
           )}
 
-          {/* Стих дня */}
+          {/* Стихотворение дня */}
           <motion.button
             onClick={(e) => {
               e.stopPropagation();
@@ -108,7 +108,7 @@ export function TableOfContents({
                   ? 'text-burgundy-700 font-semibold' 
                   : 'text-burgundy-600 group-hover:text-burgundy-800'
               }`}>
-                Стих дня
+                Стихотворение дня
               </span>
               <span className="flex-1 border-b border-dotted border-ink-300 mx-2" />
               <span className="text-ink-500">{poemOfDayPageNumber}</span>
