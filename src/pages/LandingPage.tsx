@@ -74,7 +74,7 @@ export function LandingPage() {
               <h1 className="font-serif text-2xl sm:text-3xl lg:text-4xl text-[#2C3E50] mb-4 leading-tight">
                 Книга стихов
               </h1>
-              <p className="font-serif text-lg sm:text-xl text-[#2C3E50]/60 mb-2">
+              <p className="font-serif text-lg sm:text-xl text-[#2C3E50]/80 mb-2">
                 {author.fullName}
               </p>
               <p className="text-[#2C3E50]/50 mb-8">
