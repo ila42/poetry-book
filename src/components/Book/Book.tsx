@@ -1,8 +1,9 @@
 import React, { useState, useCallback, useMemo } from 'react';
 import { BookInfo, Chapter, Poem } from '@/types';
-import { BookPage, TitlePage, DedicationPage, EpigraphPage, AfterwordPage, ChapterPage } from './BookPage';
+import { BookPage, TitlePage, DedicationPage, EpigraphPage, AfterwordPage, ChapterPage, PartPage, ChapterInPartPage, InterludePage } from './BookPage';
 import { PoemPage } from './PoemPage';
 import { getPoemOfTheDay } from '@/data/contentHelpers';
+import { getTocItems } from '@/data/toc';
 
 interface BookProps {
   bookInfo: BookInfo;
@@ -34,9 +35,42 @@ export function Book({ bookInfo, poems, currentPage: controlledPage, onNavigate,
 
     pages.push({ type: 'poem-of-day', content: poemOfTheDay, id: 'poem-of-the-day' });
 
-    poems.forEach((poem, index) => {
-      pages.push({ type: 'poem', content: poem, id: poem.id, poemIndex: index });
-    });
+    // Получаем информацию о структуре из toc
+    const tocItems = getTocItems(bookInfo, poems);
+    const poemMap = new Map(poems.map((p, i) => [p.id, { poem: p, index: i }]));
+
+    // Добавляем страницы согласно tocItems
+    for (const item of tocItems) {
+      if (item.type === 'part') {
+        pages.push({ 
+          type: 'part', 
+          content: { label: item.title, title: item.subtitle },
+          id: item.id 
+        });
+      } else if (item.type === 'chapter') {
+        pages.push({ 
+          type: 'chapter-in-part', 
+          content: { label: item.title, title: item.subtitle },
+          id: item.id 
+        });
+      } else if (item.type === 'interlude') {
+        pages.push({ 
+          type: 'interlude', 
+          content: item.title,
+          id: item.id 
+        });
+      } else if (item.type === 'poem' && item.id !== 'poem-of-the-day') {
+        const poemData = poemMap.get(item.id);
+        if (poemData) {
+          pages.push({ 
+            type: 'poem', 
+            content: poemData.poem, 
+            id: item.id, 
+            poemIndex: poemData.index 
+          });
+        }
+      }
+    }
 
     return pages;
   }, [bookInfo, poems, poemOfTheDay]);
@@ -51,6 +85,7 @@ export function Book({ bookInfo, poems, currentPage: controlledPage, onNavigate,
 
   const page = pageStructure[currentPage];
   if (!page) return null;
+  const isInterlude = page.type === 'interlude';
 
   const renderCurrentPage = () => {
     switch (page.type) {
@@ -78,6 +113,26 @@ export function Book({ bookInfo, poems, currentPage: controlledPage, onNavigate,
             content={page.content as string}
             pageNumber={currentPage + 1}
             isLeft={currentPage % 2 === 0}
+          />
+        );
+      case 'part':
+        return (
+          <PartPage
+            label={(page.content as any).label}
+            title={(page.content as any).title}
+          />
+        );
+      case 'chapter-in-part':
+        return (
+          <ChapterInPartPage
+            label={(page.content as any).label}
+            title={(page.content as any).title}
+          />
+        );
+      case 'interlude':
+        return (
+          <InterludePage
+            title={page.content as string}
           />
         );
       case 'chapter':
@@ -136,44 +191,44 @@ export function Book({ bookInfo, poems, currentPage: controlledPage, onNavigate,
 
   return (
     <div
-      className="reader-page-wrap w-full min-h-screen flex flex-col pt-14 pb-24"
+      className={`reader-page-wrap w-full min-h-screen flex flex-col pt-14 pb-24 transition-colors duration-300 ${isInterlude ? 'bg-black' : ''}`}
       style={readerFontSizeStyle}
     >
       {/* Одна страница на весь экран: белый фон, контент по центру */}
-      <div className="flex-1 flex flex-col min-h-0 relative bg-white">
+      <div className={`flex-1 flex flex-col min-h-0 relative transition-colors duration-300 ${isInterlude ? 'bg-black' : 'bg-white'}`}>
         {/* Зоны клика влево/вправо для перелистывания */}
         <button
           type="button"
           aria-label="Предыдущая страница"
-          className="absolute left-0 top-0 bottom-0 w-1/4 min-w-[60px] z-10 cursor-pointer hover:bg-black/5 transition-colors"
+          className={`absolute left-0 top-0 bottom-0 w-1/4 min-w-[60px] z-10 cursor-pointer transition-colors ${isInterlude ? 'hover:bg-white/5' : 'hover:bg-black/5'}`}
           onClick={handlePrevPage}
         />
         <button
           type="button"
           aria-label="Следующая страница"
-          className="absolute right-0 top-0 bottom-0 w-1/4 min-w-[60px] z-10 cursor-pointer hover:bg-black/5 transition-colors"
+          className={`absolute right-0 top-0 bottom-0 w-1/4 min-w-[60px] z-10 cursor-pointer transition-colors ${isInterlude ? 'hover:bg-white/5' : 'hover:bg-black/5'}`}
           onClick={handleNextPage}
         />
 
-        <div className="readerContent flex-1 flex flex-col items-center justify-center mx-auto w-full max-w-3xl px-6 py-8 overflow-y-auto">
+        <div className={`readerContent flex-1 flex flex-col items-center justify-center mx-auto w-full ${isInterlude ? '' : 'max-w-3xl px-6 py-8'} overflow-y-auto`}>
           {renderCurrentPage()}
         </div>
       </div>
 
       {/* Нижняя навигация: только стрелки и номер страницы */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white/95 border-t border-gray-100 py-3 px-4 flex items-center justify-center gap-6 z-40">
+      <div className={`fixed bottom-0 left-0 right-0 py-3 px-4 flex items-center justify-center gap-6 z-40 transition-colors duration-300 ${isInterlude ? 'bg-black/95 border-t border-gray-800' : 'bg-white/95 border-t border-gray-100'}`}>
         <button
           type="button"
           onClick={handlePrevPage}
           disabled={currentPage === 0}
           aria-label="Предыдущая страница"
-          className="p-2 rounded-lg text-gray-600 hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+          className={`p-2 rounded-lg disabled:opacity-30 disabled:cursor-not-allowed transition-colors ${isInterlude ? 'text-gray-400 hover:bg-gray-800' : 'text-gray-600 hover:bg-gray-100'}`}
         >
           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
           </svg>
         </button>
-        <span className="font-serif text-sm text-gray-500 min-w-[4rem] text-center">
+        <span className={`font-serif text-sm min-w-[4rem] text-center ${isInterlude ? 'text-gray-500' : 'text-gray-500'}`}>
           {currentPage + 1} / {pageStructure.length}
         </span>
         <button
@@ -181,7 +236,7 @@ export function Book({ bookInfo, poems, currentPage: controlledPage, onNavigate,
           onClick={handleNextPage}
           disabled={currentPage === pageStructure.length - 1}
           aria-label="Следующая страница"
-          className="p-2 rounded-lg text-gray-600 hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+          className={`p-2 rounded-lg disabled:opacity-30 disabled:cursor-not-allowed transition-colors ${isInterlude ? 'text-gray-400 hover:bg-gray-800' : 'text-gray-600 hover:bg-gray-100'}`}
         >
           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />

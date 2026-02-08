@@ -1,5 +1,5 @@
 import { Routes, Route, useLocation } from 'react-router-dom';
-import { LandingPage, BookReader, AudioArchive, PoemOfTheDay, PoemRoute } from '@/pages';
+import { LandingPage, BookReader, AudioArchive, PoemOfTheDay, PoemRoute, TableOfContentsPage } from '@/pages';
 import { AdminApp } from '@/admin';
 
 function App() {
@@ -17,6 +17,7 @@ function App() {
       <Route path="/poem/:poemId" element={<PoemRoute />} />
       <Route path="/audio-archive" element={<AudioArchive />} />
       <Route path="/poem-of-the-day" element={<PoemOfTheDay />} />
+      <Route path="/toc" element={<TableOfContentsPage />} />
     </Routes>
   );
 }

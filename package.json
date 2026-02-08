@@ -11,7 +11,10 @@
     "qa": "node scripts/qa-check.mjs",
     "qa:routes": "node scripts/check-routes.mjs",
     "qa:full": "node scripts/qa-check.mjs && node scripts/check-routes.mjs",
-    "parse-book": "node scripts/parse-book-final.mjs"
+    "parse-book": "node scripts/parse-book-final.mjs",
+    "parse-toc": "node scripts/parse-toc-docx.mjs",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "dependencies": {
     "@emailjs/browser": "^4.4.1",
@@ -36,6 +39,7 @@
     "tailwindcss": "^3.4.17",
     "typescript": "~5.6.2",
     "typescript-eslint": "^8.18.2",
-    "vite": "^6.0.5"
+    "vite": "^6.0.5",
+    "vitest": "^4.0.18"
   }
 }

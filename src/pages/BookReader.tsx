@@ -37,7 +37,9 @@ export function BookReader({ initialPageIndex = 0 }: BookReaderProps) {
   const tocItems = useMemo(() => getTocItems(bookInfo, contentPoems), [bookInfo, contentPoems]);
 
   const currentPoemId = useMemo(() => {
-    const item = tocItems.find((tocItem) => tocItem.pageIndex === currentPage);
+    const item = tocItems.find(
+      (tocItem) => tocItem.pageIndex === currentPage && (tocItem.type === 'poem' || tocItem.type === 'poem-of-day')
+    );
     if (!item || item.id === 'poem-of-the-day') return undefined;
     return item.id;
   }, [tocItems, currentPage]);
@@ -46,6 +48,10 @@ export function BookReader({ initialPageIndex = 0 }: BookReaderProps) {
     () => tocItems.filter((item) => item.id !== 'poem-of-the-day' && favoritePoemIds.includes(item.id)),
     [tocItems, favoritePoemIds]
   );
+
+  const isInterlude = useMemo(() => {
+    return tocItems.some(item => item.pageIndex === currentPage && item.type === 'interlude');
+  }, [tocItems, currentPage]);
 
   const handleReaderFontSizeChange = useCallback((px: number) => {
     setReaderFontSize(px);
@@ -68,7 +74,7 @@ export function BookReader({ initialPageIndex = 0 }: BookReaderProps) {
         tocItems={tocItems}
         onNavigateToPage={setCurrentPage}
       >
-        <div className="min-h-screen bg-white">
+        <div className={`min-h-screen transition-colors duration-300 ${isInterlude ? 'bg-black' : 'bg-white'}`}>
           <TopToolbar
             tocItems={tocItems}
             favoriteItems={favoriteItems}
@@ -92,11 +98,13 @@ export function BookReader({ initialPageIndex = 0 }: BookReaderProps) {
 
           <GlobalAudioPlayer />
 
-          <footer className="py-6 text-center">
-            <p className="text-gray-400 text-xs font-serif">
-              © {new Date().getFullYear()} {author.name}. Все права защищены.
-            </p>
-          </footer>
+          {!isInterlude && (
+            <footer className="py-6 text-center">
+              <p className="text-gray-400 text-xs font-serif">
+                © {new Date().getFullYear()} {author.name}. Все права защищены.
+              </p>
+            </footer>
+          )}
         </div>
       </SearchProvider>
     </AudioPlayerProvider>

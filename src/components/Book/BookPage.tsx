@@ -231,3 +231,89 @@ export function ChapterPage({ title, subtitle, chapterNumber }: ChapterPageProps
     </BookPage>
   );
 }
+
+// Компонент для страницы части
+interface PartPageProps {
+  label: string;
+  title?: string;
+}
+
+export function PartPage({ label, title }: PartPageProps) {
+  return (
+    <BookPage className="justify-center items-center">
+      <div className="flex flex-col items-center justify-center h-full text-center">
+        <div className="ornament mb-8" />
+        
+        <h2 className="font-display text-2xl md:text-3xl lg:text-4xl text-burgundy-900 mb-4">
+          {label}
+        </h2>
+        
+        {title && (
+          <>
+            <div className="divider my-6" />
+            <p className="font-serif text-xl md:text-2xl text-ink-700">
+              {title}
+            </p>
+          </>
+        )}
+        
+        <div className="ornament mt-8" />
+      </div>
+    </BookPage>
+  );
+}
+
+// Компонент для страницы главы (внутри части)
+interface ChapterInPartPageProps {
+  label: string;
+  title?: string;
+}
+
+export function ChapterInPartPage({ label, title }: ChapterInPartPageProps) {
+  return (
+    <BookPage className="justify-center items-center">
+      <div className="flex flex-col items-center justify-center h-full text-center">
+        <div className="ornament mb-6" />
+        
+        <h3 className="font-display text-xl md:text-2xl lg:text-3xl text-burgundy-800 mb-4">
+          {label}
+        </h3>
+        
+        {title && (
+          <>
+            <div className="divider my-4" />
+            <p className="font-serif text-lg md:text-xl text-ink-600">
+              {title}
+            </p>
+          </>
+        )}
+        
+        <div className="ornament mt-6" />
+      </div>
+    </BookPage>
+  );
+}
+
+// Компонент для страницы интерлюдии (чёрный фон, белый текст)
+interface InterludePageProps {
+  title: string;
+}
+
+export function InterludePage({ title }: InterludePageProps) {
+  return (
+    <motion.div
+      className="w-full min-h-[60vh] flex flex-col items-center justify-center"
+      style={{ background: '#000' }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+      data-no-flip
+    >
+      <div className="flex flex-col items-center justify-center text-center px-8 py-12">
+        <p className="font-serif text-xl md:text-2xl lg:text-3xl text-white italic leading-relaxed tracking-wide">
+          {title}
+        </p>
+      </div>
+    </motion.div>
+  );
+}

@@ -39,57 +39,190 @@
   min-height: 0;
   overflow-y: auto;
   overflow-x: hidden;
-  padding: 8px 0;
+  padding: 8px 0 16px;
   -webkit-overflow-scrolling: touch;
   overscroll-behavior: contain;
   touch-action: pan-y;
 }
 
-.item {
-  display: block;
+/* ─── Заголовок части (ЧАСТЬ 1. ИСТОК) ─── */
+.partHeader {
   width: 100%;
-  min-height: 44px;
-  padding: 12px 16px;
+  padding: 18px 16px 6px;
+  text-align: center;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.partHeader:hover {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+.partHeader.itemActive {
+  background: rgba(59, 130, 246, 0.08);
+}
+
+.partTitle {
+  display: block;
+  font-family: 'Georgia', 'Times New Roman', serif;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #1f2937;
+}
+
+.partSubtitle {
+  display: block;
+  margin-top: 4px;
+  font-size: 0.75rem;
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: 0.02em;
+  color: #6b7280;
+}
+
+/* ─── Заголовок главы (глава 1. ПРАВО НА ГОЛОС) ─── */
+.chapterHeader {
+  width: 100%;
+  padding: 12px 16px 4px;
+  text-align: center;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.chapterHeader:hover {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+.chapterHeader.itemActive {
+  background: rgba(59, 130, 246, 0.08);
+}
+
+.chapterTitle {
+  display: block;
+  font-family: 'Georgia', 'Times New Roman', serif;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #374151;
+}
+
+.chapterSubtitle {
+  display: block;
+  margin-top: 4px;
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: #6b7280;
+}
+
+/* ─── Интерлюдия ─── */
+.interludeHeader {
+  padding: 8px 16px;
+  text-align: center;
+}
+
+.interludeTitle {
+  display: block;
+  font-family: 'Georgia', 'Times New Roman', serif;
+  font-size: 0.75rem;
+  font-style: italic;
+  color: #9ca3af;
+}
+
+/* ─── Элемент стиха ─── */
+.poemItem {
+  display: flex;
+  align-items: baseline;
+  width: 100%;
+  min-height: 32px;
+  padding: 3px 16px;
   border: none;
   border-radius: 0;
   background: transparent;
   text-align: left;
-  font-size: 1rem;
-  font-family: inherit;
-  color: #374151;
+  font-family: 'Georgia', 'Times New Roman', serif;
+  font-size: 0.8125rem;
+  color: #4b5563;
   cursor: pointer;
   transition: background 0.15s, color 0.15s;
+  line-height: 1.5;
 }
 
-.item:hover {
-  background: rgba(0, 0, 0, 0.06);
+.poemItem:hover {
+  background: rgba(0, 0, 0, 0.04);
   color: #111827;
 }
 
-.item:active {
-  background: rgba(0, 0, 0, 0.1);
+.poemItem:active {
+  background: rgba(0, 0, 0, 0.08);
 }
 
-.item:focus-visible {
+.poemItem:focus-visible {
   outline: 2px solid #3b82f6;
   outline-offset: -2px;
 }
 
 .itemActive {
-  background: rgba(59, 130, 246, 0.1);
+  background: rgba(59, 130, 246, 0.08);
   color: #1d4ed8;
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .itemActive:hover {
-  background: rgba(59, 130, 246, 0.15);
+  background: rgba(59, 130, 246, 0.12);
 }
 
-.itemTitle {
-  display: block;
+/* ─── Номер стиха (001.) ─── */
+.poemNumber {
+  flex-shrink: 0;
+  display: inline-block;
+  min-width: 2em;
+  margin-right: 4px;
+  color: #9ca3af;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ─── Название стиха с точками ─── */
+.poemTitle {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: baseline;
+  overflow: hidden;
+}
+
+.poemTitleText {
+  flex-shrink: 0;
+  max-width: calc(100% - 20px);
+  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap;
+}
+
+/* Пунктирная линия-заполнитель между названием и номером страницы */
+.dots {
+  flex: 1;
+  min-width: 8px;
+  margin: 0 4px;
+  border-bottom: 1px dotted #d1d5db;
+  align-self: baseline;
+  position: relative;
+  top: -3px;
+}
+
+/* ─── Номер страницы ─── */
+.pageNum {
+  flex-shrink: 0;
+  font-family: 'Georgia', 'Times New Roman', serif;
+  font-size: 0.8125rem;
+  color: #9ca3af;
+  font-variant-numeric: tabular-nums;
+  min-width: 2em;
+  text-align: right;
 }
 
 .empty {
@@ -97,4 +230,5 @@
   text-align: center;
   color: #6b7280;
   font-size: 0.9375rem;
+  font-family: 'Georgia', 'Times New Roman', serif;
 }
