@@ -205,19 +205,27 @@ export function Book({ bookInfo, poems, currentPage: controlledPage, onNavigate,
       className={`reader-page-wrap w-full min-h-screen flex flex-col pt-14 pb-24 transition-colors duration-300 ${isInterlude ? 'bg-black' : ''}`}
       style={readerFontSizeStyle}
     >
-      {/* Одна страница на весь экран: белый фон, контент по центру */}
-      <div className={`flex-1 flex flex-col min-h-0 relative transition-colors duration-300 ${isInterlude ? 'bg-black' : 'bg-white'}`}>
-        {/* Зоны клика влево/вправо для перелистывания */}
+      {/* Одна страница на весь экран: белый фон, контент по центру.
+          touch-action: pan-y гарантирует вертикальный скролл на всех мобильных браузерах. */}
+      <div
+        className={`flex-1 flex flex-col min-h-0 relative transition-colors duration-300 ${isInterlude ? 'bg-black' : 'bg-white'}`}
+        style={{ touchAction: 'pan-y' }}
+      >
+        {/* Зоны клика влево/вправо для перелистывания.
+            touch-action: pan-y разрешает вертикальный скролл одним пальцем
+            на Chrome Android, который иначе блокирует скролл через button. */}
         <button
           type="button"
           aria-label="Предыдущая страница"
           className={`absolute left-0 top-0 bottom-0 w-1/4 min-w-[60px] z-10 cursor-pointer transition-colors ${isInterlude ? 'hover:bg-white/5' : 'hover:bg-black/5'}`}
+          style={{ touchAction: 'pan-y', WebkitTapHighlightColor: 'transparent' }}
           onClick={handlePrevPage}
         />
         <button
           type="button"
           aria-label="Следующая страница"
           className={`absolute right-0 top-0 bottom-0 w-1/4 min-w-[60px] z-10 cursor-pointer transition-colors ${isInterlude ? 'hover:bg-white/5' : 'hover:bg-black/5'}`}
+          style={{ touchAction: 'pan-y', WebkitTapHighlightColor: 'transparent' }}
           onClick={handleNextPage}
         />
 

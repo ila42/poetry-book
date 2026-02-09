@@ -848,14 +848,12 @@
               "id": "poem-129",
               "title": "Я оценил отказ",
               "page": 129
-            }
-          ]
-        },
-        {
-          "type": "marker",
-          "id": "intermecco-i",
-          "title": "ИНТЕРМЕЦЦО I",
-          "items": [
+            },
+            {
+              "type": "subsection",
+              "id": "intermecco-i",
+              "title": "ИНТЕРМЕЦЦО I"
+            },
             {
               "type": "poem",
               "id": "poem-130",
@@ -956,14 +954,12 @@
               "id": "poem-142",
               "title": "Не оборачивайся (Триптих)",
               "page": 142
-            }
-          ]
-        },
-        {
-          "type": "marker",
-          "id": "intermecco-ii",
-          "title": "ИНТЕРМЕЦЦО II: ФАТУМ",
-          "items": [
+            },
+            {
+              "type": "subsection",
+              "id": "intermecco-ii",
+              "title": "ИНТЕРМЕЦЦО II: ФАТУМ"
+            },
             {
               "type": "poem",
               "id": "poem-143",

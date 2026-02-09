@@ -3,11 +3,13 @@
 @tailwind utilities;
 
 @layer base {
-  /* Фон при overscroll (pull-to-refresh) на мобильных — белый, не коричневый */
+  /* Фон при overscroll (pull-to-refresh) на мобильных — белый, не коричневый.
+     overscroll-behavior: contain — предотвращает pull-to-refresh и chain-scrolling,
+     но НЕ блокирует обычный скролл (в отличие от none на некоторых браузерах). */
   html,
   body {
     background-color: #ffffff;
-    overscroll-behavior: none;
+    overscroll-behavior: contain;
   }
 
   html {
@@ -1798,12 +1800,38 @@
   -webkit-tap-highlight-color: transparent;
 }
 
+/* ===== READER MODE — ВЕРТИКАЛЬНАЯ ПРОКРУТКА ОДНИМ ПАЛЬЦЕМ ===== */
+/* Зоны навигации (кнопки-оверлеи) должны пропускать вертикальный скролл.
+   Без этого Chrome Android блокирует одно-пальцевый скролл через button. */
+.reader-page-wrap button[aria-label="Предыдущая страница"],
+.reader-page-wrap button[aria-label="Следующая страница"] {
+  touch-action: pan-y;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Основной контейнер чтения: разрешаем pan-y чтобы прокрутка
+   не блокировалась ни на одном мобильном браузере */
+.reader-page-wrap {
+  touch-action: pan-y;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Зона контента в читалке */
+.readerContent {
+  -webkit-overflow-scrolling: touch;
+}
+
 /* Улучшенная отзывчивость на тач-устройствах */
 @media (hover: none) and (pointer: coarse) {
   /* На тач-устройствах делаем стрелки более заметными при активации */
   .edge-navigation-hints button:active {
     transform: scale(0.9);
     opacity: 0.9;
+  }
+  
+  /* Убираем мерцание при тапе на мобильных */
+  button, a, [role="button"] {
+    -webkit-tap-highlight-color: transparent;
   }
 }
 
@@ -1912,13 +1940,16 @@
   }
 }
 
-/* ===== ПРЕДОТВРАЩЕНИЕ ЛИШНЕЙ ПРОКРУТКИ ===== */
+/* ===== ПРЕДОТВРАЩЕНИЕ ЛИШНЕЙ ГОРИЗОНТАЛЬНОЙ ПРОКРУТКИ ===== */
 @media (max-width: 768px) {
   html, body {
     overflow-x: hidden;
+    /* Не блокируем вертикальный скролл */
   }
   
   .book-container {
-    overflow: hidden;
+    overflow-x: hidden;
+    /* overflow (без оси) был hidden — это блокировало вертикальный скролл 
+       в дочерних элементах на некоторых браузерах. Меняем на overflow-x: hidden */
   }
 }

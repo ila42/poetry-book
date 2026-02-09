@@ -95,30 +95,44 @@ describe('toc-book.json structure', () => {
     expect(blocks.map((b) => b.title)).toEqual(['Небо', 'Маски', 'Прощание']);
   });
 
-  it('Part II has two ИНТЕРМЕЦЦО marker sections with poems', () => {
-    const markers = toc.sections[1].items.filter(
-      (i) => i.type === 'marker',
-    ) as TocMarkerNode[];
-    const intermeccos = markers.filter((m) => m.title.startsWith('ИНТЕРМЕЦЦО'));
-    expect(intermeccos.length).toBe(2);
+  it('Part II has ИНТЕРМЕЦЦО as subsections (like III. Выход)', () => {
+    const ch4 = toc.sections[1].items.find(
+      (i) => i.type === 'chapter' && (i as TocChapterNode).id === 'chapter-4',
+    ) as TocChapterNode;
+    const ch5 = toc.sections[1].items.find(
+      (i) => i.type === 'chapter' && (i as TocChapterNode).id === 'chapter-5',
+    ) as TocChapterNode;
 
-    // ИНТЕРМЕЦЦО I has 1 poem
-    expect(intermeccos[0].items?.length).toBe(1);
-    expect((intermeccos[0].items?.[0] as TocPoemNode).title).toBe('Hydrologium');
+    const intermeccoI = ch4.items.find(
+      (i) => i.type === 'subsection' && i.title === 'ИНТЕРМЕЦЦО I',
+    );
+    expect(intermeccoI).toBeTruthy();
+    const poem130 = ch4.items.find(
+      (i) => i.type === 'poem' && (i as TocPoemNode).id === 'poem-130',
+    ) as TocPoemNode;
+    expect(poem130).toBeTruthy();
+    expect(poem130.title).toBe('Hydrologium');
 
-    // ИНТЕРМЕЦЦО II has 4 poems
-    expect(intermeccos[1].items?.length).toBe(4);
+    const intermeccoII = ch5.items.find(
+      (i) => i.type === 'subsection' && i.title === 'ИНТЕРМЕЦЦО II: ФАТУМ',
+    );
+    expect(intermeccoII).toBeTruthy();
+    const poems143to146 = ch5.items.filter(
+      (i) => i.type === 'poem' && ['poem-143', 'poem-144', 'poem-145', 'poem-146'].includes((i as TocPoemNode).id),
+    );
+    expect(poems143to146.length).toBe(4);
   });
 
-  it('Chapter 5 has Roman-numeral subsections', () => {
+  it('Chapter 5 has Roman-numeral subsections and ИНТЕРМЕЦЦО II', () => {
     const ch5 = toc.sections[1].items.find(
       (i) => i.type === 'chapter' && (i as TocChapterNode).id === 'chapter-5',
     ) as TocChapterNode;
     const subs = ch5.items.filter((i) => i.type === 'subsection');
-    expect(subs.length).toBe(3);
+    expect(subs.length).toBe(4);
     expect(subs[0].title).toBe('I. Вход');
     expect(subs[1].title).toContain('Ностос');
     expect(subs[2].title).toBe('III. Выход');
+    expect(subs[3].title).toBe('ИНТЕРМЕЦЦО II: ФАТУМ');
   });
 
   it('Chapter 6 has an epigraph marker', () => {
