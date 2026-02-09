@@ -12,9 +12,18 @@ interface PoemPageProps {
   variant?: 'default' | 'reader';
   /** Показать надпись «Стихотворение дня» над заголовком (когда этот стих — стихотворение дня в книге) */
   showPoemOfTheDayLabel?: boolean;
+  /** Сквозной номер стихотворения в книге (если передан — будет показан перед названием) */
+  poemNumber?: number;
 }
 
-export function PoemPage({ poem, pageNumber, isLeft, variant = 'default', showPoemOfTheDayLabel = false }: PoemPageProps) {
+export function PoemPage({
+  poem,
+  pageNumber,
+  isLeft,
+  variant = 'default',
+  showPoemOfTheDayLabel = false,
+  poemNumber,
+}: PoemPageProps) {
   const isReader = variant === 'reader';
   const hasTitle = Boolean(poem.title && poem.title.trim().length > 0);
   const hasMeta = Boolean(poem.dedication || poem.epigraph);
@@ -51,7 +60,7 @@ export function PoemPage({ poem, pageNumber, isLeft, variant = 'default', showPo
         )}
         {hasTitle && (
           <h3 className={isReader ? 'reader-poem-title' : 'poem-title text-center shrink-0'}>
-            {poem.title}
+            {poemNumber !== undefined ? `${String(poemNumber).padStart(3, '0')}. ${poem.title}` : poem.title}
           </h3>
         )}
 

@@ -1,4 +1,4 @@
-# 📚 Книга стихов — Poetry Book Website
+# 📚 Просто человеком — Poetry Book Website
 
 Веб-сайт для поэта с интерфейсом в виде книги, созданный на React + TypeScript.
 
@@ -189,7 +189,7 @@ export default async function handler(req, res) {
   await resend.emails.send({
     from: 'noreply@yourdomain.com',
     to: 'author@email.com',
-    subject: `[Книга стихов] ${subject}`,
+    subject: `[Просто человеком] ${subject}`,
     text: `От: ${name} (${email})\n\n${message}`,
   });
   

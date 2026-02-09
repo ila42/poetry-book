@@ -1,6 +1,7 @@
 import { useState, useMemo, useEffect, useCallback, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import tocJson from '@/data/toc-book.json';
+import { contentPoems } from '@/data/contentHelpers';
 import type {
   BookTocData,
   TocSection,
@@ -113,6 +114,9 @@ function HomeIcon() {
 
 /** Header */
 function TocHeader() {
+  const formatPoemNumber = (num: number | undefined): string | null =>
+    num === undefined ? null : String(num).padStart(3, '0');
+
   return (
     <header className="text-center pt-10 pb-6 md:pt-14 md:pb-8">
       <h1 className="font-display text-3xl md:text-4xl lg:text-5xl tracking-widest text-burgundy-800 uppercase">
@@ -123,6 +127,13 @@ function TocHeader() {
       </p>
       {/* decorative divider */}
       <div className="mt-4 mx-auto w-24 h-px bg-gradient-to-r from-transparent via-burgundy-400 to-transparent" />
+      <p className="mt-2 font-serif text-xs text-ink-400 uppercase tracking-[0.3em]">
+        {contentPoems.length > 0 && (
+          <>
+            Стихи № {formatPoemNumber(1)}–{formatPoemNumber(contentPoems[contentPoems.length - 1]?.number)}
+          </>
+        )}
+      </p>
     </header>
   );
 }
@@ -212,6 +223,19 @@ function PoemRow({
     );
   }, [poem.title, highlight]);
 
+  const poemNumberMap = useMemo(() => {
+    const map = new Map<string, number>();
+    contentPoems.forEach((p) => {
+      if (p.number !== undefined) {
+        map.set(p.id, p.number);
+      }
+    });
+    return map;
+  }, []);
+
+  const poemNumber = poemNumberMap.get(poem.id);
+  const formattedNumber = poemNumber !== undefined ? String(poemNumber).padStart(3, '0') : null;
+
   return (
     <div id={poem.id} className="group flex items-baseline gap-1 py-[3px] scroll-mt-24">
       {/* title */}
@@ -222,6 +246,11 @@ function PoemRow({
                    hover:text-burgundy-700 transition-colors cursor-pointer focus:outline-none
                    focus-visible:ring-2 focus-visible:ring-burgundy-400/50 rounded"
       >
+        {formattedNumber && (
+          <span className="inline-block mr-1 text-ink-400 tabular-nums min-w-[3ch]">
+            {formattedNumber}.
+          </span>
+        )}
         {titleNode}
       </button>
 

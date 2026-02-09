@@ -59,6 +59,12 @@ export function Book({ bookInfo, poems, currentPage: controlledPage, onNavigate,
           content: item.title,
           id: item.id 
         });
+      } else if (item.type === 'epigraph' && item.subtitle) {
+        pages.push({ 
+          type: 'epigraph', 
+          content: item.subtitle,
+          id: item.id 
+        });
       } else if (item.type === 'poem' && item.id !== 'poem-of-the-day') {
         const poemData = poemMap.get(item.id);
         if (poemData) {
@@ -147,6 +153,9 @@ export function Book({ bookInfo, poems, currentPage: controlledPage, onNavigate,
       case 'poem': {
         const poem = page.content as Poem;
         const isPoemOfTheDay = poem.id === poemOfTheDay.id;
+        const poemNumber = typeof page.poemIndex === 'number'
+          ? poems[page.poemIndex]?.number
+          : poem.number;
         return (
           <div id={page.id} className="reader-poem-anchor">
             <PoemPage
@@ -155,6 +164,7 @@ export function Book({ bookInfo, poems, currentPage: controlledPage, onNavigate,
               isLeft={currentPage % 2 === 0}
               variant="reader"
               showPoemOfTheDayLabel={isPoemOfTheDay}
+              poemNumber={poemNumber}
             />
           </div>
         );
@@ -170,6 +180,7 @@ export function Book({ bookInfo, poems, currentPage: controlledPage, onNavigate,
               pageNumber={currentPage + 1}
               isLeft={currentPage % 2 === 0}
               variant="reader"
+              poemNumber={(page.content as Poem).number}
             />
           </div>
         );

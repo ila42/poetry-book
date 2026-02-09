@@ -261,7 +261,7 @@ const epigraphText = normalizeLines(epigraphRaw);
 
 const nextContent = {
   book: {
-    title: existingContent.book?.title ?? 'Книга стихов',
+    title: existingContent.book?.title ?? 'Просто человеком',
     author: existingContent.book?.author ?? 'Автор',
     year: existingContent.book?.year ?? '',
     version: existingContent.book?.version ?? '',

@@ -2,16 +2,18 @@ import type { Poem } from '@/types';
 import type { BookInfo } from '@/types';
 import tocBookData from './toc-book.json';
 
-export type TocItemType = 'part' | 'chapter' | 'poem' | 'poem-of-day' | 'interlude';
+export type TocItemType = 'part' | 'chapter' | 'poem' | 'poem-of-day' | 'interlude' | 'epigraph';
 
 export interface TocItem {
   id: string;
   title: string;
   pageIndex: number;
   type: TocItemType;
+  /** Сквозной номер стихотворения в книге (если применимо) */
   poemNumber?: number;
   pageNumber?: number;
-  subtitle?: string; // для частей и глав
+  /** Для частей/глав — подзаголовок; для type 'epigraph' — текст эпиграфа */
+  subtitle?: string;
 }
 
 interface TocBookSection {
@@ -81,12 +83,14 @@ export function getTocItems(bookInfo: BookInfo, poems: Poem[]): TocItem[] {
           // Добавляем содержимое главы
           for (const chapterItem of item.items) {
             if (chapterItem.type === 'poem') {
+              const poem = poemMap.get(chapterItem.id);
               items.push({
                 id: chapterItem.id,
                 title: chapterItem.title,
                 pageIndex: currentPageIndex,
                 type: 'poem',
                 pageNumber: currentPageIndex + 1,
+                poemNumber: poem?.number,
               });
               currentPageIndex++;
             } else if (chapterItem.type === 'interlude') {
@@ -98,16 +102,29 @@ export function getTocItems(bookInfo: BookInfo, poems: Poem[]): TocItem[] {
                 pageNumber: currentPageIndex + 1,
               });
               currentPageIndex++;
+            } else if (chapterItem.type === 'marker' && chapterItem.text) {
+              // Эпиграф к главе (маркер с текстом, без списка стихов)
+              items.push({
+                id: chapterItem.id,
+                title: chapterItem.title ?? 'ЭПИГРАФ',
+                pageIndex: currentPageIndex,
+                type: 'epigraph',
+                pageNumber: currentPageIndex + 1,
+                subtitle: chapterItem.text,
+              });
+              currentPageIndex++;
             }
           }
         } else if (item.type === 'poem') {
           // Стихи напрямую в части (без главы)
+          const poem = poemMap.get(item.id);
           items.push({
             id: item.id,
             title: item.title,
             pageIndex: currentPageIndex,
             type: 'poem',
             pageNumber: currentPageIndex + 1,
+            poemNumber: poem?.number,
           });
           currentPageIndex++;
         } else if (item.type === 'interlude') {
@@ -118,6 +135,38 @@ export function getTocItems(bookInfo: BookInfo, poems: Poem[]): TocItem[] {
             pageIndex: currentPageIndex,
             type: 'interlude',
             pageNumber: currentPageIndex + 1,
+          });
+          currentPageIndex++;
+        } else if (item.type === 'marker' && item.items?.length) {
+          // Секция-маркер (например ИНТЕРМЕЦЦО) со стихами — добавляем только стихи, без отдельной страницы заголовка
+          for (const poemItem of item.items) {
+            if (poemItem.type === 'poem') {
+              const poem = poemMap.get(poemItem.id);
+              items.push({
+                id: poemItem.id,
+                title: poemItem.title,
+                pageIndex: currentPageIndex,
+                type: 'poem',
+                pageNumber: currentPageIndex + 1,
+                poemNumber: poem?.number,
+              });
+              currentPageIndex++;
+            }
+          }
+        }
+      }
+    } else if (section.items?.length) {
+      // Секция не part (например marker: ИНТЕРМЕЦЦО I) — добавляем стихи из неё в поток страниц
+      for (const item of section.items) {
+        if (item.type === 'poem') {
+          const poem = poemMap.get(item.id);
+          items.push({
+            id: item.id,
+            title: item.title,
+            pageIndex: currentPageIndex,
+            type: 'poem',
+            pageNumber: currentPageIndex + 1,
+            poemNumber: poem?.number,
           });
           currentPageIndex++;
         }

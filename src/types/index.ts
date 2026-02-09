@@ -3,6 +3,8 @@ export interface Poem {
   title: string;
   content: string;
   chapterId: string;
+  /** Сквозной номер стихотворения в книге (1, 2, 3, ...) */
+  number?: number;
   audioUrl?: string;
   epigraph?: string;
   afterword?: string;

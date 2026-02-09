@@ -75,7 +75,7 @@ export function AdminLayout({ children, currentPage, onNavigate }: AdminLayoutPr
             {sidebarOpen && (
               <div className="overflow-hidden">
                 <h1 className="font-bold text-white truncate">Админ-панель</h1>
-                <p className="text-xs text-slate-400 truncate">Книга стихов</p>
+                <p className="text-xs text-slate-400 truncate">Просто человеком</p>
               </div>
             )}
           </div>

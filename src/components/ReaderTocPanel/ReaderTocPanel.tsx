@@ -24,6 +24,11 @@ export function ReaderTocPanel({
 }: ReaderTocPanelProps) {
   const [query, setQuery] = useState('');
 
+  const formatPoemNumber = (num: number | undefined): string | null => {
+    if (num === undefined) return null;
+    return String(num).padStart(3, '0');
+  };
+
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
     if (!q) return items;
@@ -155,6 +160,11 @@ export function ReaderTocPanel({
                   aria-current={currentPageIndex === item.pageIndex ? 'true' : undefined}
                 >
                   <span className={styles.poemTitle}>
+                    {item.poemNumber !== undefined && (
+                      <span className={styles.poemNumber}>
+                        {formatPoemNumber(item.poemNumber)}.
+                      </span>
+                    )}
                     <span className={styles.poemTitleText}>{item.title}</span>
                     <span className={styles.dots} />
                   </span>
@@ -176,6 +186,11 @@ export function ReaderTocPanel({
                 aria-current={currentPageIndex === item.pageIndex ? 'true' : undefined}
               >
                 <span className={styles.poemTitle}>
+                  {item.poemNumber !== undefined && (
+                    <span className={styles.poemNumber}>
+                      {formatPoemNumber(item.poemNumber)}.
+                    </span>
+                  )}
                   <span className={styles.poemTitleText}>{item.title}</span>
                   <span className={styles.dots} />
                 </span>

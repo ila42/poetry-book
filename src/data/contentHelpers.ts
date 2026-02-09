@@ -3,6 +3,7 @@ import contentData from './content.json';
 
 interface ContentPoem {
   id: string;
+  /** Сквозной номер стихотворения в книге */
   number: number;
   title: string;
   alternateTitle?: string;
@@ -52,6 +53,7 @@ export function extractPoems(): Poem[] {
         part.poems.forEach((poem) => {
           poems.push({
             id: poem.id,
+            number: poem.number,
             title: poem.title,
             content: poem.text,
             chapterId: part.id,
@@ -69,6 +71,7 @@ export function extractPoems(): Poem[] {
             chapter.poems.forEach((poem) => {
               poems.push({
                 id: poem.id,
+                number: poem.number,
                 title: poem.title,
                 content: poem.text,
                 chapterId: chapter.id,

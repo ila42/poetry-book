@@ -132,12 +132,13 @@ interface EpigraphPageProps {
   isLeft?: boolean;
 }
 
-export function EpigraphPage({ content, pageNumber, isLeft }: EpigraphPageProps) {
+export function EpigraphPage({ content }: EpigraphPageProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
   useScrollbarReveal(scrollRef);
 
+  // Для страниц с эпиграфом не показываем номер страницы
   return (
-    <BookPage pageNumber={pageNumber} isLeft={isLeft}>
+    <BookPage>
       <div className="w-full h-full flex flex-col">
         {/* Заголовок - как у стихов */}
         <motion.h3 
