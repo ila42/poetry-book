@@ -26,6 +26,7 @@ export function PoemPage({
 }: PoemPageProps) {
   const isReader = variant === 'reader';
   const hasTitle = Boolean(poem.title && poem.title.trim().length > 0);
+  const hasAlternateTitle = Boolean(poem.alternateTitle && poem.alternateTitle.trim().length > 0);
   const hasMeta = Boolean(poem.dedication || poem.epigraph);
   const hasAudio = Boolean(poem.audioUrl?.trim());
   const { currentTrack, isPlaying, isLoading, play, pause } = useAudioPlayer();
@@ -56,6 +57,13 @@ export function PoemPage({
         {showPoemOfTheDayLabel && (
           <div className="mb-3 text-center font-serif text-sm text-burgundy-600">
             Стихотворение дня
+          </div>
+        )}
+        {hasAlternateTitle && (
+          <div
+            className={`text-center font-serif mb-1 ${isReader ? 'text-base text-ink-700' : 'text-sm text-ink-600'}`}
+          >
+            {poem.alternateTitle}
           </div>
         )}
         {hasTitle && (

@@ -1,6 +1,7 @@
 export interface Poem {
   id: string;
   title: string;
+  alternateTitle?: string;
   content: string;
   chapterId: string;
   /** Сквозной номер стихотворения в книге (1, 2, 3, ...) */
