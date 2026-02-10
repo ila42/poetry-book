@@ -53,7 +53,7 @@ export function PoemPage({
       transition={{ duration: 0.3 }}
       data-no-flip
     >
-      <div className={`flex flex-col overflow-hidden w-full max-w-2xl ${isReader ? 'py-4 text-center' : 'flex-1 p-3 md:p-4'}`}>
+      <div className={`flex flex-col w-full max-w-2xl ${isReader ? 'py-4 text-center' : 'flex-1 p-3 md:p-4 overflow-hidden'}`}>
         {showPoemOfTheDayLabel && (
           <div className="mb-3 text-center font-serif text-sm text-burgundy-600">
             Стихотворение дня
@@ -61,7 +61,7 @@ export function PoemPage({
         )}
         {hasAlternateTitle && (
           <div
-            className={`text-center font-serif mb-1 ${isReader ? 'text-base text-ink-700' : 'text-sm text-ink-600'}`}
+            className={`text-center font-serif ${isReader ? 'text-lg text-ink-700 mb-2 tracking-widest uppercase' : 'text-sm text-ink-600 mb-1'}`}
           >
             {poem.alternateTitle}
           </div>
@@ -105,16 +105,20 @@ export function PoemPage({
         <div
           className={
             isReader
-              ? 'reader-poem-text flex-1 overflow-y-auto overflow-x-hidden text-center'
+              ? 'reader-poem-text text-center'
               : 'poem-text flex-1 overflow-y-auto overflow-x-hidden pr-2'
           }
-          style={{
-            touchAction: 'pan-y',
-            overscrollBehavior: 'contain',
-            WebkitOverflowScrolling: 'touch',
-            scrollbarWidth: 'thin',
-            scrollbarColor: isReader ? 'rgba(0,0,0,0.2) transparent' : 'rgba(122, 29, 57, 0.4) transparent',
-          }}
+          style={
+            isReader
+              ? undefined
+              : {
+                  touchAction: 'pan-y',
+                  overscrollBehavior: 'contain',
+                  WebkitOverflowScrolling: 'touch',
+                  scrollbarWidth: 'thin',
+                  scrollbarColor: 'rgba(122, 29, 57, 0.4) transparent',
+                }
+          }
         >
           {poem.content}
         </div>
