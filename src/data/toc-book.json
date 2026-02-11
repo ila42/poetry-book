@@ -1063,14 +1063,8 @@
           "type": "chapter",
           "id": "chapter-7",
           "label": "ГЛАВА 7",
-          "title": "СТРЕКОЗЫ (НОВАЯ РЕДАКЦИЯ)",
+          "title": "СТРЕКОЗЫ",
           "items": [
-            {
-              "type": "marker",
-              "id": "epigraph-chapter-7",
-              "title": "ЭПИГРАФ",
-              "text": "«Воплощение мимолётности...»"
-            },
             {
               "type": "poem",
               "id": "poem-156",
@@ -1165,159 +1159,153 @@
             },
             {
               "type": "poem",
-              "id": "poem-170",
-              "title": "Пробежка",
-              "page": 170
-            },
-            {
-              "type": "poem",
               "id": "poem-171",
               "title": "Поезд в 10:40",
-              "page": 171
+              "page": 170
             },
             {
               "type": "poem",
               "id": "poem-172",
               "title": "Ритм поезда",
-              "page": 172
+              "page": 171
             },
             {
               "type": "poem",
               "id": "poem-173",
               "title": "Не к кому с сердцем",
-              "page": 173
+              "page": 172
             },
             {
               "type": "poem",
               "id": "poem-174",
               "title": "Танец под дождём",
-              "page": 174
+              "page": 173
             },
             {
               "type": "poem",
               "id": "poem-175",
               "title": "Дождь в парке",
-              "page": 175
+              "page": 174
             },
             {
               "type": "poem",
               "id": "poem-176",
               "title": "В стране, однажды бросившей читать",
-              "page": 176
+              "page": 175
             },
             {
               "type": "poem",
               "id": "poem-177",
               "title": "Мы ехали в Гурзуф",
-              "page": 177
+              "page": 176
             },
             {
               "type": "poem",
               "id": "poem-178",
               "title": "Геннакер",
-              "page": 178
+              "page": 177
             },
             {
               "type": "poem",
               "id": "poem-179",
               "title": "Бархатный сезон",
-              "page": 179
+              "page": 178
             },
             {
               "type": "poem",
               "id": "poem-180",
               "title": "Я снова в Ереване",
-              "page": 180
+              "page": 179
             },
             {
               "type": "poem",
               "id": "poem-181",
               "title": "Ереван",
-              "page": 181
+              "page": 180
             },
             {
               "type": "poem",
               "id": "poem-182",
               "title": "Вардавар",
-              "page": 182
+              "page": 181
             },
             {
               "type": "poem",
               "id": "poem-183",
               "title": "Стамбул",
-              "page": 183
+              "page": 182
             },
             {
               "type": "poem",
               "id": "poem-184",
               "title": "Мой мир",
-              "page": 184
+              "page": 183
             },
             {
               "type": "poem",
               "id": "poem-185",
               "title": "Кот-домосед",
-              "page": 185
+              "page": 184
             },
             {
               "type": "poem",
               "id": "poem-186",
               "title": "Снеговик",
-              "page": 186
+              "page": 185
             },
             {
               "type": "poem",
               "id": "poem-187",
               "title": "Мой друг",
-              "page": 187
+              "page": 186
             },
             {
               "type": "poem",
               "id": "poem-188",
               "title": "Комариные занудства",
-              "page": 188
+              "page": 187
             },
             {
               "type": "poem",
               "id": "poem-189",
               "title": "День не задался",
-              "page": 189
+              "page": 188
             },
             {
               "type": "poem",
               "id": "poem-190",
               "title": "Зной",
-              "page": 190
+              "page": 189
             },
             {
               "type": "poem",
               "id": "poem-191",
               "title": "Город, уставший от жары",
-              "page": 191
+              "page": 190
             },
             {
               "type": "poem",
               "id": "poem-192",
               "title": "Вскачь",
-              "page": 192
+              "page": 191
             },
             {
               "type": "poem",
               "id": "poem-193",
               "title": "Южный гость",
-              "page": 193
+              "page": 192
             },
             {
               "type": "poem",
               "id": "poem-194",
               "title": "А кто-то будет ждать",
-              "page": 194
+              "page": 193
             },
             {
               "type": "poem",
               "id": "poem-195",
               "title": "Я пошёл искать раннюю осень",
-              "page": 195
+              "page": 194
             }
           ]
         },
@@ -1331,103 +1319,103 @@
               "type": "poem",
               "id": "poem-196",
               "title": "Пришёл октябрь",
-              "page": 196
+              "page": 195
             },
             {
               "type": "poem",
               "id": "poem-197",
               "title": "Мне осень с утра",
-              "page": 197
+              "page": 196
             },
             {
               "type": "poem",
               "id": "poem-198",
               "title": "Осенние листья",
-              "page": 198
+              "page": 197
             },
             {
               "type": "poem",
               "id": "poem-199",
               "title": "Почему опадают листья?",
-              "page": 199
+              "page": 198
             },
             {
               "type": "poem",
               "id": "poem-200",
               "title": "Жёлтые листья",
-              "page": 200
+              "page": 199
             },
             {
               "type": "poem",
               "id": "poem-201",
               "title": "Мечта",
-              "page": 201
+              "page": 200
             },
             {
               "type": "poem",
               "id": "poem-202",
               "title": "Как паутинкой по лицу",
-              "page": 202
+              "page": 201
             },
             {
               "type": "poem",
               "id": "poem-203",
               "title": "Море простужено",
-              "page": 203
+              "page": 202
             },
             {
               "type": "poem",
               "id": "poem-204",
               "title": "Ноябрь, как всегда",
-              "page": 204
+              "page": 203
             },
             {
               "type": "poem",
               "id": "poem-205",
               "title": "Мелодия дождя",
-              "page": 205
+              "page": 204
             },
             {
               "type": "poem",
               "id": "poem-206",
               "title": "С дождём молиться",
-              "page": 206
+              "page": 205
             },
             {
               "type": "poem",
               "id": "poem-207",
               "title": "Речь монотонная дождя",
-              "page": 207
+              "page": 206
             },
             {
               "type": "poem",
               "id": "poem-208",
               "title": "Можно в август опять постучаться",
-              "page": 208
+              "page": 207
             },
             {
               "type": "poem",
               "id": "poem-209",
               "title": "Яблочный Спас",
-              "page": 209
+              "page": 208
             },
             {
               "type": "poem",
               "id": "poem-210",
               "title": "Природа устала",
-              "page": 210
+              "page": 209
             },
             {
               "type": "poem",
               "id": "poem-211",
               "title": "Ноябрь шалит",
-              "page": 211
+              "page": 210
             },
             {
               "type": "poem",
               "id": "poem-212",
               "title": "Зачем ты открываешь эту дверь?",
-              "page": 212
+              "page": 211
             }
           ]
         },
@@ -1441,163 +1429,163 @@
               "type": "poem",
               "id": "poem-213",
               "title": "Декабрьская морось",
-              "page": 213
+              "page": 212
             },
             {
               "type": "poem",
               "id": "poem-214",
               "title": "Зонтики",
-              "page": 214
+              "page": 213
             },
             {
               "type": "poem",
               "id": "poem-215",
               "title": "Такой декабрь",
-              "page": 215
+              "page": 214
             },
             {
               "type": "poem",
               "id": "poem-216",
               "title": "Декабрь заплакал",
-              "page": 216
+              "page": 215
             },
             {
               "type": "poem",
               "id": "poem-217",
               "title": "В Ростове декабрь",
-              "page": 217
+              "page": 216
             },
             {
               "type": "poem",
               "id": "poem-218",
               "title": "Туман",
-              "page": 218
+              "page": 217
             },
             {
               "type": "poem",
               "id": "poem-219",
               "title": "Райские яблочки",
-              "page": 219
+              "page": 218
             },
             {
               "type": "poem",
               "id": "poem-220",
               "title": "Коктейль «Безольда»",
-              "page": 220
+              "page": 219
             },
             {
               "type": "poem",
               "id": "poem-221",
               "title": "Как просто грустить",
-              "page": 221
+              "page": 220
             },
             {
               "type": "poem",
               "id": "poem-222",
               "title": "Зимняя шуточка",
-              "page": 222
+              "page": 221
             },
             {
               "type": "poem",
               "id": "poem-223",
               "title": "Холода время",
-              "page": 223
+              "page": 222
             },
             {
               "type": "poem",
               "id": "poem-224",
               "title": "Случился январь",
-              "page": 224
+              "page": 223
             },
             {
               "type": "poem",
               "id": "poem-225",
               "title": "Январская осень",
-              "page": 225
+              "page": 224
             },
             {
               "type": "poem",
               "id": "poem-226",
               "title": "Декабрь",
-              "page": 226
+              "page": 225
             },
             {
               "type": "poem",
               "id": "poem-227",
               "title": "Декабрь-альфонс",
-              "page": 227
+              "page": 226
             },
             {
               "type": "poem",
               "id": "poem-228",
               "title": "Хрустальные ветки",
-              "page": 228
+              "page": 227
             },
             {
               "type": "poem",
               "id": "poem-229",
               "title": "Прогнозы лгут",
-              "page": 229
+              "page": 228
             },
             {
               "type": "poem",
               "id": "poem-230",
               "title": "Между лужами и снегом",
-              "page": 230
+              "page": 229
             },
             {
               "type": "poem",
               "id": "poem-231",
               "title": "Карусель",
-              "page": 231
+              "page": 230
             },
             {
               "type": "poem",
               "id": "poem-232",
               "title": "Зимняя душа",
-              "page": 232
+              "page": 231
             },
             {
               "type": "poem",
               "id": "poem-233",
               "title": "На год старее",
-              "page": 233
+              "page": 232
             },
             {
               "type": "poem",
               "id": "poem-234",
               "title": "Стал на минуту день длинней",
-              "page": 234
+              "page": 233
             },
             {
               "type": "poem",
               "id": "poem-235",
               "title": "Невнятная зима",
-              "page": 235
+              "page": 234
             },
             {
               "type": "poem",
               "id": "poem-236",
               "title": "Шалун февраль",
-              "page": 236
+              "page": 235
             },
             {
               "type": "poem",
               "id": "poem-237",
               "title": "Раненая птица",
-              "page": 237
+              "page": 236
             },
             {
               "type": "poem",
               "id": "poem-238",
               "title": "Врут календари",
-              "page": 238
+              "page": 237
             },
             {
               "type": "poem",
               "id": "poem-239",
               "title": "Четверг перед Пасхой",
-              "page": 239
+              "page": 238
             }
           ]
         }
@@ -1613,31 +1601,31 @@
           "type": "poem",
           "id": "poem-240",
           "title": "Прах",
-          "page": 240
+          "page": 239
         },
         {
           "type": "poem",
           "id": "poem-241",
           "title": "Нервожилия (Финал-аккорд)",
-          "page": 241
+          "page": 240
         },
         {
           "type": "poem",
           "id": "poem-242",
           "title": "Проперций",
-          "page": 242
+          "page": 241
         },
         {
           "type": "poem",
           "id": "poem-243",
           "title": "Три дня до Нового года",
-          "page": 243
+          "page": 242
         },
         {
           "type": "poem",
           "id": "poem-244",
           "title": "Дождь в Новый год",
-          "page": 244
+          "page": 243
         }
       ]
     },
@@ -1651,7 +1639,7 @@
           "type": "poem",
           "id": "poem-245",
           "title": "Точка",
-          "page": 245
+          "page": 244
         }
       ]
     }
