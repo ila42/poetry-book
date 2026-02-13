@@ -53,7 +53,8 @@ export function Book({ bookInfo, poems, currentPage: controlledPage, onNavigate,
           content: { label: item.title, title: item.subtitle },
           id: item.id 
         });
-      } else if (item.type === 'interlude') {
+      } else if (item.type === 'interlude' && item.pageNumber) {
+        // Только интерлюдии с собственной страницей (без вложенных стихов)
         pages.push({ 
           type: 'interlude', 
           content: item.title,

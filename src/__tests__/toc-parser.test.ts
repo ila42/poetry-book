@@ -95,44 +95,44 @@ describe('toc-book.json structure', () => {
     expect(blocks.map((b) => b.title)).toEqual(['Небо', 'Маски', 'Прощание']);
   });
 
-  it('Part II has ИНТЕРМЕЦЦО as subsections (like III. Выход)', () => {
-    const ch4 = toc.sections[1].items.find(
-      (i) => i.type === 'chapter' && (i as TocChapterNode).id === 'chapter-4',
-    ) as TocChapterNode;
-    const ch5 = toc.sections[1].items.find(
-      (i) => i.type === 'chapter' && (i as TocChapterNode).id === 'chapter-5',
-    ) as TocChapterNode;
+  it('Part II has ИНТЕРМЕЦЦО I and II as standalone interludes with poems', () => {
+    const part2Items = toc.sections[1].items;
 
-    const intermeccoI = ch4.items.find(
-      (i) => i.type === 'subsection' && i.title === 'ИНТЕРМЕЦЦО I',
+    // ИНТЕРМЕЦЦО I — отдельная интерлюдия на уровне части (между главой 4 и 5)
+    const intermeccoI = part2Items.find(
+      (i) => i.type === 'interlude' && i.title === 'ИНТЕРМЕЦЦО I',
     );
     expect(intermeccoI).toBeTruthy();
-    const poem130 = ch4.items.find(
-      (i) => i.type === 'poem' && (i as TocPoemNode).id === 'poem-130',
-    ) as TocPoemNode;
-    expect(poem130).toBeTruthy();
-    expect(poem130.title).toBe('Hydrologium');
+    const intermeccoIPoems = (intermeccoI as any).items?.filter(
+      (i: any) => i.type === 'poem',
+    );
+    expect(intermeccoIPoems?.length).toBe(1);
+    expect(intermeccoIPoems?.[0].id).toBe('poem-130');
+    expect(intermeccoIPoems?.[0].title).toBe('Hydrologium');
 
-    const intermeccoII = ch5.items.find(
-      (i) => i.type === 'subsection' && i.title === 'ИНТЕРМЕЦЦО II: ФАТУМ',
+    // ИНТЕРМЕЦЦО II: ФАТУМ — отдельная интерлюдия на уровне части (между главой 5 и 6)
+    const intermeccoII = part2Items.find(
+      (i) => i.type === 'interlude' && i.title === 'ИНТЕРМЕЦЦО II: ФАТУМ',
     );
     expect(intermeccoII).toBeTruthy();
-    const poems143to146 = ch5.items.filter(
-      (i) => i.type === 'poem' && ['poem-143', 'poem-144', 'poem-145', 'poem-146'].includes((i as TocPoemNode).id),
+    const intermeccoIIPoems = (intermeccoII as any).items?.filter(
+      (i: any) => i.type === 'poem',
     );
-    expect(poems143to146.length).toBe(4);
+    expect(intermeccoIIPoems?.length).toBe(4);
+    expect(intermeccoIIPoems?.map((p: any) => p.id)).toEqual([
+      'poem-143', 'poem-144', 'poem-145', 'poem-146',
+    ]);
   });
 
-  it('Chapter 5 has Roman-numeral subsections and ИНТЕРМЕЦЦО II', () => {
+  it('Chapter 5 has Roman-numeral subsections (I. Вход, II. Ностос, III. Выход)', () => {
     const ch5 = toc.sections[1].items.find(
       (i) => i.type === 'chapter' && (i as TocChapterNode).id === 'chapter-5',
     ) as TocChapterNode;
     const subs = ch5.items.filter((i) => i.type === 'subsection');
-    expect(subs.length).toBe(4);
+    expect(subs.length).toBe(3);
     expect(subs[0].title).toBe('I. Вход');
     expect(subs[1].title).toContain('Ностос');
     expect(subs[2].title).toBe('III. Выход');
-    expect(subs[3].title).toBe('ИНТЕРМЕЦЦО II: ФАТУМ');
   });
 
   it('Chapter 6 has an epigraph marker', () => {

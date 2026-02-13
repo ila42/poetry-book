@@ -148,6 +148,21 @@ export function ReaderTocPanel({
               );
             }
 
+            // Подразделы внутри главы (I. Вход, II. Ностос и т.п.)
+            if (item.type === 'subsection') {
+              return (
+                <button
+                  key={item.id}
+                  type="button"
+                  className={styles.subsectionHeader}
+                  onClick={() => handleItemClick(item.pageIndex)}
+                  role="listitem"
+                >
+                  <span className={styles.subsectionTitle}>({item.title})</span>
+                </button>
+              );
+            }
+
             // Стихотворение дня
             if (item.type === 'poem-of-day') {
               return (

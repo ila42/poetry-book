@@ -66,6 +66,7 @@ export interface TocInterludeNode {
   type: 'interlude';
   id: string;
   title: string;
+  items?: TocPoemNode[];
 }
 
 /** Flattened poem entry used for searching */

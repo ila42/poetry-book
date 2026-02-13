@@ -133,6 +133,31 @@
   color: #9ca3af;
 }
 
+/* ─── Подраздел внутри главы (I. Вход, II. Ностос и т.п.) ─── */
+.subsectionHeader {
+  width: 100%;
+  padding: 10px 16px 4px;
+  text-align: center;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.subsectionHeader:hover {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+.subsectionTitle {
+  display: block;
+  font-family: 'Georgia', 'Times New Roman', serif;
+  font-size: 0.8125rem;
+  font-style: italic;
+  font-weight: 500;
+  color: #6b7280;
+  letter-spacing: 0.02em;
+}
+
 /* ─── Элемент стиха ─── */
 .poemItem {
   display: flex;

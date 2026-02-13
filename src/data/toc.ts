@@ -2,7 +2,7 @@ import type { Poem } from '@/types';
 import type { BookInfo } from '@/types';
 import tocBookData from './toc-book.json';
 
-export type TocItemType = 'part' | 'chapter' | 'poem' | 'poem-of-day' | 'interlude' | 'epigraph';
+export type TocItemType = 'part' | 'chapter' | 'poem' | 'poem-of-day' | 'interlude' | 'epigraph' | 'subsection';
 
 export interface TocItem {
   id: string;
@@ -113,6 +113,15 @@ export function getTocItems(bookInfo: BookInfo, poems: Poem[]): TocItem[] {
                 subtitle: chapterItem.text,
               });
               currentPageIndex++;
+            } else if (chapterItem.type === 'subsection') {
+              // Подраздел внутри главы (I. Вход, II. Ностос, III. Выход и т.п.)
+              // Не создаёт отдельную страницу, pageIndex указывает на следующий стих
+              items.push({
+                id: chapterItem.id,
+                title: chapterItem.title,
+                pageIndex: currentPageIndex,
+                type: 'subsection',
+              });
             }
           }
         } else if (item.type === 'poem') {
@@ -128,15 +137,40 @@ export function getTocItems(bookInfo: BookInfo, poems: Poem[]): TocItem[] {
           });
           currentPageIndex++;
         } else if (item.type === 'interlude') {
-          // Интерлюдия в части
-          items.push({
-            id: item.id,
-            title: item.title,
-            pageIndex: currentPageIndex,
-            type: 'interlude',
-            pageNumber: currentPageIndex + 1,
-          });
-          currentPageIndex++;
+          if (item.items?.length) {
+            // Интермеццо со стихами — только метка в TOC, без отдельной страницы
+            items.push({
+              id: item.id,
+              title: item.title,
+              pageIndex: currentPageIndex,
+              type: 'interlude',
+            });
+
+            for (const poemItem of item.items) {
+              if (poemItem.type === 'poem') {
+                const poem = poemMap.get(poemItem.id);
+                items.push({
+                  id: poemItem.id,
+                  title: poemItem.title,
+                  pageIndex: currentPageIndex,
+                  type: 'poem',
+                  pageNumber: currentPageIndex + 1,
+                  poemNumber: poem?.number,
+                });
+                currentPageIndex++;
+              }
+            }
+          } else {
+            // Обычная интерлюдия без стихов — отдельная страница
+            items.push({
+              id: item.id,
+              title: item.title,
+              pageIndex: currentPageIndex,
+              type: 'interlude',
+              pageNumber: currentPageIndex + 1,
+            });
+            currentPageIndex++;
+          }
         } else if (item.type === 'marker' && item.items?.length) {
           // Секция-маркер (например ИНТЕРМЕЦЦО) со стихами — добавляем только стихи, без отдельной страницы заголовка
           for (const poemItem of item.items) {
