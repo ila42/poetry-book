@@ -9,14 +9,12 @@ export interface TocItem {
   title: string;
   pageIndex: number;
   type: TocItemType;
-  /** Сквозной номер стихотворения в книге (если применимо) */
   poemNumber?: number;
   pageNumber?: number;
-  /** Для частей/глав — подзаголовок; для type 'epigraph' — текст эпиграфа */
   subtitle?: string;
 }
 
-interface TocBookSection {
+export interface TocBookSection {
   type: string;
   id: string;
   label: string;
@@ -24,17 +22,16 @@ interface TocBookSection {
   items: any[];
 }
 
-interface TocBookData {
+export interface TocBookData {
   meta: { bookTitle: string };
   frontMatter: any[];
   sections: TocBookSection[];
 }
 
-export function getTocItems(bookInfo: BookInfo, poems: Poem[]): TocItem[] {
+export function getTocItems(bookInfo: BookInfo, poems: Poem[], customTocData?: TocBookData): TocItem[] {
   const poemOfDayPageIndex = getPoemOfTheDayPageIndex(bookInfo);
   let currentPageIndex = poemOfDayPageIndex + 1;
 
-  // Создаём мапу poem.id -> poem для быстрого доступа
   const poemMap = new Map<string, Poem>();
   poems.forEach((poem) => {
     poemMap.set(poem.id, poem);
@@ -44,13 +41,13 @@ export function getTocItems(bookInfo: BookInfo, poems: Poem[]): TocItem[] {
 
   items.push({
     id: 'poem-of-the-day',
-    title: '\u0421\u0442\u0438\u0445\u043e\u0442\u0432\u043e\u0440\u0435\u043d\u0438\u0435 \u0434\u043d\u044f',
+    title: 'Стихотворение дня',
     pageIndex: poemOfDayPageIndex,
     type: 'poem-of-day',
     pageNumber: poemOfDayPageIndex + 1,
   });
 
-  const tocBook = tocBookData as TocBookData;
+  const tocBook = (customTocData ?? tocBookData) as TocBookData;
 
   // Проходим по структуре и присваиваем pageIndex последовательно
   for (const section of tocBook.sections) {

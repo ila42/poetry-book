@@ -2,27 +2,26 @@ import React, { useState, useCallback, useMemo } from 'react';
 import { BookInfo, Chapter, Poem } from '@/types';
 import { BookPage, TitlePage, DedicationPage, EpigraphPage, AfterwordPage, ChapterPage, PartPage, ChapterInPartPage, InterludePage } from './BookPage';
 import { PoemPage } from './PoemPage';
-import { getPoemOfTheDay } from '@/data/contentHelpers';
-import { getTocItems } from '@/data/toc';
+import { getTocItems, type TocBookData } from '@/data/toc';
+import { getGlobalPoemOfTheDay } from '@/data/books';
 
 interface BookProps {
   bookInfo: BookInfo;
   chapters?: Chapter[];
   poems: Poem[];
-  /** Управляемый режим: текущая страница */
   currentPage?: number;
-  /** Управляемый режим: переход на страницу */
   onNavigate?: (pageIndex: number) => void;
-  /** Размер шрифта в зоне чтения (px), задаёт CSS-переменную --reader-font-size */
   readerFontSize?: number;
+  bookSlug?: string;
+  tocData?: TocBookData;
 }
 
-export function Book({ bookInfo, poems, currentPage: controlledPage, onNavigate, readerFontSize = 16 }: BookProps) {
+export function Book({ bookInfo, poems, currentPage: controlledPage, onNavigate, readerFontSize = 16, bookSlug, tocData }: BookProps) {
   const [internalPage, setInternalPage] = useState(0);
   const isControlled = controlledPage !== undefined && onNavigate !== undefined;
   const currentPage = isControlled ? controlledPage : internalPage;
   const setCurrentPage = isControlled ? onNavigate : setInternalPage;
-  const poemOfTheDay = useMemo(() => getPoemOfTheDay(), []);
+  const poemOfTheDay = useMemo(() => getGlobalPoemOfTheDay(), []);
 
   const pageStructure = useMemo(() => {
     const pages: Array<{ type: string; content?: unknown; id?: string; poemIndex?: number }> = [];
@@ -35,8 +34,7 @@ export function Book({ bookInfo, poems, currentPage: controlledPage, onNavigate,
 
     pages.push({ type: 'poem-of-day', content: poemOfTheDay, id: 'poem-of-the-day' });
 
-    // Получаем информацию о структуре из toc
-    const tocItems = getTocItems(bookInfo, poems);
+    const tocItems = getTocItems(bookInfo, poems, tocData);
     const poemMap = new Map(poems.map((p, i) => [p.id, { poem: p, index: i }]));
 
     // Добавляем страницы согласно tocItems
@@ -153,7 +151,7 @@ export function Book({ bookInfo, poems, currentPage: controlledPage, onNavigate,
         );
       case 'poem': {
         const poem = page.content as Poem;
-        const isPoemOfTheDay = poem.id === poemOfTheDay.id;
+        const isPoemOfTheDay = poem.id === poemOfTheDay.id && bookSlug === poemOfTheDay.bookSlug;
         const poemNumber = typeof page.poemIndex === 'number'
           ? poems[page.poemIndex]?.number
           : poem.number;
@@ -173,9 +171,14 @@ export function Book({ bookInfo, poems, currentPage: controlledPage, onNavigate,
       case 'poem-of-day':
         return (
           <div id={page.id} className="reader-poem-anchor w-full">
-            <div className="mb-3 text-center font-serif text-sm text-burgundy-600">
+            <div className="mb-3 text-center font-serif text-base sm:text-lg text-burgundy-600">
               Стихотворение дня
             </div>
+            {poemOfTheDay.bookNumber && (
+              <div className="mb-1 text-center font-serif text-sm sm:text-base text-burgundy-500">
+                Книга {poemOfTheDay.bookNumber}
+              </div>
+            )}
             <PoemPage
               poem={page.content as Poem}
               pageNumber={currentPage + 1}

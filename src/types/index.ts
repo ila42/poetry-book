@@ -11,6 +11,10 @@ export interface Poem {
   afterword?: string;
   dedication?: string;
   date?: string;
+  /** Из какой книги стихотворение (slug вида book-1, book-2, ...) */
+  bookSlug?: string;
+  /** Порядковый номер книги (1, 2, 3, ...) */
+  bookNumber?: number;
 }
 
 export interface Chapter {

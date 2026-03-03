@@ -1,0 +1,140 @@
+{
+  "meta": {
+    "bookTitle": "КНИГА 2"
+  },
+  "frontMatter": [],
+  "sections": [
+    {
+      "type": "part",
+      "id": "b2-part-1",
+      "label": "ТЕТРАДЬ I",
+      "title": "Вода не отражает суеты",
+      "items": [
+        { "type": "poem", "id": "b2-poem-1", "title": "Моя стрекоза", "page": 1 },
+        { "type": "poem", "id": "b2-poem-2", "title": "Наговор", "page": 2 },
+        { "type": "poem", "id": "b2-poem-3", "title": "Кристаллы", "page": 3 },
+        { "type": "poem", "id": "b2-poem-4", "title": "Я не верю", "page": 4 },
+        { "type": "poem", "id": "b2-poem-5", "title": "Сильные чувства", "page": 5 },
+        { "type": "poem", "id": "b2-poem-6", "title": "Июнь прошёл…", "page": 6 },
+        { "type": "poem", "id": "b2-poem-7", "title": "Приглашение", "page": 7 },
+        { "type": "poem", "id": "b2-poem-8", "title": "Красное вино", "page": 8 },
+        { "type": "poem", "id": "b2-poem-9", "title": "Течение", "page": 9 },
+        { "type": "poem", "id": "b2-poem-10", "title": "Регулярный сад", "page": 10 },
+        { "type": "poem", "id": "b2-poem-11", "title": "Майская гроза", "page": 11 },
+        { "type": "poem", "id": "b2-poem-12", "title": "Мысли, как ртуть", "page": 12 },
+        { "type": "poem", "id": "b2-poem-13", "title": "Не понимаю я, что лучше…", "page": 13 },
+        { "type": "poem", "id": "b2-poem-14", "title": "Как падает снег…", "page": 14 },
+        { "type": "poem", "id": "b2-poem-15", "title": "Это март? Не февраль?..  ", "page": 15 }
+      ]
+    },
+    {
+      "type": "part",
+      "id": "b2-part-2",
+      "label": "ТЕТРАДЬ II",
+      "title": "Взросление",
+      "items": [
+        { "type": "poem", "id": "b2-poem-16", "title": "Пролог", "page": 16 },
+        { "type": "poem", "id": "b2-poem-17", "title": "Награда", "page": 17 },
+        { "type": "poem", "id": "b2-poem-18", "title": "Чудо", "page": 18 },
+        { "type": "poem", "id": "b2-poem-19", "title": "Магри", "page": 19 },
+        { "type": "poem", "id": "b2-poem-20", "title": "Свеча", "page": 20 },
+        { "type": "poem", "id": "b2-poem-21", "title": "По кругу", "page": 21 },
+        { "type": "poem", "id": "b2-poem-22", "title": "Боль", "page": 22 },
+        { "type": "poem", "id": "b2-poem-23", "title": "Простой ответ", "page": 23 }
+      ]
+    },
+    {
+      "type": "part",
+      "id": "b2-part-3",
+      "label": "ТЕТРАДЬ III",
+      "title": "Время не лечит",
+      "items": [
+        { "type": "poem", "id": "b2-poem-24", "title": "А после — перекошенная дверь…", "page": 24 },
+        { "type": "poem", "id": "b2-poem-25", "title": "Голос Времени", "page": 25 },
+        { "type": "poem", "id": "b2-poem-26", "title": "А вот себя я победить не смог…", "page": 26 },
+        { "type": "poem", "id": "b2-poem-27", "title": "Из черновиков (Любовь должна быть…)", "page": 27 },
+        { "type": "poem", "id": "b2-poem-28", "title": "Мы снова встретимся…", "page": 28 },
+        { "type": "poem", "id": "b2-poem-29", "title": "Ты знаешь, я скучаю по тебе…", "page": 29 },
+        { "type": "poem", "id": "b2-poem-30", "title": "Бесценно время", "page": 30 },
+        { "type": "poem", "id": "b2-poem-31", "title": "Время не лечит", "page": 31 },
+        { "type": "poem", "id": "b2-poem-32", "title": "Октябрь зачастил…", "page": 32 },
+        { "type": "poem", "id": "b2-poem-33", "title": "Я точно знал: меня весна обманет…", "page": 33 },
+        { "type": "poem", "id": "b2-poem-34", "title": "Серое небо придавит дождём…", "page": 34 },
+        { "type": "poem", "id": "b2-poem-35", "title": "Ты ищешь край неба…", "page": 35 },
+        { "type": "poem", "id": "b2-poem-36", "title": "Нельзя откладывать счастье…", "page": 36 },
+        { "type": "poem", "id": "b2-poem-37", "title": "Нет жизни вне любви…", "page": 37 },
+        { "type": "poem", "id": "b2-poem-38", "title": "Как-то странно звучит из-под снега…", "page": 38 }
+      ]
+    },
+    {
+      "type": "part",
+      "id": "b2-part-4",
+      "label": "ТЕТРАДЬ IV",
+      "title": "Как много прожитого наспех",
+      "items": [
+        { "type": "poem", "id": "b2-poem-39", "title": "Мы можем по душе и сердцу жить", "page": 39 },
+        { "type": "poem", "id": "b2-poem-40", "title": "То, что прожили, можно сложить…", "page": 40 },
+        { "type": "poem", "id": "b2-poem-41", "title": "Январь на качелях", "page": 41 },
+        { "type": "poem", "id": "b2-poem-42", "title": "Когда тебя уже совсем не слышат…", "page": 42 },
+        { "type": "poem", "id": "b2-poem-43", "title": "Молчание порой как крик в ответ…", "page": 43 },
+        { "type": "poem", "id": "b2-poem-44", "title": "Как много прожитого наспех…", "page": 44 },
+        { "type": "poem", "id": "b2-poem-45", "title": "Моя беда в том, что я всё понимаю…", "page": 45 },
+        { "type": "poem", "id": "b2-poem-46", "title": "Искусство отсеивания", "page": 46 },
+        { "type": "poem", "id": "b2-poem-47", "title": "Не ври, что забыла…", "page": 47 },
+        { "type": "poem", "id": "b2-poem-48", "title": "Осенний манифест", "page": 48 },
+        { "type": "poem", "id": "b2-poem-49", "title": "Похолодало…", "page": 49 },
+        { "type": "poem", "id": "b2-poem-50", "title": "Ворон (Черная капля)", "page": 50 },
+        { "type": "poem", "id": "b2-poem-51", "title": "Давай с тобой поговорим…", "page": 51 },
+        { "type": "poem", "id": "b2-poem-52", "title": "Слова, что ты бросала мне…", "page": 52 },
+        { "type": "poem", "id": "b2-poem-53", "title": "Вокзал, с которого не уехать", "page": 53 }
+      ]
+    },
+    {
+      "type": "part",
+      "id": "b2-part-5",
+      "label": "ТЕТРАДЬ V",
+      "title": "Тень под валуном",
+      "items": [
+        { "type": "poem", "id": "b2-poem-54", "title": "Пряха", "page": 54 },
+        { "type": "poem", "id": "b2-poem-55", "title": "Цыганка", "page": 55 },
+        { "type": "poem", "id": "b2-poem-56", "title": "Осенние горки", "page": 56 },
+        { "type": "poem", "id": "b2-poem-57", "title": "Переезд — это просто", "page": 57 },
+        { "type": "poem", "id": "b2-poem-58", "title": "Штиль ожидания", "page": 58 },
+        { "type": "poem", "id": "b2-poem-59", "title": "Одноцветные", "page": 59 },
+        { "type": "poem", "id": "b2-poem-60", "title": "Сток", "page": 60 },
+        { "type": "poem", "id": "b2-poem-61", "title": "Швея", "page": 61 },
+        { "type": "poem", "id": "b2-poem-62", "title": "Тень под валуном", "page": 62 },
+        { "type": "poem", "id": "b2-poem-63", "title": "Горизонт не к спеху", "page": 63 },
+        { "type": "poem", "id": "b2-poem-64", "title": "Глухой звонок", "page": 64 },
+        { "type": "poem", "id": "b2-poem-65", "title": "Заклинившая дверь", "page": 65 },
+        { "type": "poem", "id": "b2-poem-66", "title": "Цветущая слива", "page": 66 },
+        { "type": "poem", "id": "b2-poem-67", "title": "В лето не помещается", "page": 67 },
+        { "type": "poem", "id": "b2-poem-68", "title": "Надежная ладонь", "page": 68 },
+        { "type": "poem", "id": "b2-poem-69", "title": "Вечность в вечности", "page": 69 },
+        { "type": "poem", "id": "b2-poem-70", "title": "Брошенный февраль (Эпилог)", "page": 70 }
+      ]
+    },
+    {
+      "type": "part",
+      "id": "b2-part-6",
+      "label": "ТЕТРАДЬ VI",
+      "title": "Багаж для вечности",
+      "items": [
+        { "type": "poem", "id": "b2-poem-71", "title": "Заставка на столе", "page": 71 },
+        { "type": "poem", "id": "b2-poem-72", "title": "Сбитые мечты", "page": 72 },
+        { "type": "poem", "id": "b2-poem-73", "title": "Пропущенная осень", "page": 73 },
+        { "type": "poem", "id": "b2-poem-74", "title": "Воровство ноября", "page": 74 },
+        { "type": "poem", "id": "b2-poem-75", "title": "Багаж для вечности", "page": 75 },
+        { "type": "poem", "id": "b2-poem-76", "title": "Октябрьская светотень", "page": 76 },
+        { "type": "poem", "id": "b2-poem-77", "title": "Побег в октябрь", "page": 77 },
+        { "type": "poem", "id": "b2-poem-78", "title": "Имбирь и розы", "page": 78 },
+        { "type": "poem", "id": "b2-poem-79", "title": "Комната смеха", "page": 79 },
+        { "type": "poem", "id": "b2-poem-80", "title": "Право быть", "page": 80 },
+        { "type": "poem", "id": "b2-poem-81", "title": "Бредущий по городу", "page": 81 },
+        { "type": "poem", "id": "b2-poem-82", "title": "Гротескное лицедейство", "page": 82 },
+        { "type": "poem", "id": "b2-poem-83", "title": "Форма фарса", "page": 83 },
+        { "type": "poem", "id": "b2-poem-84", "title": "Лунный клубочек", "page": 84 }
+      ]
+    }
+  ]
+}

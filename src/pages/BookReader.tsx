@@ -1,11 +1,10 @@
 import { useState, useMemo, useCallback } from 'react';
+import { useParams, Navigate } from 'react-router-dom';
 import { Book } from '@/components/Book';
 import { TopToolbar } from '@/components/TopToolbar';
 import { AudioPlayerProvider, GlobalAudioPlayer } from '@/components/AudioPlayer';
 import { SearchProvider } from '@/context/SearchContext';
-import { author, bookInfo } from '@/data/author';
-import { contentChapters, contentPoems } from '@/data/contentHelpers';
-import { getTocItems } from '@/data/toc';
+import { getBookBySlug, getTocItemsForBook, author } from '@/data/books';
 import { getFavoritePoemIds, toggleFavoritePoemId } from '@/data/favorites';
 
 const READER_FONT_STORAGE_KEY = 'reader_font_size';
@@ -31,10 +30,17 @@ interface BookReaderProps {
 }
 
 export function BookReader({ initialPageIndex = 0 }: BookReaderProps) {
+  const { bookSlug = 'book-1' } = useParams<{ bookSlug: string }>();
+  const bookData = useMemo(() => getBookBySlug(bookSlug), [bookSlug]);
+
   const [currentPage, setCurrentPage] = useState(initialPageIndex);
   const [readerFontSize, setReaderFontSize] = useState(getInitialReaderFontSize);
-  const [favoritePoemIds, setFavoritePoemIds] = useState(() => getFavoritePoemIds());
-  const tocItems = useMemo(() => getTocItems(bookInfo, contentPoems), [bookInfo, contentPoems]);
+  const [favoritePoemIds, setFavoritePoemIds] = useState(() => getFavoritePoemIds(bookSlug));
+
+  const tocItems = useMemo(() => {
+    if (!bookData) return [];
+    return getTocItemsForBook(bookData);
+  }, [bookData]);
 
   const currentPoemId = useMemo(() => {
     const item = tocItems.find(
@@ -63,14 +69,18 @@ export function BookReader({ initialPageIndex = 0 }: BookReaderProps) {
   }, []);
 
   const handleToggleFavorite = useCallback((poemId: string) => {
-    const next = toggleFavoritePoemId(poemId);
+    const next = toggleFavoritePoemId(poemId, bookSlug);
     setFavoritePoemIds(next);
-  }, []);
+  }, [bookSlug]);
+
+  if (!bookData) {
+    return <Navigate to="/" replace />;
+  }
 
   return (
     <AudioPlayerProvider>
       <SearchProvider
-        poems={contentPoems}
+        poems={bookData.poems}
         tocItems={tocItems}
         onNavigateToPage={setCurrentPage}
       >
@@ -88,12 +98,14 @@ export function BookReader({ initialPageIndex = 0 }: BookReaderProps) {
           />
 
           <Book
-            bookInfo={bookInfo}
-            chapters={contentChapters}
-            poems={contentPoems}
+            bookInfo={bookData.bookInfo}
+            chapters={bookData.chapters}
+            poems={bookData.poems}
             currentPage={currentPage}
             onNavigate={setCurrentPage}
             readerFontSize={readerFontSize}
+            bookSlug={bookSlug}
+            tocData={bookData.tocData}
           />
 
           <GlobalAudioPlayer />
@@ -101,7 +113,7 @@ export function BookReader({ initialPageIndex = 0 }: BookReaderProps) {
           {!isInterlude && (
             <footer className="py-6 text-center">
               <p className="text-gray-400 text-xs font-serif">
-                © {new Date().getFullYear()} {author.name}. Все права защищены.
+                &copy; {new Date().getFullYear()} {author.name}. Все права защищены.
               </p>
             </footer>
           )}

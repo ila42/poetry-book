@@ -55,7 +55,7 @@ export function PoemPage({
     >
       <div className={`flex flex-col w-full max-w-2xl ${isReader ? 'py-4 text-center' : 'flex-1 p-3 md:p-4 overflow-hidden'}`}>
         {showPoemOfTheDayLabel && (
-          <div className="mb-3 text-center font-serif text-sm text-burgundy-600">
+          <div className="mb-3 text-center font-serif text-base sm:text-lg text-burgundy-600">
             Стихотворение дня
           </div>
         )}

@@ -1,0 +1,886 @@
+{
+  "meta": {
+    "bookTitle": "КНИГА 3"
+  },
+  "frontMatter": [],
+  "sections": [
+    {
+      "type": "list",
+      "id": "b3-all",
+      "label": "",
+      "title": "",
+      "items": [
+        {
+          "type": "poem",
+          "id": "b3-poem-1",
+          "title": "Вне времени",
+          "page": 1
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-2",
+          "title": "Дождь и огонь",
+          "page": 2
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-3",
+          "title": "Капли",
+          "page": 3
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-4",
+          "title": "Лириды",
+          "page": 4
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-5",
+          "title": "Звёзды",
+          "page": 5
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-6",
+          "title": "Зачем?",
+          "page": 6
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-7",
+          "title": "Мотылёк",
+          "page": 7
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-8",
+          "title": "Октябрь",
+          "page": 8
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-9",
+          "title": "Зеркало",
+          "page": 9
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-10",
+          "title": "Ожидание",
+          "page": 10
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-11",
+          "title": "Из комнаты не убежать",
+          "page": 11
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-12",
+          "title": "Дежавю",
+          "page": 12
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-13",
+          "title": "Осенняя хандра",
+          "page": 13
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-14",
+          "title": "Сто вопросов",
+          "page": 14
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-15",
+          "title": "Проворонил сентябрь",
+          "page": 15
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-16",
+          "title": "Мне дождь сегодня постучал в окно",
+          "page": 16
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-17",
+          "title": "Дорамы",
+          "page": 17
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-18",
+          "title": "Слагаемые счастья",
+          "page": 18
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-19",
+          "title": "Осень",
+          "page": 19
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-20",
+          "title": "Ты смотришь вдаль",
+          "page": 20
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-21",
+          "title": "Ты называешь ненадёжным дождь",
+          "page": 21
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-22",
+          "title": "Последний сентябрь",
+          "page": 22
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-23",
+          "title": "Самообман",
+          "page": 23
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-24",
+          "title": "Отрицательные значения",
+          "page": 24
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-25",
+          "title": "Вина и стыд",
+          "page": 25
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-26",
+          "title": "Я снова убегаю в одиночество",
+          "page": 26
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-27",
+          "title": "Уже к тебе подкрался снегопад",
+          "page": 27
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-28",
+          "title": "Опять сорока новость принесла",
+          "page": 28
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-29",
+          "title": "Время не лечит",
+          "page": 29
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-30",
+          "title": "Гроза не случилась",
+          "page": 30
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-31",
+          "title": "Колени твои от молитвы все стёсаны",
+          "page": 31
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-32",
+          "title": "Свечи пахнут мёдом липовым",
+          "page": 32
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-33",
+          "title": "Мы любим сказки",
+          "page": 33
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-34",
+          "title": "Раз лепестки касаются руки",
+          "page": 34
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-35",
+          "title": "Стрекозы",
+          "page": 35
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-36",
+          "title": "Как странно, день не задался с утра",
+          "page": 36
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-37",
+          "title": "Мне снова напророчил гороскоп",
+          "page": 37
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-38",
+          "title": "Сегодня в гости к нам зашла жара",
+          "page": 38
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-39",
+          "title": "Стрекоза",
+          "page": 39
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-40",
+          "title": "Мне по-прежнему пятнадцать",
+          "page": 40
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-41",
+          "title": "Молчащий телефон",
+          "page": 41
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-42",
+          "title": "Чтоб сохранить любовь",
+          "page": 42
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-43",
+          "title": "Не духом нищие",
+          "page": 43
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-44",
+          "title": "Так значит, осень для тебя",
+          "page": 44
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-45",
+          "title": "Хрусталь звенит",
+          "page": 45
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-46",
+          "title": "Печаль светла",
+          "page": 46
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-47",
+          "title": "Фундамент",
+          "page": 47
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-48",
+          "title": "Законы осени",
+          "page": 48
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-49",
+          "title": "Юная душа",
+          "page": 49
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-50",
+          "title": "Как болит душа",
+          "page": 50
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-51",
+          "title": "Исход из лета",
+          "page": 51
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-52",
+          "title": "Привет, стрекоза",
+          "page": 52
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-53",
+          "title": "Наскальный рисунок",
+          "page": 53
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-54",
+          "title": "Ну что, потанцуем?",
+          "page": 54
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-55",
+          "title": "Бабушке",
+          "page": 55
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-56",
+          "title": "Отражение",
+          "page": 56
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-57",
+          "title": "Рождественская Москва",
+          "page": 57
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-58",
+          "title": "Тишина — как ответ?",
+          "page": 58
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-59",
+          "title": "Собаки сразу попадают в Рай",
+          "page": 59
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-60",
+          "title": "Несовпадение",
+          "page": 60
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-61",
+          "title": "Осень со мной",
+          "page": 61
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-62",
+          "title": "Что-то мне не весело в этот месяц май",
+          "page": 62
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-63",
+          "title": "Горсточка праха (восточное)",
+          "page": 63
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-64",
+          "title": "Что лукавить, есть плешь на темени",
+          "page": 64
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-65",
+          "title": "Берёзовые слёзы",
+          "page": 65
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-66",
+          "title": "Холод приходит всегда неожиданно",
+          "page": 66
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-67",
+          "title": "Хватит хмуриться хмурой хмари",
+          "page": 67
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-68",
+          "title": "Фехтую",
+          "page": 68
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-69",
+          "title": "Уже у раны не свести края",
+          "page": 69
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-70",
+          "title": "У старых лип мы встретились опять",
+          "page": 70
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-71",
+          "title": "У одиночества безвкусное вино",
+          "page": 71
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-72",
+          "title": "Ты снова заблудилась где-то",
+          "page": 72
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-73",
+          "title": "Что значит жить",
+          "page": 73
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-74",
+          "title": "Мелодия дождя",
+          "page": 74
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-75",
+          "title": "Речь монотонная дождя",
+          "page": 75
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-76",
+          "title": "Слова цыганки",
+          "page": 76
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-77",
+          "title": "Июльский круг",
+          "page": 77
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-78",
+          "title": "Хрипотца",
+          "page": 78
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-79",
+          "title": "Поезда",
+          "page": 79
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-80",
+          "title": "Медовый Спас",
+          "page": 80
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-81",
+          "title": "Ловцы забытых голосов",
+          "page": 81
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-82",
+          "title": "Дождь-проказник",
+          "page": 82
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-83",
+          "title": "Корёжит на осень",
+          "page": 83
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-84",
+          "title": "Невременье",
+          "page": 84
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-85",
+          "title": "Я каюсь",
+          "page": 85
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-86",
+          "title": "По секрету, одной",
+          "page": 86
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-87",
+          "title": "То и ладно",
+          "page": 87
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-88",
+          "title": "Время холодных дней",
+          "page": 88
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-89",
+          "title": "Монолог дождя",
+          "page": 89
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-90",
+          "title": "Клепсидра с клеем",
+          "page": 90
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-91",
+          "title": "Клён и ива",
+          "page": 91
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-92",
+          "title": "Четыре дня",
+          "page": 92
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-93",
+          "title": "Питерский морок",
+          "page": 93
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-94",
+          "title": "Глава в судьбе",
+          "page": 94
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-95",
+          "title": "Победить октябрь",
+          "page": 95
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-96",
+          "title": "Побег в сентябрь",
+          "page": 96
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-97",
+          "title": "Десять слов",
+          "page": 97
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-98",
+          "title": "Горя вкус",
+          "page": 98
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-99",
+          "title": "Выбор берега",
+          "page": 99
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-100",
+          "title": "Листья к костру",
+          "page": 100
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-101",
+          "title": "Суть случайности",
+          "page": 101
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-102",
+          "title": "Шарада судьбы",
+          "page": 102
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-103",
+          "title": "Общий секрет",
+          "page": 103
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-104",
+          "title": "Зябко",
+          "page": 104
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-105",
+          "title": "Диалог о зиме",
+          "page": 105
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-106",
+          "title": "Предчувствие весны",
+          "page": 106
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-107",
+          "title": "Слепой сентябрь",
+          "page": 107
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-108",
+          "title": "Ночь в октябре",
+          "page": 108
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-109",
+          "title": "Закрутилось",
+          "page": 109
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-110",
+          "title": "Сезон",
+          "page": 110
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-111",
+          "title": "Мой юг",
+          "page": 111
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-112",
+          "title": "За поворотом",
+          "page": 112
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-113",
+          "title": "За городом октябрь",
+          "page": 113
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-114",
+          "title": "Июль",
+          "page": 114
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-115",
+          "title": "Ловец солнца",
+          "page": 115
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-116",
+          "title": "Начало зимы",
+          "page": 116
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-117",
+          "title": "Не страшен дождь",
+          "page": 117
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-118",
+          "title": "Электричка на Краснодар",
+          "page": 118
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-119",
+          "title": "Дождаться солнца",
+          "page": 119
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-120",
+          "title": "Дождались дождей",
+          "page": 120
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-121",
+          "title": "До свиданья, сентябрь",
+          "page": 121
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-122",
+          "title": "Солнца зайчик",
+          "page": 122
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-123",
+          "title": "Октябрь вдавит",
+          "page": 123
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-124",
+          "title": "Дай мне руку",
+          "page": 124
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-125",
+          "title": "Синдром смотрителя",
+          "page": 125
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-126",
+          "title": "Роковое танго",
+          "page": 126
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-127",
+          "title": "Как жить",
+          "page": 127
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-128",
+          "title": "Не бывает срочно",
+          "page": 128
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-129",
+          "title": "Под ночь на Рождество",
+          "page": 129
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-130",
+          "title": "Нежданный вальс",
+          "page": 130
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-131",
+          "title": "Время собаки",
+          "page": 131
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-132",
+          "title": "Время не переводи",
+          "page": 132
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-133",
+          "title": "Геология времени",
+          "page": 133
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-134",
+          "title": "Ускользающий луч",
+          "page": 134
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-135",
+          "title": "К морю",
+          "page": 135
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-136",
+          "title": "Курортное",
+          "page": 136
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-137",
+          "title": "Не поторапливай",
+          "page": 137
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-138",
+          "title": "Здравствуй, февраль",
+          "page": 138
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-139",
+          "title": "Ва-банк",
+          "page": 139
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-140",
+          "title": "Танец протеста",
+          "page": 140
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-141",
+          "title": "Вечная осень",
+          "page": 141
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-142",
+          "title": "Полуночница",
+          "page": 142
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-143",
+          "title": "Не Цирцея",
+          "page": 143
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-144",
+          "title": "Старые часы",
+          "page": 144
+        },
+        {
+          "type": "poem",
+          "id": "b3-poem-145",
+          "title": "Кирпич Спиридона",
+          "page": 145
+        }
+      ]
+    }
+  ]
+}

@@ -1,14 +1,16 @@
-const FAVORITES_STORAGE_KEY = 'favorite_poems';
+function storageKey(bookSlug?: string): string {
+  return bookSlug ? `favorite_poems_${bookSlug}` : 'favorite_poems';
+}
 
 function sanitizeIds(value: unknown): string[] {
   if (!Array.isArray(value)) return [];
   return value.filter((id): id is string => typeof id === 'string' && id.trim().length > 0);
 }
 
-export function getFavoritePoemIds(): string[] {
+export function getFavoritePoemIds(bookSlug?: string): string[] {
   if (typeof window === 'undefined') return [];
   try {
-    const raw = localStorage.getItem(FAVORITES_STORAGE_KEY);
+    const raw = localStorage.getItem(storageKey(bookSlug));
     if (!raw) return [];
     return sanitizeIds(JSON.parse(raw));
   } catch {
@@ -16,20 +18,20 @@ export function getFavoritePoemIds(): string[] {
   }
 }
 
-export function setFavoritePoemIds(ids: string[]): void {
+export function setFavoritePoemIds(ids: string[], bookSlug?: string): void {
   if (typeof window === 'undefined') return;
   try {
-    localStorage.setItem(FAVORITES_STORAGE_KEY, JSON.stringify(sanitizeIds(ids)));
+    localStorage.setItem(storageKey(bookSlug), JSON.stringify(sanitizeIds(ids)));
   } catch {
     /* ignore */
   }
 }
 
-export function toggleFavoritePoemId(id: string): string[] {
-  const current = getFavoritePoemIds();
+export function toggleFavoritePoemId(id: string, bookSlug?: string): string[] {
+  const current = getFavoritePoemIds(bookSlug);
   const exists = current.includes(id);
   const next = exists ? current.filter((item) => item !== id) : [...current, id];
-  setFavoritePoemIds(next);
+  setFavoritePoemIds(next, bookSlug);
   return next;
 }
 
