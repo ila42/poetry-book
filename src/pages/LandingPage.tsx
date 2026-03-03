@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useMemo } from 'react';
-import { author, bookInfo } from '@/data/author';
+import { author } from '@/data/author';
 import { getAllBooks, getGlobalPoemOfTheDay } from '@/data/books';
 
 function BookCover({ slug, title, subtitle, authorName, gradient, delay = 0 }: {
@@ -101,12 +101,6 @@ export function LandingPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
             >
-              <h1 className="font-serif text-2xl sm:text-3xl lg:text-4xl text-[#2C3E50] mb-2 leading-tight">
-                {bookInfo.title}
-              </h1>
-              <p className="text-[#2C3E50]/75 mb-4">
-                {bookInfo.year} год
-              </p>
               <p className="font-serif text-lg sm:text-xl text-[#2C3E50] mb-1">
                 {author.fullName}
               </p>

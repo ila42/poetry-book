@@ -24,7 +24,7 @@ const booksConfig: BookConfig[] = [
     bookInfo: book1Info,
     contentData: contentBook1 as ContentDataShape,
     tocData: tocBook1 as TocBookData,
-    coverGradient: 'from-[#8B4557] via-[#6B3344] to-[#4A2332]',
+    coverGradient: 'from-[#7A3545] via-[#5E2838] to-[#42192A]',
   },
   {
     slug: 'book-2',
@@ -37,7 +37,7 @@ const booksConfig: BookConfig[] = [
     },
     contentData: contentBook2 as ContentDataShape,
     tocData: tocBook2 as TocBookData,
-    coverGradient: 'from-[#2C5F7C] via-[#1E4A5F] to-[#0F3042]',
+    coverGradient: 'from-[#6A3B5E] via-[#523048] to-[#3A2034]',
   },
   {
     slug: 'book-3',
@@ -50,7 +50,7 @@ const booksConfig: BookConfig[] = [
     },
     contentData: contentBook3 as ContentDataShape,
     tocData: tocBook3 as TocBookData,
-    coverGradient: 'from-[#5C6B3C] via-[#465429] to-[#2F3A1A]',
+    coverGradient: 'from-[#6B4A3A] via-[#52382C] to-[#3A271E]',
   },
 ];
 
