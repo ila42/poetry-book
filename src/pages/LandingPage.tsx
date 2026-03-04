@@ -142,9 +142,9 @@ export function LandingPage() {
                 </motion.div>
               </div>
 
-              {/* Детское фото */}
+              {/* Фото автора: детское и современное */}
               <motion.div
-                className="mb-10"
+                className="mb-10 flex flex-col md:flex-row items-center justify-center gap-4 md:gap-6"
                 initial={{ opacity: 0, y: 10 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -153,7 +153,12 @@ export function LandingPage() {
                 <img
                   src="/images/author/childhood.jpg"
                   alt="Андрей Балашов в детстве"
-                  className="mx-auto rounded-lg shadow-lg max-w-[280px] w-full object-cover"
+                  className="rounded-lg shadow-lg max-w-[260px] w-full object-cover"
+                />
+                <img
+                  src="/images/author/photo_2026-01-22_17-15-55.jpg"
+                  alt="Андрей Балашов"
+                  className="rounded-lg shadow-lg max-w-[260px] w-full object-cover"
                 />
               </motion.div>
 
