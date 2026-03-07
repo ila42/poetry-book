@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useMemo } from 'react';
-import { author } from '@/data/author';
+import { author, bookInfo } from '@/data/author';
 import { getAllBooks, getGlobalPoemOfTheDay } from '@/data/books';
 
 function BookCover({ slug, title, subtitle, authorName, gradient, delay = 0 }: {
@@ -79,6 +79,20 @@ export function LandingPage() {
       <section id="book-content" className="min-h-screen flex items-center pt-20 md:pt-28 lg:pt-32">
         <div className="max-w-[1200px] w-full mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col items-center gap-12 lg:gap-16">
+            {/* Эпиграф над книгами */}
+            {bookInfo.epigraph && (
+              <motion.blockquote
+                className="max-w-[640px] w-full text-center font-serif"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.7 }}
+              >
+                <p className="text-base sm:text-lg text-[#2C3E50]/85 italic leading-relaxed whitespace-pre-line">
+                  {bookInfo.epigraph}
+                </p>
+              </motion.blockquote>
+            )}
+
             {/* Обложки книг: на телефонах — вертикально, на десктопах — в один горизонтальный ряд */}
             <div className="w-full flex flex-col items-center gap-8 sm:gap-10 lg:gap-12 lg:flex-row lg:justify-center lg:items-stretch lg:overflow-x-auto">
               {books.map((book, i) => (

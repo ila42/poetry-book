@@ -14,7 +14,7 @@ export const author: Author = {
 export const bookInfo: BookInfo = {
   title: 'Просто человеком',
   titlePageTitle: 'Просто человеком',
-  subtitle: '',
+  subtitle: 'книга стихов',
   author: author.name,
   year: '1980-2025',
   dedication: '',
