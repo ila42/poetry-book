@@ -6,9 +6,11 @@ import { author, bookInfo as book1Info } from './author';
 import contentBook1 from './content.json';
 import contentBook2 from './content-book-2.json';
 import contentBook3 from './content-book-3.json';
+import contentBook4 from './content-book-4.json';
 import tocBook1 from './toc-book.json';
 import tocBook2 from './toc-book-2.json';
 import tocBook3 from './toc-book-3.json';
+import tocBook4 from './toc-book-4.json';
 
 export interface BookConfig {
   slug: string;
@@ -53,6 +55,20 @@ const booksConfig: BookConfig[] = [
     contentData: contentBook3 as ContentDataShape,
     tocData: tocBook3 as TocBookData,
     coverGradient: 'from-[#6B4A3A] via-[#52382C] to-[#3A271E]',
+  },
+  {
+    slug: 'book-4',
+    bookInfo: {
+      title: 'Восточные тетради',
+      titlePageTitle: 'Восточные тетради',
+      subtitle: 'как будто восточный цикл',
+      author: 'Андрей Балашов',
+      year: '2026',
+      epigraph: book1Info.epigraph,
+    },
+    contentData: contentBook4 as ContentDataShape,
+    tocData: tocBook4 as TocBookData,
+    coverGradient: 'from-[#8B1A1A] via-[#6B1212] to-[#4A0D0D]',
   },
 ];
 

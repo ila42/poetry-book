@@ -1,0 +1,750 @@
+{
+  "meta": {
+    "bookTitle": "ВОСТОЧНЫЕ ТЕТРАДИ"
+  },
+  "frontMatter": [],
+  "sections": [
+    {
+      "type": "part",
+      "id": "b4-prologue",
+      "label": "ПРОЛОГ",
+      "title": "",
+      "items": [
+        {
+          "type": "poem",
+          "id": "b4-poem-prologue",
+          "title": "Игра в слова",
+          "page": 1
+        }
+      ]
+    },
+    {
+      "type": "part",
+      "id": "b4-epigraph",
+      "label": "ЭПИГРАФ",
+      "title": "",
+      "items": [
+        {
+          "type": "poem",
+          "id": "b4-poem-1",
+          "title": "Я отвязал свой плот",
+          "page": 2
+        }
+      ]
+    },
+    {
+      "type": "part",
+      "id": "b4-part-1",
+      "label": "АКВАРЕЛИ",
+      "title": "ПУТЕВЫЕ ЗАРИСОВКИ",
+      "items": [
+        {
+          "type": "poem",
+          "id": "b4-poem-2",
+          "title": "Лёд в Чхорвоне",
+          "page": 3
+        },
+        {
+          "type": "poem",
+          "id": "b4-poem-3",
+          "title": "Река Кымган (Короткая версия)",
+          "page": 4
+        },
+        {
+          "type": "poem",
+          "id": "b4-poem-4",
+          "title": "Кымган (Длинная версия)",
+          "page": 5
+        },
+        {
+          "type": "poem",
+          "id": "b4-poem-5",
+          "title": "Подсолнухи в Канвоне",
+          "page": 6
+        },
+        {
+          "type": "poem",
+          "id": "b4-poem-6",
+          "title": "Две разницы (Как будто восточное)",
+          "page": 7
+        },
+        {
+          "type": "poem",
+          "id": "b4-poem-7",
+          "title": "Ручей",
+          "page": 8
+        },
+        {
+          "type": "poem",
+          "id": "b4-poem-8",
+          "title": "Путь к морю",
+          "page": 9
+        },
+        {
+          "type": "poem",
+          "id": "b4-poem-9",
+          "title": "Начало июня",
+          "page": 10
+        },
+        {
+          "type": "poem",
+          "id": "b4-poem-10",
+          "title": "Как море лечит",
+          "page": 11
+        },
+        {
+          "type": "poem",
+          "id": "b4-poem-11",
+          "title": "Заводь",
+          "page": 12
+        },
+        {
+          "type": "poem",
+          "id": "b4-poem-12",
+          "title": "На пути",
+          "page": 13
+        },
+        {
+          "type": "poem",
+          "id": "b4-poem-13",
+          "title": "Письма с горы Намсан (Диптих)",
+          "page": 14
+        },
+        {
+          "type": "poem",
+          "id": "b4-poem-14",
+          "title": "Садик и ручей",
+          "page": 15
+        },
+        {
+          "type": "poem",
+          "id": "b4-poem-15",
+          "title": "Вишен цветопад",
+          "page": 16
+        },
+        {
+          "type": "poem",
+          "id": "b4-poem-16",
+          "title": "Слеза разлуки",
+          "page": 17
+        },
+        {
+          "type": "poem",
+          "id": "b4-poem-17",
+          "title": "Предчувствие весны",
+          "page": 18
+        },
+        {
+          "type": "poem",
+          "id": "b4-poem-18",
+          "title": "Зима придёт",
+          "page": 19
+        },
+        {
+          "type": "poem",
+          "id": "b4-poem-19",
+          "title": "Зима в Чхонджу (Диптих)",
+          "page": 20
+        },
+        {
+          "type": "poem",
+          "id": "b4-poem-20",
+          "title": "Драгоценный шёлк",
+          "page": 21
+        },
+        {
+          "type": "poem",
+          "id": "b4-poem-21",
+          "title": "Осенний шаг",
+          "page": 22
+        },
+        {
+          "type": "poem",
+          "id": "b4-poem-22",
+          "title": "Февральская метель",
+          "page": 23
+        },
+        {
+          "type": "poem",
+          "id": "b4-poem-23",
+          "title": "Декабрьский воздух",
+          "page": 24
+        }
+      ]
+    },
+    {
+      "type": "part",
+      "id": "b4-part-2",
+      "label": "ЧУЖАЯ ЛУНА",
+      "title": "ВЗГЛЯД ВАРВАРА",
+      "items": [
+        {
+          "type": "poem",
+          "id": "b4-poem-24",
+          "title": "Чайная церемония",
+          "page": 25
+        },
+        {
+          "type": "poem",
+          "id": "b4-poem-25",
+          "title": "Острый перец",
+          "page": 26
+        },
+        {
+          "type": "poem",
+          "id": "b4-poem-26",
+          "title": "Стихи на стекле",
+          "page": 27
+        },
+        {
+          "type": "poem",
+          "id": "b4-poem-27",
+          "title": "Сто вопросов",
+          "page": 28
+        }
+      ]
+    },
+    {
+      "type": "part",
+      "id": "b4-part-3",
+      "label": "САД КАМНЕЙ",
+      "title": "ФИЛОСОФИЯ",
+      "items": [
+        {
+          "type": "poem",
+          "id": "b4-poem-28",
+          "title": "Обнажение",
+          "page": 29
+        },
+        {
+          "type": "poem",
+          "id": "b4-poem-29",
+          "title": "Поэт и Рыбак",
+          "page": 30
+        },
+        {
+          "type": "poem",
+          "id": "b4-poem-30",
+          "title": "Падук",
+          "page": 31
+        },
+        {
+          "type": "poem",
+          "id": "b4-poem-31",
+          "title": "Карп",
+          "page": 32
+        },
+        {
+          "type": "poem",
+          "id": "b4-poem-32",
+          "title": "Бамбук",
+          "page": 33
+        },
+        {
+          "type": "poem",
+          "id": "b4-poem-33",
+          "title": "Душа и Тело",
+          "page": 34
+        },
+        {
+          "type": "poem",
+          "id": "b4-poem-34",
+          "title": "Хлеб",
+          "page": 35
+        },
+        {
+          "type": "poem",
+          "id": "b4-poem-35",
+          "title": "Игра в слова (Вариация)",
+          "page": 36
+        },
+        {
+          "type": "poem",
+          "id": "b4-poem-36",
+          "title": "Богатство",
+          "page": 37
+        },
+        {
+          "type": "poem",
+          "id": "b4-poem-37",
+          "title": "Седины",
+          "page": 38
+        },
+        {
+          "type": "poem",
+          "id": "b4-poem-38",
+          "title": "Совершенство",
+          "page": 39
+        },
+        {
+          "type": "poem",
+          "id": "b4-poem-39",
+          "title": "Ошибка путника",
+          "page": 40
+        },
+        {
+          "type": "poem",
+          "id": "b4-poem-40",
+          "title": "Холодный свет",
+          "page": 41
+        },
+        {
+          "type": "poem",
+          "id": "b4-poem-41",
+          "title": "Вечное",
+          "page": 42
+        },
+        {
+          "type": "poem",
+          "id": "b4-poem-42",
+          "title": "Кусок души",
+          "page": 43
+        },
+        {
+          "type": "poem",
+          "id": "b4-poem-43",
+          "title": "Равновесие",
+          "page": 44
+        },
+        {
+          "type": "poem",
+          "id": "b4-poem-44",
+          "title": "Пока не выпал снег",
+          "page": 45
+        },
+        {
+          "type": "poem",
+          "id": "b4-poem-45",
+          "title": "Джонгсонг",
+          "page": 46
+        },
+        {
+          "type": "poem",
+          "id": "b4-poem-46",
+          "title": "Повод тонкий",
+          "page": 47
+        },
+        {
+          "type": "poem",
+          "id": "b4-poem-47",
+          "title": "Твой меч",
+          "page": 48
+        },
+        {
+          "type": "poem",
+          "id": "b4-poem-48",
+          "title": "Улов не важен",
+          "page": 49
+        },
+        {
+          "type": "poem",
+          "id": "b4-poem-49",
+          "title": "Хрупкость души",
+          "page": 50
+        },
+        {
+          "type": "poem",
+          "id": "b4-poem-50",
+          "title": "Маяк",
+          "page": 51
+        },
+        {
+          "type": "poem",
+          "id": "b4-poem-51",
+          "title": "Зато как у всех",
+          "page": 52
+        },
+        {
+          "type": "poem",
+          "id": "b4-poem-52",
+          "title": "Балованный настрой",
+          "page": 53
+        },
+        {
+          "type": "poem",
+          "id": "b4-poem-53",
+          "title": "Путь к счастью",
+          "page": 54
+        },
+        {
+          "type": "poem",
+          "id": "b4-poem-54",
+          "title": "Дом",
+          "page": 55
+        },
+        {
+          "type": "poem",
+          "id": "b4-poem-55",
+          "title": "Журавль",
+          "page": 56
+        },
+        {
+          "type": "poem",
+          "id": "b4-poem-56",
+          "title": "Мост",
+          "page": 57
+        },
+        {
+          "type": "poem",
+          "id": "b4-poem-57",
+          "title": "Холм",
+          "page": 58
+        },
+        {
+          "type": "poem",
+          "id": "b4-poem-58",
+          "title": "Горсточка праха",
+          "page": 59
+        },
+        {
+          "type": "poem",
+          "id": "b4-poem-59",
+          "title": "Так было",
+          "page": 60
+        },
+        {
+          "type": "poem",
+          "id": "b4-poem-60",
+          "title": "Лишь бы солёное",
+          "page": 61
+        },
+        {
+          "type": "poem",
+          "id": "b4-poem-61",
+          "title": "Серединный путь",
+          "page": 62
+        },
+        {
+          "type": "poem",
+          "id": "b4-poem-62",
+          "title": "Для менеджмента",
+          "page": 63
+        },
+        {
+          "type": "poem",
+          "id": "b4-poem-63",
+          "title": "Выбор пути",
+          "page": 64
+        },
+        {
+          "type": "poem",
+          "id": "b4-poem-64",
+          "title": "Шулер",
+          "page": 65
+        },
+        {
+          "type": "poem",
+          "id": "b4-poem-65",
+          "title": "Кровь земли",
+          "page": 66
+        },
+        {
+          "type": "poem",
+          "id": "b4-poem-66",
+          "title": "Цена души",
+          "page": 67
+        },
+        {
+          "type": "poem",
+          "id": "b4-poem-67",
+          "title": "Источник",
+          "page": 68
+        },
+        {
+          "type": "poem",
+          "id": "b4-poem-68",
+          "title": "Мост Надежды",
+          "page": 69
+        },
+        {
+          "type": "poem",
+          "id": "b4-poem-69",
+          "title": "Миг забвения",
+          "page": 70
+        },
+        {
+          "type": "poem",
+          "id": "b4-poem-71",
+          "title": "Жажда скорости",
+          "page": 71
+        },
+        {
+          "type": "poem",
+          "id": "b4-poem-72",
+          "title": "Невидимый закон",
+          "page": 72
+        }
+      ]
+    },
+    {
+      "type": "part",
+      "id": "b4-part-4",
+      "label": "ПТИЦЫ И ВРЕМЯ",
+      "title": "",
+      "items": [
+        {
+          "type": "poem",
+          "id": "b4-poem-73",
+          "title": "Наш август",
+          "page": 73
+        },
+        {
+          "type": "poem",
+          "id": "b4-poem-74",
+          "title": "Стрижи улетели",
+          "page": 74
+        },
+        {
+          "type": "poem",
+          "id": "b4-poem-75",
+          "title": "Кукушка-подружка",
+          "page": 75
+        }
+      ]
+    },
+    {
+      "type": "part",
+      "id": "b4-part-5",
+      "label": "ЧЕТЫРЕ ГРАНИ",
+      "title": "ЖЕНСКИЙ ЦИКЛ",
+      "items": [
+        {
+          "type": "poem",
+          "id": "b4-poem-76",
+          "title": "Ты обещал",
+          "page": 76
+        },
+        {
+          "type": "poem",
+          "id": "b4-poem-77",
+          "title": "Там, где вчера",
+          "page": 77
+        },
+        {
+          "type": "poem",
+          "id": "b4-poem-78",
+          "title": "Твой голос",
+          "page": 78
+        },
+        {
+          "type": "poem",
+          "id": "b4-poem-79",
+          "title": "Терпение для женщины",
+          "page": 79
+        }
+      ]
+    },
+    {
+      "type": "part",
+      "id": "b4-part-6",
+      "label": "ОСКОЛКИ",
+      "title": "МОЗАИКА",
+      "items": [
+        {
+          "type": "poem",
+          "id": "b4-poem-80",
+          "title": "Ребёнок на ступенях",
+          "page": 80
+        },
+        {
+          "type": "poem",
+          "id": "b4-poem-81",
+          "title": "С тобою я",
+          "page": 81
+        },
+        {
+          "type": "poem",
+          "id": "b4-poem-82",
+          "title": "У озера",
+          "page": 82
+        },
+        {
+          "type": "poem",
+          "id": "b4-poem-83",
+          "title": "Опять в дорогу",
+          "page": 83
+        },
+        {
+          "type": "poem",
+          "id": "b4-poem-84",
+          "title": "Ты мне шептала",
+          "page": 84
+        },
+        {
+          "type": "poem",
+          "id": "b4-poem-85",
+          "title": "Касаюсь рук",
+          "page": 85
+        },
+        {
+          "type": "poem",
+          "id": "b4-poem-86",
+          "title": "Ты в путь зовёшь",
+          "page": 86
+        },
+        {
+          "type": "poem",
+          "id": "b4-poem-87",
+          "title": "Когда на берег",
+          "page": 87
+        },
+        {
+          "type": "poem",
+          "id": "b4-poem-88",
+          "title": "Ты пьёшь со мной вино",
+          "page": 88
+        },
+        {
+          "type": "poem",
+          "id": "b4-poem-89",
+          "title": "Возвращение в дождь",
+          "page": 89
+        },
+        {
+          "type": "poem",
+          "id": "b4-poem-90",
+          "title": "Поезд с юга",
+          "page": 90
+        },
+        {
+          "type": "poem",
+          "id": "b4-poem-91",
+          "title": "Не возвращается",
+          "page": 91
+        },
+        {
+          "type": "poem",
+          "id": "b4-poem-92",
+          "title": "Полуденная беседа",
+          "page": 92
+        },
+        {
+          "type": "poem",
+          "id": "b4-poem-93",
+          "title": "Тропа влюблённой",
+          "page": 93
+        },
+        {
+          "type": "poem",
+          "id": "b4-poem-94",
+          "title": "Бриз и капризы",
+          "page": 94
+        },
+        {
+          "type": "poem",
+          "id": "b4-poem-95",
+          "title": "Игра в мяч",
+          "page": 95
+        },
+        {
+          "type": "poem",
+          "id": "b4-poem-96",
+          "title": "Собачья погода",
+          "page": 96
+        },
+        {
+          "type": "poem",
+          "id": "b4-poem-97",
+          "title": "Мало желания",
+          "page": 97
+        },
+        {
+          "type": "poem",
+          "id": "b4-poem-98",
+          "title": "В твоих глазах",
+          "page": 98
+        },
+        {
+          "type": "poem",
+          "id": "b4-poem-99",
+          "title": "Недовольство",
+          "page": 99
+        },
+        {
+          "type": "poem",
+          "id": "b4-poem-100",
+          "title": "Слова и гроза",
+          "page": 100
+        },
+        {
+          "type": "poem",
+          "id": "b4-poem-101",
+          "title": "Пепел",
+          "page": 101
+        },
+        {
+          "type": "poem",
+          "id": "b4-poem-102",
+          "title": "Игра в оро",
+          "page": 102
+        }
+      ]
+    },
+    {
+      "type": "part",
+      "id": "b4-part-7",
+      "label": "МИНИАТЮРЫ",
+      "title": "",
+      "items": [
+        {
+          "type": "poem",
+          "id": "b4-poem-103",
+          "title": "Коснулась первая луна",
+          "page": 103
+        },
+        {
+          "type": "poem",
+          "id": "b4-poem-104",
+          "title": "На берегу чужой реки",
+          "page": 104
+        },
+        {
+          "type": "poem",
+          "id": "b4-poem-105",
+          "title": "Воздушный замок",
+          "page": 105
+        },
+        {
+          "type": "poem",
+          "id": "b4-poem-106",
+          "title": "Руки коснусь",
+          "page": 106
+        },
+        {
+          "type": "poem",
+          "id": "b4-poem-107",
+          "title": "Ольха",
+          "page": 107
+        }
+      ]
+    },
+    {
+      "type": "part",
+      "id": "b4-epilogue",
+      "label": "ЭПИЛОГ",
+      "title": "",
+      "items": [
+        {
+          "type": "poem",
+          "id": "b4-poem-108",
+          "title": "И обмелевшая в жару...",
+          "page": 108
+        }
+      ]
+    },
+    {
+      "type": "part",
+      "id": "b4-final",
+      "label": "ФИНАЛ",
+      "title": "",
+      "items": [
+        {
+          "type": "poem",
+          "id": "b4-poem-final",
+          "title": "И память о тебе...",
+          "page": 109
+        }
+      ]
+    }
+  ]
+}
