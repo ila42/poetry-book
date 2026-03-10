@@ -26,7 +26,7 @@ function BookCover({ slug, title, subtitle, authorName, gradient, delay = 0 }: {
       >
         <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 w-[80%] h-8 bg-black/10 blur-2xl rounded-full" />
         
-        <div className={`relative w-[240px] sm:w-[280px] lg:w-[320px] aspect-[3/4] 
+        <div className={`relative w-[240px] sm:w-[280px] lg:w-[220px] xl:w-[260px] aspect-[3/4]
                         bg-gradient-to-br ${gradient}
                         rounded-sm shadow-2xl overflow-hidden
                         transform hover:scale-[1.02] transition-all duration-300
@@ -94,7 +94,7 @@ export function LandingPage() {
             )}
 
             {/* Обложки книг: на телефонах — вертикально, на десктопах — в один горизонтальный ряд */}
-            <div className="w-full flex flex-col items-center gap-8 sm:gap-10 lg:gap-12 lg:flex-row lg:justify-center lg:items-stretch lg:overflow-x-auto">
+            <div className="w-full flex flex-col items-center gap-8 sm:gap-10 lg:gap-4 xl:gap-6 lg:flex-row lg:justify-center lg:items-stretch">
               {books.map((book, i) => (
                 <BookCover
                   key={book.slug}
