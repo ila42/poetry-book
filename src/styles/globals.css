@@ -502,6 +502,41 @@
   .readerContent .reader-poem-text {
     font-size: 1em;
   }
+
+  /* ===== МАСШТАБИРОВАНИЕ ЗАГОЛОВОЧНЫХ СТРАНИЦ (TitlePage, PartPage, ChapterPage и др.) =====
+     Все h1/h2/h3 и именованные CSS-классы внутри .readerContent переводятся в em-единицы,
+     чтобы они масштабировались вместе с --reader-font-size при нажатии A−/A+. */
+
+  /* TitlePage: главный заголовок книги (было text-3xl md:text-4xl lg:text-5xl) */
+  .readerContent h1 {
+    font-size: 2.2em;
+  }
+
+  /* PartPage: заголовок части (было text-2xl md:text-3xl lg:text-4xl) */
+  /* ChapterPage: .chapter-title ниже переопределяет свой clamp() */
+  .readerContent h2 {
+    font-size: 1.8em;
+  }
+
+  /* ChapterInPartPage: заголовок главы (было text-xl md:text-2xl lg:text-3xl) */
+  .readerContent h3 {
+    font-size: 1.5em;
+  }
+
+  /* .poem-title — заголовок стиха и заголовок «Эпиграф» (было clamp(1.1rem, 2vw, 1.5rem)) */
+  .readerContent .poem-title {
+    font-size: 1.4em;
+  }
+
+  /* .chapter-title — заголовок раздела ChapterPage (было clamp(1.75rem, 3vw, 2.75rem)) */
+  .readerContent .chapter-title {
+    font-size: 1.8em;
+  }
+
+  /* .poem-text — текст эпиграфа и стихов в «книжном» режиме (было clamp(0.9rem, 1.8vw, 1.15rem)) */
+  .readerContent .poem-text {
+    font-size: 1em;
+  }
   .reader-poem-text::-webkit-scrollbar {
     width: 6px;
   }
