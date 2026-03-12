@@ -76,6 +76,7 @@ export function LandingPage() {
   const poemOfTheDay = useMemo(() => getGlobalPoemOfTheDay(), []);
   return (
     <div className="min-h-screen bg-[#F5F5F0]">
+      <h1 className="sr-only">Просто человеком — сборник стихов Андрея Балашова</h1>
       <section id="book-content" className="min-h-screen flex items-center pt-20 md:pt-28 lg:pt-32">
         <div className="max-w-[1200px] w-full mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col items-center gap-12 lg:gap-16">
@@ -167,12 +168,18 @@ export function LandingPage() {
                 <img
                   src="/images/author/childhood.jpg"
                   alt="Андрей Балашов в детстве"
+                  title="Андрей Балашов в детстве"
                   className="rounded-lg shadow-lg max-w-[260px] w-full object-cover"
+                  loading="lazy"
+                  decoding="async"
                 />
                 <img
                   src="/images/author/photo_2026-01-22_17-15-55.jpg"
-                  alt="Андрей Балашов"
+                  alt="Андрей Балашов — автор сборника стихов «Просто человеком»"
+                  title="Андрей Балашов"
                   className="rounded-lg shadow-lg max-w-[260px] w-full object-cover"
+                  loading="lazy"
+                  decoding="async"
                 />
               </motion.div>
 

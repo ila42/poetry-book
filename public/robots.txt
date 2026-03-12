@@ -1,0 +1,12 @@
+User-agent: *
+Allow: /
+
+# Block admin and private paths
+Disallow: /admin
+Disallow: /admin/
+Disallow: /private/
+Disallow: /.env
+Disallow: /node_modules/
+
+# Sitemap
+Sitemap: https://просто-человеком.рф/sitemap.xml
