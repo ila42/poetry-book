@@ -1,4 +1,5 @@
-import React, { useState, useCallback, useMemo } from 'react';
+import React, { useState, useCallback, useMemo, useRef } from 'react';
+import { useSwipeNavigation } from '@/hooks';
 import { BookInfo, Chapter, Poem } from '@/types';
 import { BookPage, TitlePage, DedicationPage, EpigraphPage, AfterwordPage, ChapterPage, PartPage, ChapterInPartPage, InterludePage } from './BookPage';
 import { PoemPage } from './PoemPage';
@@ -204,8 +205,15 @@ export function Book({ bookInfo, poems, currentPage: controlledPage, onNavigate,
       ? { ['--reader-font-size' as string]: `${readerFontSize}px` }
       : undefined;
 
+  const swipeRef = useRef<HTMLDivElement>(null);
+  useSwipeNavigation(swipeRef, {
+    onSwipeLeft: handleNextPage,
+    onSwipeRight: handlePrevPage,
+  });
+
   return (
     <div
+      ref={swipeRef}
       className={`reader-page-wrap w-full min-h-screen flex flex-col pt-14 pb-24 transition-colors duration-300 ${isInterlude ? 'bg-black' : ''}`}
       style={readerFontSizeStyle}
     >
