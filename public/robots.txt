@@ -1,4 +1,6 @@
 User-agent: *
+Allow: /yandex_57902ff93ee6c198.html
+Allow: /mailru-domaindBkVXpJDG4RUlW5v.html
 Allow: /
 
 # Block admin and private paths
@@ -9,4 +11,4 @@ Disallow: /.env
 Disallow: /node_modules/
 
 # Sitemap
-Sitemap: https://просто-человеком.рф/sitemap.xml
+Sitemap: https://abalashov.ru/sitemap.xml
