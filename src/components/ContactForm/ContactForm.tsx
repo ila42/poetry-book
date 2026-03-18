@@ -2,33 +2,34 @@ import { useState, useRef, FormEvent, ChangeEvent, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import emailjs from '@emailjs/browser';
 
-// EmailJS configuration - replace with your own keys
-const EMAILJS_SERVICE_ID = "service_3jqdlop"; // Твой ID с картинки
-const EMAILJS_TEMPLATE_ID = "template_1u9x183"; // Твой ID с картинки
-const EMAILJS_PUBLIC_KEY = "JhHvdYgde2UHtavaG"; // Твой ключ с картинки
+// EmailJS configuration
+const EMAILJS_SERVICE_ID = "service_3jqdlop";
+const EMAILJS_TEMPLATE_ID = "template_2b5vomv"; // Обновлённый Template ID
+const EMAILJS_PUBLIC_KEY = "JhHvdYgde2UHtavaG";
 
 
 // Проверка валидности ключей
 const isConfigValid = Boolean(
-  EMAILJS_SERVICE_ID && 
-  EMAILJS_TEMPLATE_ID && 
+  EMAILJS_SERVICE_ID &&
+  EMAILJS_TEMPLATE_ID &&
   EMAILJS_PUBLIC_KEY &&
   !EMAILJS_SERVICE_ID.includes('your_') &&
   !EMAILJS_TEMPLATE_ID.includes('your_') &&
   !EMAILJS_PUBLIC_KEY.includes('your_')
 );
 
+// Поля формы — имена строго совпадают с переменными шаблона EmailJS
 interface FormData {
-  name: string;
-  email: string;
+  user_name: string;
+  user_email: string;
   subject: string;
   message: string;
   honeypot: string; // Spam protection
 }
 
 interface FormErrors {
-  name?: string;
-  email?: string;
+  user_name?: string;
+  user_email?: string;
   subject?: string;
   message?: string;
 }
@@ -38,15 +39,15 @@ type FormStatus = 'idle' | 'submitting' | 'success' | 'error';
 export function ContactForm() {
   const formRef = useRef<HTMLFormElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  
+
   const [formData, setFormData] = useState<FormData>({
-    name: '',
-    email: '',
+    user_name: '',
+    user_email: '',
     subject: '',
     message: '',
     honeypot: '',
   });
-  
+
   const [errors, setErrors] = useState<FormErrors>({});
   const [status, setStatus] = useState<FormStatus>('idle');
   const [attachment, setAttachment] = useState<File | null>(null);
@@ -65,34 +66,34 @@ export function ContactForm() {
   // Validation
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};
-    
+
     // Name validation
-    if (!formData.name.trim()) {
-      newErrors.name = 'Пожалуйста, введите ваше имя';
-    } else if (formData.name.trim().length < 2) {
-      newErrors.name = 'Имя должно содержать минимум 2 символа';
+    if (!formData.user_name.trim()) {
+      newErrors.user_name = 'Пожалуйста, введите ваше имя';
+    } else if (formData.user_name.trim().length < 2) {
+      newErrors.user_name = 'Имя должно содержать минимум 2 символа';
     }
-    
+
     // Email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!formData.email.trim()) {
-      newErrors.email = 'Пожалуйста, введите email';
-    } else if (!emailRegex.test(formData.email)) {
-      newErrors.email = 'Пожалуйста, введите корректный email';
+    if (!formData.user_email.trim()) {
+      newErrors.user_email = 'Пожалуйста, введите email';
+    } else if (!emailRegex.test(formData.user_email)) {
+      newErrors.user_email = 'Пожалуйста, введите корректный email';
     }
-    
+
     // Subject validation (optional but if provided, should be meaningful)
     if (formData.subject && formData.subject.trim().length < 3) {
       newErrors.subject = 'Тема должна содержать минимум 3 символа';
     }
-    
+
     // Message validation
     if (!formData.message.trim()) {
       newErrors.message = 'Пожалуйста, введите сообщение';
     } else if (formData.message.trim().length < 10) {
       newErrors.message = 'Сообщение должно содержать минимум 10 символов';
     }
-    
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -101,7 +102,7 @@ export function ContactForm() {
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
-    
+
     // Clear error when user starts typing
     if (errors[name as keyof FormErrors]) {
       setErrors(prev => ({ ...prev, [name]: undefined }));
@@ -111,7 +112,7 @@ export function ContactForm() {
   // Handle file selection
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] || null;
-    
+
     if (file) {
       // Validate file size (max 5MB)
       if (file.size > 5 * 1024 * 1024) {
@@ -119,7 +120,7 @@ export function ContactForm() {
         setStatus('error');
         return;
       }
-      
+
       // Validate file type
       const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'application/pdf', 'text/plain'];
       if (!allowedTypes.includes(file.type)) {
@@ -128,7 +129,7 @@ export function ContactForm() {
         return;
       }
     }
-    
+
     setAttachment(file);
     setStatus('idle');
   };
@@ -141,20 +142,20 @@ export function ContactForm() {
     }
   };
 
-  // Handle form submission
+  // Handle form submission — использует emailjs.sendForm, поля читаются по name-атрибуту
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    
+
     // Check honeypot (spam protection)
     if (formData.honeypot) {
       console.log('Bot detected');
       return;
     }
-    
+
     if (!validateForm()) {
       return;
     }
-    
+
     // Проверка конфигурации перед отправкой
     if (!isConfigValid) {
       setStatus('error');
@@ -162,35 +163,25 @@ export function ContactForm() {
       console.error('EmailJS config invalid! Check .env file.');
       return;
     }
-    
+
     setStatus('submitting');
-    
+
     try {
-      // Prepare template parameters
-      const templateParams = {
-        from_name: formData.name,
-        reply_to: formData.email,
-        message: formData.message,
-      };
-      
-      // Send main email
-      await emailjs.send(
+      // Отправка формы через emailjs.sendForm — name-атрибуты полей совпадают с переменными шаблона
+      await emailjs.sendForm(
         EMAILJS_SERVICE_ID,
         EMAILJS_TEMPLATE_ID,
-        templateParams,
+        formRef.current!,
         EMAILJS_PUBLIC_KEY
       );
-      
-      // Send auto-reply to user
-      
-      
+
       setStatus('success');
       setStatusMessage('Спасибо! Ваше письмо отправлено. Я отвечу вам в ближайшее время');
-      
-      // Reset form
+
+      // Очистка формы после успешной отправки
       setFormData({
-        name: '',
-        email: '',
+        user_name: '',
+        user_email: '',
         subject: '',
         message: '',
         honeypot: '',
@@ -199,10 +190,10 @@ export function ContactForm() {
       if (fileInputRef.current) {
         fileInputRef.current.value = '';
       }
-      
+
     } catch (error: unknown) {
       console.error('Email send error:', error);
-      
+
       // Детальное логирование для отладки
       if (error && typeof error === 'object' && 'text' in error) {
         console.error('EmailJS Error Text:', (error as { text: string }).text);
@@ -210,11 +201,11 @@ export function ContactForm() {
       if (error && typeof error === 'object' && 'status' in error) {
         console.error('EmailJS Error Status:', (error as { status: number }).status);
       }
-      
+
       setStatus('error');
-      
+
       // Более информативное сообщение об ошибке
-      const errorMessage = error && typeof error === 'object' && 'text' in error 
+      const errorMessage = error && typeof error === 'object' && 'text' in error
         ? `Ошибка: ${(error as { text: string }).text}`
         : 'Произошла ошибка при отправке. Проверьте консоль браузера для деталей.';
       setStatusMessage(errorMessage);
@@ -244,15 +235,15 @@ export function ContactForm() {
       >
         {/* Vintage border */}
         <div className="absolute inset-0 border-8 border-double border-burgundy-200/50 pointer-events-none rounded-sm" />
-        
+
         {/* Corner decorations */}
         <div className="absolute top-3 left-3 w-8 h-8 border-t-2 border-l-2 border-burgundy-300/50" />
         <div className="absolute top-3 right-3 w-8 h-8 border-t-2 border-r-2 border-burgundy-300/50" />
         <div className="absolute bottom-3 left-3 w-8 h-8 border-b-2 border-l-2 border-burgundy-300/50" />
         <div className="absolute bottom-3 right-3 w-8 h-8 border-b-2 border-r-2 border-burgundy-300/50" />
-        
+
         {/* Stamp decoration */}
-        <div className="absolute top-4 right-4 w-16 h-20 bg-burgundy-100/50 border-2 border-dashed border-burgundy-300/50 
+        <div className="absolute top-4 right-4 w-16 h-20 bg-burgundy-100/50 border-2 border-dashed border-burgundy-300/50
                         flex items-center justify-center transform rotate-3">
           <div className="text-center">
             <svg className="w-8 h-8 mx-auto text-burgundy-400/70" fill="currentColor" viewBox="0 0 24 24">
@@ -261,7 +252,7 @@ export function ContactForm() {
             <span className="text-[8px] text-burgundy-500/70 font-serif">ПОЧТА</span>
           </div>
         </div>
-        
+
         {/* Form content */}
         <div className="p-8 pt-6">
           {/* Header */}
@@ -271,9 +262,9 @@ export function ContactForm() {
             </h3>
             <div className="w-24 h-0.5 mx-auto bg-gradient-to-r from-transparent via-burgundy-400 to-transparent" />
           </div>
-          
+
           <form ref={formRef} onSubmit={handleSubmit} className="space-y-5">
-            {/* Honeypot field (hidden) */}
+            {/* Honeypot field (hidden) — spam protection */}
             <input
               type="text"
               name="honeypot"
@@ -283,8 +274,8 @@ export function ContactForm() {
               tabIndex={-1}
               autoComplete="off"
             />
-            
-            {/* Name field */}
+
+            {/* Name field — name="user_name" совпадает с переменной шаблона EmailJS */}
             <div className="form-field">
               <label htmlFor="name" className="form-label">
                 <span className="flex items-center gap-2">
@@ -297,28 +288,28 @@ export function ContactForm() {
               <input
                 type="text"
                 id="name"
-                name="name"
-                value={formData.name}
+                name="user_name"
+                value={formData.user_name}
                 onChange={handleChange}
                 placeholder="Иван Иванов"
-                className={`form-input ${errors.name ? 'border-red-400' : ''}`}
+                className={`form-input ${errors.user_name ? 'border-red-400' : ''}`}
                 disabled={status === 'submitting'}
               />
               <AnimatePresence>
-                {errors.name && (
+                {errors.user_name && (
                   <motion.p
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -10 }}
                     className="form-error"
                   >
-                    {errors.name}
+                    {errors.user_name}
                   </motion.p>
                 )}
               </AnimatePresence>
             </div>
-            
-            {/* Email field */}
+
+            {/* Email field — name="user_email" совпадает с переменной шаблона EmailJS */}
             <div className="form-field">
               <label htmlFor="email" className="form-label">
                 <span className="flex items-center gap-2">
@@ -331,27 +322,27 @@ export function ContactForm() {
               <input
                 type="email"
                 id="email"
-                name="email"
-                value={formData.email}
+                name="user_email"
+                value={formData.user_email}
                 onChange={handleChange}
                 placeholder="ivan@example.com"
-                className={`form-input ${errors.email ? 'border-red-400' : ''}`}
+                className={`form-input ${errors.user_email ? 'border-red-400' : ''}`}
                 disabled={status === 'submitting'}
               />
               <AnimatePresence>
-                {errors.email && (
+                {errors.user_email && (
                   <motion.p
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -10 }}
                     className="form-error"
                   >
-                    {errors.email}
+                    {errors.user_email}
                   </motion.p>
                 )}
               </AnimatePresence>
             </div>
-            
+
             {/* Subject field */}
             <div className="form-field">
               <label htmlFor="subject" className="form-label">
@@ -385,8 +376,8 @@ export function ContactForm() {
                 )}
               </AnimatePresence>
             </div>
-            
-            {/* Message field */}
+
+            {/* Message field — name="message" совпадает с переменной шаблона EmailJS */}
             <div className="form-field">
               <label htmlFor="message" className="form-label">
                 <span className="flex items-center gap-2">
@@ -419,7 +410,7 @@ export function ContactForm() {
                 )}
               </AnimatePresence>
             </div>
-            
+
             {/* File attachment */}
             <div className="form-field">
               <label className="form-label">
@@ -430,7 +421,7 @@ export function ContactForm() {
                   Прикрепить файл
                 </span>
               </label>
-              
+
               <div className="relative">
                 <input
                   type="file"
@@ -441,11 +432,11 @@ export function ContactForm() {
                   id="file-upload"
                   disabled={status === 'submitting'}
                 />
-                
+
                 {!attachment ? (
                   <label
                     htmlFor="file-upload"
-                    className="flex items-center justify-center gap-2 px-4 py-3 
+                    className="flex items-center justify-center gap-2 px-4 py-3
                                border-2 border-dashed border-burgundy-300/50 rounded-md
                                cursor-pointer hover:border-burgundy-400 hover:bg-burgundy-50/30
                                transition-all duration-200 text-ink-500 text-sm"
@@ -456,7 +447,7 @@ export function ContactForm() {
                     <span>Выберите файл (до 5 МБ)</span>
                   </label>
                 ) : (
-                  <div className="flex items-center justify-between px-4 py-3 
+                  <div className="flex items-center justify-between px-4 py-3
                                   bg-burgundy-50/50 border border-burgundy-200/50 rounded-md">
                     <div className="flex items-center gap-2 text-sm text-ink-700">
                       <svg className="w-5 h-5 text-burgundy-500" fill="currentColor" viewBox="0 0 24 24">
@@ -483,8 +474,8 @@ export function ContactForm() {
                 Форматы: JPG, PNG, GIF, PDF, TXT
               </p>
             </div>
-            
-            {/* Submit button */}
+
+            {/* Submit button — индикация состояний: Отправляю... / Отправлено! */}
             <motion.button
               type="submit"
               disabled={status === 'submitting'}
@@ -499,7 +490,14 @@ export function ContactForm() {
                     animate={{ rotate: 360 }}
                     transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
                   />
-                  <span>Отправка...</span>
+                  <span>Отправляю...</span>
+                </>
+              ) : status === 'success' ? (
+                <>
+                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                  </svg>
+                  <span>Отправлено!</span>
                 </>
               ) : (
                 <>
@@ -511,7 +509,7 @@ export function ContactForm() {
               )}
             </motion.button>
           </form>
-          
+
           {/* Status messages */}
           <AnimatePresence>
             {(status === 'success' || status === 'error') && (
@@ -520,8 +518,8 @@ export function ContactForm() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
                 className={`mt-6 p-4 rounded-md text-center ${
-                  status === 'success' 
-                    ? 'bg-green-50 border border-green-200 text-green-800' 
+                  status === 'success'
+                    ? 'bg-green-50 border border-green-200 text-green-800'
                     : 'bg-red-50 border border-red-200 text-red-800'
                 }`}
               >
@@ -543,13 +541,13 @@ export function ContactForm() {
               </motion.div>
             )}
           </AnimatePresence>
-          
+
           {/* Footer note */}
           <p className="mt-6 text-center text-xs text-ink-400 font-serif">
             Все поля, отмеченные <span className="text-burgundy-500">*</span>, обязательны для заполнения
           </p>
         </div>
-        
+
         {/* Postcard lines decoration */}
         <div className="absolute bottom-0 left-0 right-0 h-24 pointer-events-none opacity-20"
              style={{

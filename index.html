@@ -77,6 +77,13 @@
       "url": "https://просто-человеком.рф/read/book-1"
     }
     </script>
+    <!-- EmailJS SDK — инициализация через CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script>
+      (function() {
+        emailjs.init({ publicKey: "JhHvdYgde2UHtavaG" });
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

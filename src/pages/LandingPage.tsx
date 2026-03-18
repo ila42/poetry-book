@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { useMemo } from 'react';
 import { author, bookInfo } from '@/data/author';
 import { getAllBooks, getGlobalPoemOfTheDay } from '@/data/books';
+import { ContactForm } from '@/components/ContactForm';
 
 function BookCover({ slug, title, subtitle, authorName, gradient, delay = 0 }: {
   slug: string;
@@ -228,6 +229,30 @@ export function LandingPage() {
               </div>
             </motion.div>
           </div>
+        </div>
+      </section>
+
+      {/* Форма обратной связи */}
+      <section className="py-16 px-4 bg-[#F5F5F0]">
+        <div className="max-w-[720px] mx-auto">
+          <motion.h2
+            className="text-2xl sm:text-3xl font-serif font-semibold tracking-wide text-[#2C3E50] mb-3 text-center"
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.4 }}
+          >
+            Написать автору
+          </motion.h2>
+          <div className="w-16 h-px mx-auto my-4 bg-[#2C3E50]/25" aria-hidden="true" />
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+          >
+            <ContactForm />
+          </motion.div>
         </div>
       </section>
 
