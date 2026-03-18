@@ -228,19 +228,19 @@ export function ContactForm() {
 
       {/* Postcard styling */}
       <motion.div
-        className="relative bg-parchment-50 rounded-sm shadow-xl overflow-hidden"
+        className="relative bg-parchment-50 rounded-sm shadow-xl border border-burgundy-200/60"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        {/* Vintage border */}
-        <div className="absolute inset-0 border-8 border-double border-burgundy-200/50 pointer-events-none rounded-sm" />
+        {/* Внутренняя рамка — чётко отступает от внешней, без наложений */}
+        <div className="absolute inset-[10px] border border-burgundy-200/35 pointer-events-none rounded-sm" />
 
-        {/* Corner decorations */}
-        <div className="absolute top-3 left-3 w-8 h-8 border-t-2 border-l-2 border-burgundy-300/50" />
-        <div className="absolute top-3 right-3 w-8 h-8 border-t-2 border-r-2 border-burgundy-300/50" />
-        <div className="absolute bottom-3 left-3 w-8 h-8 border-b-2 border-l-2 border-burgundy-300/50" />
-        <div className="absolute bottom-3 right-3 w-8 h-8 border-b-2 border-r-2 border-burgundy-300/50" />
+        {/* Угловые акценты — внутри внутренней рамки, не пересекаются с линиями */}
+        <div className="absolute top-[18px] left-[18px] w-6 h-6 border-t border-l border-burgundy-400/50" />
+        <div className="absolute top-[18px] right-[18px] w-6 h-6 border-t border-r border-burgundy-400/50" />
+        <div className="absolute bottom-[18px] left-[18px] w-6 h-6 border-b border-l border-burgundy-400/50" />
+        <div className="absolute bottom-[18px] right-[18px] w-6 h-6 border-b border-r border-burgundy-400/50" />
 
         {/* Stamp decoration */}
         <div className="absolute top-4 right-4 w-16 h-20 bg-burgundy-100/50 border-2 border-dashed border-burgundy-300/50
@@ -548,17 +548,6 @@ export function ContactForm() {
           </p>
         </div>
 
-        {/* Postcard lines decoration */}
-        <div className="absolute bottom-0 left-0 right-0 h-24 pointer-events-none opacity-20"
-             style={{
-               backgroundImage: `repeating-linear-gradient(
-                 transparent,
-                 transparent 19px,
-                 #7a1d39 19px,
-                 #7a1d39 20px
-               )`
-             }}
-        />
       </motion.div>
     </div>
   );
