@@ -4,7 +4,7 @@ import emailjs from '@emailjs/browser';
 
 // EmailJS configuration
 const EMAILJS_SERVICE_ID = "service_3jqdlop";
-const EMAILJS_TEMPLATE_ID = "template_2b5vomv"; // Обновлённый Template ID
+const EMAILJS_TEMPLATE_ID = "template_1u9x183"; // Обновлённый Template ID
 const EMAILJS_PUBLIC_KEY = "JhHvdYgde2UHtavaG";
 
 
