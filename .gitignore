@@ -47,6 +47,7 @@ yarn-error.log*
 # Word documents
 *.docx
 *.doc
+*.txt
 
 # Local content files
 book-content.txt
