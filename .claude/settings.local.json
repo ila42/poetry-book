@@ -1,8 +1,0 @@
-{
-  "permissions": {
-    "allow": [
-      "Bash(python -c \"\nimport sys, io\nsys.stdout = io.TextIOWrapper\\(sys.stdout.buffer, encoding='utf-8'\\)\nimport docx\ndoc = docx.Document\\('C:/dev/poetry-book-clean/Восточная тетрадь окончательно.docx'\\)\nfor i, p in enumerate\\(doc.paragraphs\\):\n    print\\(f'{i:4d}: {p.text}'\\)\n\" 2>&1 | head -500)",
-      "Bash(python -c \"\nimport sys, io\nsys.stdout = io.TextIOWrapper\\(sys.stdout.buffer, encoding='utf-8'\\)\nimport docx\ndoc = docx.Document\\('C:/dev/poetry-book-clean/Восточная тетрадь окончательно.docx'\\)\nfor i, p in enumerate\\(doc.paragraphs\\):\n    print\\(f'{i:4d}: {p.text}'\\)\n\" 2>&1 | wc -l)"
-    ]
-  }
-}
