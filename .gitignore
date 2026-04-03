@@ -50,3 +50,17 @@ yarn-error.log*
 
 # Local content files
 book-content.txt
+
+# Claude Code
+CLAUDE.MD
+.claude/
+
+# Media files in root (not part of the project build)
+/photo_2026-02-06_00-31-49.jpg
+/Mya fir hil.m4a
+/регги
+/забыли свет
+
+# Yandex and Mail.ru domain/search verification files
+public/yandex_*.html
+public/mailru-*.html

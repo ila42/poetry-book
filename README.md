@@ -1,211 +1,165 @@
-# 📚 Просто человеком — Poetry Book Website
+# Просто человеком — стихи Андрея Балашова
 
-Веб-сайт для поэта с интерфейсом в виде книги, созданный на React + TypeScript.
+Интерактивный сайт-книга со стихами Андрея Балашова (р. 1965). Четыре поэтических сборника в формате листающейся книги с аудиочтением, поиском, избранным и панелью администратора.
 
-## ✨ Особенности
 
-- 📖 **Интерфейс в виде книги** с эффектом перелистывания страниц
-- 🎨 **Стилизация под старинную книгу** — текстура кожаной обложки, пергаментные страницы
-- 📱 **Адаптивный дизайн** — одна страница на мобильных, разворот на десктопе
-- 🎵 **Аудиоплеер** для прослушивания стихотворений
-- 📝 **Форма обратной связи** для связи с автором
-- 🔤 **Классическая типографика** с шрифтами Crimson Text и Playfair Display
 
-## 🚀 Быстрый старт
+---
+
+## Стек
+
+| Слой | Технологии |
+|------|-----------|
+| UI | React 18, TypeScript |
+| Анимации | Framer Motion, React PageFlip |
+| Стили | Tailwind CSS (темы: leather, burgundy, parchment) |
+| Шрифты | Crimson Text, Playfair Display (Google Fonts) |
+| Роутинг | React Router DOM 7 |
+| Сборка | Vite 6 |
+| Тесты | Vitest |
+| Email | EmailJS |
+| Деплой | Vercel |
+
+---
+
+## Быстрый старт
 
 ```bash
-# Установка зависимостей
 npm install
-
-# Запуск в режиме разработки
-npm run dev
-
-# Сборка для продакшена
-npm run build
-
-# Предпросмотр собранного приложения
-npm run preview
 ```
 
-## 📁 Структура проекта
-
-```
-├── public/
-│   ├── audio/              # Аудиофайлы стихов (.mp3)
-│   └── images/             # Изображения (фото автора)
-├── src/
-│   ├── components/
-│   │   ├── Book/           # Компоненты книги
-│   │   │   ├── Book.tsx           # Главный компонент книги
-│   │   │   ├── BookCover.tsx      # Обложка
-│   │   │   ├── BookPage.tsx       # Базовые страницы
-│   │   │   ├── PoemPage.tsx       # Страница стихотворения
-│   │   │   ├── TableOfContents.tsx # Оглавление
-│   │   │   ├── AboutPage.tsx      # Страница об авторе
-│   │   │   └── ContactPage.tsx    # Страница контактов
-│   │   ├── AudioPlayer.tsx        # Аудиоплеер
-│   │   └── ContactForm.tsx        # Форма обратной связи
-│   ├── content/
-│   │   └── poems/          # Стихотворения
-│   │       └── index.ts    # Все стихи и функции для работы с ними
-│   ├── data/
-│   │   ├── author.ts       # Данные об авторе и книге
-│   │   └── chapters.ts     # Структура глав
-│   ├── types/
-│   │   └── index.ts        # TypeScript типы
-│   ├── styles/
-│   │   └── globals.css     # Глобальные стили + Tailwind
-│   ├── App.tsx
-│   └── main.tsx
-├── package.json
-├── tailwind.config.js
-├── tsconfig.json
-└── vite.config.ts
-```
-
-## 📋 Оглавление (TOC) — `/toc`
-
-Страница **Оглавление** отображает полную структуру книги «ПРОСТО ЧЕЛОВЕКОМ»:
-
-- Две части, 10 глав, 245 стихотворений
-- Подзаголовки (блоки, подразделы, интермеццо, эпилог, post scriptum)
-- Поиск по названию стиха (case-insensitive)
-- Аккордеоны — сворачивание/разворачивание частей и глав
-- Лидеры-точки между названием и номером страницы
-- Якоря — у каждого пункта есть стабильный `id`; можно копировать ссылку
-- Кнопки «Свернуть / Развернуть все»
-
-### Как обновить оглавление из `.docx`
-
-1. Положите файл `ПРОСТО ЧЕЛОВЕКОМ оглавление (2).docx` в корень проекта (или передайте путь).
-2. Запустите парсер:
+Скопируй `env.example.txt` в `.env` и заполни переменные (см. [Настройка окружения](#настройка-окружения)).
 
 ```bash
-npm run parse-toc
-# или с явным путём:
-node scripts/parse-toc-docx.mjs "path/to/file.docx"
-```
-
-3. Скрипт перезапишет `src/data/toc-book.json`. Изменения сразу отразятся в UI.
-
-### Как это работает
-
-| Файл | Назначение |
-|---|---|
-| `scripts/parse-toc-docx.mjs` | Парсер: `.docx` → JSON (через mammoth) |
-| `src/data/toc-book.json` | Сгенерированные структурированные данные |
-| `src/types/toc-types.ts` | TypeScript типы для TOC |
-| `src/pages/TableOfContentsPage.tsx` | React-компонент страницы оглавления |
-| `src/__tests__/toc-parser.test.ts` | Unit-тесты парсера (vitest, 19 тестов) |
-
-### Запуск тестов
-
-```bash
-npm test          # однократно
-npm run test:watch # в режиме наблюдения
+npm run dev       # dev-сервер с горячей перезагрузкой
+npm run build     # production-сборка
+npm run preview   # предпросмотр production-сборки
 ```
 
 ---
 
-## 📝 Как добавить новое стихотворение
+## Возможности
 
-1. Откройте файл `src/content/poems/index.ts`
-2. Добавьте новый объект в массив `poems`:
+### Читалка книг
+- Листание страниц с 3D-анимацией (React PageFlip)
+- Один лист на мобильном, разворот на десктопе
+- Регулировка размера шрифта (14–22 px, сохраняется в localStorage)
+- Свайп и клик по краю страницы для навигации
 
-```typescript
-{
-  id: 'unique-poem-id',
-  title: 'Название стихотворения',
-  chapterId: 'love', // ID главы: love, nature, philosophy, memories
-  audioUrl: '/audio/poem-audio.mp3', // Опционально
-  epigraph: '«Эпиграф, если есть»', // Опционально
-  content: `Текст стихотворения
-Строка за строкой
-С сохранением переносов`,
-}
+### Контент
+- 4 сборника, 245+ стихотворений
+- Поиск по названию стихотворения
+- Избранное (localStorage)
+- Аудиочтение со встроенным плеером
+- Стихотворение дня
+
+### Прочее
+- Полное оглавление с поиском и сворачиваемыми разделами
+- Архив аудиозаписей
+- Контактная форма (EmailJS) с авторепли
+- SEO: Open Graph, JSON-LD, sitemap.xml, robots.txt
+
+---
+
+## Сборники
+
+| № | Название | Слаг |
+|---|----------|------|
+| 1 | Просто человеком | `book-1` |
+| 2 | 6 тетрадей сборник | `book-2` |
+| 3 | Вне времени | `book-3` |
+| 4 | Восточные тетради | `book-4` |
+
+Данные каждой книги хранятся в `src/data/content-book-N.json` и `src/data/toc-book-N.json`.
+
+---
+
+## Структура проекта
+
+```
+poetry-book-clean/
+├── public/
+│   ├── audio/          # MP3/M4A — аудиозаписи стихотворений
+│   └── images/         # Обложки, фото автора, текстуры
+│
+├── src/
+│   ├── admin/          # Защищённая панель администратора
+│   ├── components/
+│   │   ├── AudioPlayer/    # Глобальный и встроенный плеер
+│   │   ├── Book/           # Ядро: Book, BookPage, PoemPage
+│   │   ├── ContactForm/    # Форма с EmailJS
+│   │   ├── ReaderTocPanel/ # Боковое оглавление в ридере
+│   │   └── TopToolbar/     # Панель управления читалкой
+│   ├── context/        # SearchContext и контексты админки
+│   ├── data/           # JSON-данные книг и TypeScript-конфиги
+│   ├── hooks/          # Свайп, клик по краю, скроллбар
+│   ├── pages/          # LandingPage, BookReader, AudioArchive и др.
+│   └── types/          # TypeScript-интерфейсы (Poem, Chapter, Author…)
+│
+├── scripts/            # Node-скрипты: парсинг .docx, QA-проверки
+├── vercel.json         # SPA rewrite для Vercel
+└── env.example.txt     # Шаблон переменных окружения
 ```
 
-3. Если нужна аудиозапись, поместите MP3 файл в `public/audio/`
+---
 
-## 📚 Как добавить новую главу
+## Панель администратора
 
-1. Откройте файл `src/data/chapters.ts`
-2. Добавьте новый объект в массив `chapters`:
+Доступна по адресу `/#/admin`. Требует пароль из переменной `VITE_ADMIN_PASSWORD`.
 
-```typescript
-{
-  id: 'unique-chapter-id',
-  title: 'Название главы',
-  subtitle: 'Подзаголовок (опционально)',
-  order: 5, // Порядок в оглавлении
-}
+Возможности: редактирование стихотворений, управление структурой книг, редактор биографии автора, файловый менеджер (аудио и изображения).
+
+---
+
+## Настройка окружения
+
+Скопируй `env.example.txt` в `.env`:
+
+```env
+VITE_ADMIN_PASSWORD=your_password
+
+VITE_EMAILJS_SERVICE_ID=your_service_id
+VITE_EMAILJS_TEMPLATE_ID=main_template_id
+VITE_EMAILJS_AUTOREPLY_TEMPLATE_ID=autoreply_template_id
+VITE_EMAILJS_PUBLIC_KEY=your_public_key
 ```
 
-## 👤 Как изменить данные автора
+---
 
-Отредактируйте файл `src/data/author.ts`:
+## Работа с контентом
 
-- `author` — информация об авторе (имя, биография, фото)
-- `bookInfo` — информация о книге (название, предисловие, посвящение)
+Книги хранятся в формате JSON. Если есть исходный `.docx`-файл, можно распарсить его:
 
-## 🖼️ Изображения
-
-Поместите в папку `public/images/`:
-- `author.jpg` — фотография автора
-
-## 🎨 Кастомизация
-
-### Цвета
-Основные цвета настраиваются в `tailwind.config.js`:
-- `leather` — оттенки кожаной обложки
-- `burgundy` — бордовые акценты
-- `parchment` — цвета пергамента/бумаги
-- `ink` — цвета текста
-
-### Шрифты
-Используются Google Fonts:
-- **Crimson Text** — основной текст
-- **Playfair Display** — заголовки
-
-## 📧 Форма обратной связи
-
-Для работы формы обратной связи необходимо:
-
-1. Создать API endpoint `/api/contact`
-2. Подключить сервис отправки email (Resend, SendGrid, Mailgun)
-3. Настроить переменные окружения
-
-Пример с Resend (Next.js API Route):
-
-```typescript
-// pages/api/contact.ts
-import { Resend } from 'resend';
-
-const resend = new Resend(process.env.RESEND_API_KEY);
-
-export default async function handler(req, res) {
-  const { name, email, subject, message } = req.body;
-  
-  await resend.emails.send({
-    from: 'noreply@yourdomain.com',
-    to: 'author@email.com',
-    subject: `[Просто человеком] ${subject}`,
-    text: `От: ${name} (${email})\n\n${message}`,
-  });
-  
-  res.status(200).json({ success: true });
-}
+```bash
+npm run parse-book    # .docx → JSON стихотворения
+npm run parse-toc     # .docx → JSON оглавление
 ```
 
-## 🛠️ Технологии
+### QA-проверки
 
-- [React](https://react.dev/) — UI библиотека
-- [TypeScript](https://www.typescriptlang.org/) — типизация
-- [Vite](https://vitejs.dev/) — сборщик
-- [Tailwind CSS](https://tailwindcss.com/) — стилизация
-- [Framer Motion](https://www.framer.com/motion/) — анимации
-- [react-pageflip](https://github.com/nickmomrik/react-pageflip) — эффект перелистывания
+```bash
+npm run qa            # проверка качества контента
+npm run qa:routes     # проверка корректности маршрутов
+npm run qa:full       # все проверки
+```
 
-## 📄 Лицензия
+---
 
-MIT
+## Тесты и линтинг
+
+```bash
+npm test              # Vitest (один запуск)
+npm run test:watch    # режим наблюдения
+npm run lint          # ESLint
+```
+
+---
+
+## Деплой
+
+Проект настроен для **Vercel**. Файл `vercel.json` содержит rewrite-правило для SPA:
+
+```json
+{ "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }] }
+```
+
