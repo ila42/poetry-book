@@ -1,4 +1,4 @@
-export { LoginPage } from './LoginPage';
+export { LoginPage } from '@/components/common/LoginPage';
 export { AdminLayout } from './AdminLayout';
 export { Dashboard } from './Dashboard';
 export { PoemsManager } from './PoemsManager';

@@ -1,10 +1,17 @@
 import { Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import { LandingPage, BookReader, AudioArchive, PoemOfTheDay, PoemRoute, TableOfContentsPage } from '@/pages';
 import { AdminApp } from '@/admin';
+import { useAuth } from '@/context/AuthContext';
+import { LoginPage } from '@/components/common/LoginPage';
 
 function App() {
   const location = useLocation();
+  const { isAuthenticated } = useAuth();
   
+  if (!isAuthenticated) {
+    return <LoginPage />;
+  }
+
   if (location.hash === '#/admin' || location.pathname === '/admin') {
     return <AdminApp />;
   }

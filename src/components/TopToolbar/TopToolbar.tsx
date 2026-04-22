@@ -2,6 +2,7 @@ import { useState, useCallback, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ReaderTocPanel } from '@/components/ReaderTocPanel';
 import { useSearchOptional } from '@/context/SearchContext';
+import { useAuth } from '@/context/AuthContext';
 import type { TocItem } from '@/data/toc';
 import styles from './TopToolbar.module.css';
 
@@ -146,8 +147,15 @@ export function TopToolbar({
     };
   }, [open, close]);
 
+  const { logout } = useAuth();
+
   const handleBack = () => {
     navigate('/');
+    close();
+  };
+
+  const handleLogout = () => {
+    logout();
     close();
   };
 
@@ -474,6 +482,19 @@ export function TopToolbar({
                 >
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
+                  </svg>
+                </button>
+                <button
+                  type="button"
+                  className={`${styles.iconButton} text-red-400 hover:text-red-300`}
+                  onClick={handleLogout}
+                  aria-label="Выйти"
+                  title="Заблокировать доступ"
+                >
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                    <polyline points="16 17 21 12 16 7" />
+                    <line x1="21" y1="12" x2="9" y2="12" />
                   </svg>
                 </button>
             </>

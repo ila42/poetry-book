@@ -1,8 +1,7 @@
 import { useState } from 'react';
-import { AuthProvider, useAuth } from './context/AuthContext';
+import { useAuth } from '@/context/AuthContext';
 import { ContentProvider } from './context/ContentContext';
 import {
-  LoginPage,
   AdminLayout,
   Dashboard,
   PoemsManager,
@@ -10,6 +9,7 @@ import {
   AuthorEditor,
   FileManager,
 } from './components';
+import { LoginPage } from '@/components/common/LoginPage';
 
 type Page = 'dashboard' | 'poems' | 'structure' | 'author' | 'files';
 
@@ -49,8 +49,6 @@ function AdminContent() {
 
 export function AdminApp() {
   return (
-    <AuthProvider>
-      <AdminContent />
-    </AuthProvider>
+    <AdminContent />
   );
 }
